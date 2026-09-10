@@ -25,7 +25,7 @@ Godot's contribution guidelines put it best:
 >If you want to add new engine features, please make sure that:
 > - This functionality is desired, which means that it solves a common use case that several users will need in their real-life projects.
 > <br><br>
-> - You talked to other developers on how to implement it best. See also Proposing features or improvements.
+> - You talked to other developers on how to implement it best.
 > <br><br>
 > - Even if it doesn't get merged, your PR is useful for future work by another developer.
 
