@@ -24,7 +24,6 @@ struct Vector3
 	//! Constructs a Vector3 of a given x, y, and z double value.
 	constexpr Vector3(const double x, const double y, const double z) : x(x), y(y), z(z) {};
 
-
 	//=================
 	// Static Presets
 	//=================

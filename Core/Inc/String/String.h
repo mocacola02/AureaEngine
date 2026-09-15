@@ -1,8 +1,8 @@
 //===================================================
 // String.h
 // Author: Moca 9/14/2026
-// Defines a String type to store a string of
-// characters.
+// Defines a String type to store a sequence
+// of characters.
 //===================================================
 #pragma once
 
@@ -11,10 +11,9 @@
 #include <cstdio>
 #include <cstring>
 
-
+//! String type for storing a sequence of characters.
 class String
 {
-
 public:
 	//! Default String constructor
 	String()
@@ -437,7 +436,7 @@ public:
 	}
 
 	//! Returns whether or not this String starts with another given String.
-	bool StartsWith(const String& value) const
+	[[nodiscard]] bool StartsWith(const String& value) const
 	{
 		return StartsWith(value.CStr());
 	}
@@ -471,7 +470,7 @@ public:
 	}
 
 	//! Returns whether or not this String ends with another given String.
-	bool EndsWith(const String& value) const
+	[[nodiscard]] bool EndsWith(const String& value) const
 	{
 		return EndsWith(value.CStr());
 	}
@@ -519,7 +518,7 @@ public:
 	}
 
 	//! Returns whether or not this String contains another given String.
-	bool Contains(const String& value) const
+	[[nodiscard]] bool Contains(const String& value) const
 	{
 		return Contains(value.CStr());
 	}
@@ -571,18 +570,18 @@ public:
 	//! Finds and returns the position of another given String.
 	//! Returns 0 if the given String's length is 0,
 	//! and returns -1 if the given String is not found in this String.
-	uint32 Find(const String& value) const
+	[[nodiscard]] uint32 Find(const String& value) const
 	{
 		return Find(value.CStr());
 	}
 
 	//! Returns the substring from a given start position up to a given count of characters.
 	//! Returns an empty String if invalid start position.
-	String Substr(const uint32 start, uint32 count) const
+	[[nodiscard]] String Substr(const uint32 start, uint32 count) const
 	{
 		if (start >= length_)
 		{
-			return String();
+			return {};
 		}
 
 		uint32 available = length_ - start;
@@ -592,11 +591,11 @@ public:
 			count = available;
 		}
 
-		return String(data_ + start, count);
+		return {data_ + start, count};
 	}
 
 	//! Converts String characters to all lowercase.
-	String ToLower() const
+	[[nodiscard]] String ToLower() const
 	{
 		String result(*this);
 
@@ -612,7 +611,7 @@ public:
 	}
 
 	//! Converts String characters to all uppercase.
-	String ToUpper() const
+	[[nodiscard]] String ToUpper() const
 	{
 		String result(*this);
 
@@ -629,7 +628,7 @@ public:
 
 	// Data fetching
 	//! Returns this String's char data.
-	const char* CStr() const
+	[[nodiscard]] const char* CStr() const
 	{
 		return data_ ? data_ : "";
 	}
@@ -641,25 +640,25 @@ public:
 	}
 
 	//! Returns a pointer to this String's data as a constant.
-	const char* Data() const
+	[[nodiscard]] const char* Data() const
 	{
 		return data_;
 	}
 
 	//! Returns the length of this String.
-	constexpr uint32 Length() const
+	[[nodiscard]] constexpr uint32 Length() const
 	{
 		return length_;
 	}
 
 	//! Returns this capacity of this String.
-	constexpr uint32 Capacity() const
+	[[nodiscard]] constexpr uint32 Capacity() const
 	{
 		return capacity_;
 	}
 
 	//! Returns whether or not this String is empty.
-	constexpr bool IsEmpty() const
+	[[nodiscard]] constexpr bool IsEmpty() const
 	{
 		return length_ == 0;
 	}
@@ -769,20 +768,118 @@ public:
 		return *this;
 	}
 
-	// TODO: Finish other operators
+	//! Appends the data of a given C string to this String.
+	String& operator+=(const char* other)
+	{
+		Append(other);
+		return *this;
+	}
+
+	//! Appends a single character to this String.
+	String& operator+=(const char character)
+	{
+		Append(character);
+		return *this;
+	}
+
+	//! Returns whether or not this String's data equals another given String's data.
+	constexpr bool operator==(const String& right) const
+	{
+		if (length_ != right.length_)
+		{
+			return false;
+		}
+
+		return CompareMemory(data_, right.data_, length_);
+	}
+
+	//! Returns whether or not this String's data equals a given C string's data.
+	constexpr bool operator==(const char* right) const
+	{
+		if (!right)
+		{
+			return false;
+		}
+
+		const uint32 rightLength = StringLength(right);
+
+		if (length_ != rightLength)
+		{
+			return false;
+		}
+
+		return CompareMemory(data_, right, length_);
+	}
+
+	//! Returns whether or not this String's data does not equal another given String's data.
+	constexpr bool operator!=(const String& right) const
+	{
+		return !(*this == right);
+	}
+
+	//! Returns whether or not this String's data does not equal a given C string's data.
+	constexpr bool operator!=(const char* right) const
+	{
+		return !(*this == right);
+	}
+
+	//! Returns whether or not this String is less than another given String.
+	//! Determine via Compare() which compares characters and lengths.
+	bool operator<(const String& right) const
+	{
+		return Compare(right) < 0;
+	}
+
+	//! Returns whether or not this String is less than or equal to another given String.
+	//! Determine via Compare() which compares characters and lengths.
+	bool operator<=(const String& right) const
+	{
+		return Compare(right) <= 0;
+	}
+
+	//! Returns whether or not this String is greater than another given String.
+	//! Determine via Compare() which compares characters and lengths.
+	bool operator>(const String& right) const
+	{
+		return Compare(right) > 0;
+	}
+
+	//! Returns whether or not this String is greater than or equal to another given String.
+	//! Determine via Compare() which compares characters and lengths.
+	bool operator>=(const String& right) const
+	{
+		return Compare(right) >= 0;
+	}
+
+	//! Returns the character at the given index.
+	constexpr char& operator[](const uint32 index)
+	{
+		return data_[index];
+	}
+
+	//! Returns the character at the given index as a constant.
+	constexpr const char& operator[](const uint32 index) const
+	{
+		return data_[index];
+	}
 
 private:
+	//! Stores a pointer to this String's first character
 	char* data_ = nullptr;
 
+	//! Stores the length of this String (number of characters)
 	uint32 length_	 = 0;
+	//! Stores the reserved capacity of this String
 	uint32 capacity_ = 0;
 
+	//! Allocates a given capacity that can store characters for this String.
 	void Allocate(const uint32 capacity)
 	{
 		data_ = new char[capacity];
 		capacity_ = capacity;
 	}
 
+	//! Ensures that this String's capacity supports a given required capacity by reserving new space if needed.
 	void EnsureCapacity(const uint32 requiredCapacity)
 	{
 		if (requiredCapacity <= capacity_)
@@ -800,6 +897,7 @@ private:
 		Reserve(newCapacity);
 	}
 
+	//! Appends a series of characters to this String based on a given starting char value and its length.
 	void Append(const char* value, const uint32 valueLength)
 	{
 		if (!value || valueLength == 0)
@@ -821,7 +919,8 @@ private:
 		data_[length_] = '\0';
 	}
 
-	int32 Compare(const String& other) const
+	//! Compares the characters and length of a given String to this String.
+	[[nodiscard]] int8 Compare(const String& other) const
 	{
 		const uint32 compareLength = length_ < other.length_ ? length_ : other.length_;
 
@@ -851,6 +950,7 @@ private:
 		return 0;
 	}
 
+	//! Returns the length of a given C string.
 	static uint32 StringLength(const char* value)
 	{
 		if (!value)
@@ -868,6 +968,7 @@ private:
 		return length;
 	}
 
+	//! Copies the source characters (based on source and then the count of characters) to the destination character pointer.
 	static void CopyMemory(char* destination, const char* source, const uint32 count)
 	{
 		if (!destination || !source || count == 0)
@@ -878,6 +979,7 @@ private:
 		memmove(destination, source, count);
 	}
 
+	//! Returns whether or not the left and right buffers are identical for the first character up to the given count.
 	static bool CompareMemory(const char* left, const char* right, const uint32 count)
 	{
 		for (uint32 i = 0; i < count; ++i)
@@ -891,12 +993,3 @@ private:
 		return true;
 	}
 };
-
-inline String operator+(const char* left, const String& right)
-{
-	String result(left);
-
-	result += right;
-
-	return result;
-}

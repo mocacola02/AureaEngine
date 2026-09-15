@@ -26,6 +26,11 @@ namespace Math
 		return acosf(value);
 	}
 
+	constexpr float AsinF(const float value)
+	{
+		return asinf(value);
+	}
+
 	constexpr float Atan2F(const float a, const float b)
 	{
 		return atan2f(a, b);
@@ -152,6 +157,11 @@ namespace Math
 	constexpr double Acos(const double value)
 	{
 		return acos(value);
+	}
+
+	constexpr double Asin(const double value)
+	{
+		return asin(value);
 	}
 
 	constexpr double Atan2(const double a, const double b)
