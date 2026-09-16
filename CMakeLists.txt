@@ -18,7 +18,6 @@ include(FetchContent)
 # -----------------------------------------------------------------------------
 # Paths
 # -----------------------------------------------------------------------------
-
 set(PROJECT_CORE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Core")
 set(PROJECT_ENGINE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Engine")
 set(PROJECT_EDITOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Editor")
@@ -31,10 +30,28 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
+# Define SDL3 target from ThirdParty/SDL
+set(SDL3_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3")
+
+if(WIN32)
+	set(SDL3_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3/lib/SDL3.dll")
+else()
+	set(SDL3_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3/lib/SDL3.so")
+endif()
+
+set(SDL3_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3/include")
+
+add_library(SDL3 INTERFACE IMPORTED)
+
+set_target_properties(
+		SDL3 PROPERTIES
+		IMPORTED_LOCATION "${SDL3_LIBRARY}"
+		INTERFACE_INCLUDE_DIRECTORIES "${SDL3_INCLUDE_DIR}"
+)
+
 # -----------------------------------------------------------------------------
 # Automatic source discovery
 # -----------------------------------------------------------------------------
-
 file(
 		GLOB_RECURSE PROJECT_CORE_SOURCES
 		CONFIGURE_DEPENDS
@@ -43,7 +60,6 @@ file(
 		"${PROJECT_CORE_DIR}/*.h"
 		"${PROJECT_CORE_DIR}/*.hpp"
 )
-
 file(
 		GLOB_RECURSE PROJECT_ENGINE_SOURCES
 		CONFIGURE_DEPENDS
@@ -52,7 +68,6 @@ file(
 		"${PROJECT_ENGINE_DIR}/*.h"
 		"${PROJECT_ENGINE_DIR}/*.hpp"
 )
-
 file(
 		GLOB_RECURSE PROJECT_EDITOR_SOURCES
 		CONFIGURE_DEPENDS
@@ -61,7 +76,6 @@ file(
 		"${PROJECT_EDITOR_DIR}/*.h"
 		"${PROJECT_EDITOR_DIR}/*.hpp"
 )
-
 file(
 		GLOB_RECURSE PROJECT_MIRA_GL_SOURCES
 		CONFIGURE_DEPENDS
@@ -70,7 +84,6 @@ file(
 		"${PROJECT_GL_DIR}/*.h"
 		"${PROJECT_GL_DIR}/*.hpp"
 )
-
 file(
 		GLOB_RECURSE PROJECT_MIRA_VK_SOURCES
 		CONFIGURE_DEPENDS
@@ -81,54 +94,13 @@ file(
 )
 
 # -----------------------------------------------------------------------------
-# SDL3
-# -----------------------------------------------------------------------------
-
-set(SDL_SHARED ON CACHE BOOL "" FORCE)
-set(SDL_STATIC OFF CACHE BOOL "" FORCE)
-
-set(SDL_AUDIO OFF CACHE BOOL "" FORCE)
-
-set(SDL_GPU OFF CACHE BOOL "" FORCE)
-set(SDL_RENDER OFF CACHE BOOL "" FORCE)
-
-set(SDL_CAMERA OFF CACHE BOOL "" FORCE)
-set(SDL_SENSOR OFF CACHE BOOL "" FORCE)
-set(SDL_POWER OFF CACHE BOOL "" FORCE)
-set(SDL_TRAY OFF CACHE BOOL "" FORCE)
-
-set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
-set(SDL_TESTS OFF CACHE BOOL "" FORCE)
-set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(SDL_INSTALL OFF CACHE BOOL "" FORCE)
-set(SDL_UNINSTALL OFF CACHE BOOL "" FORCE)
-
-# Required SDL subsystems
-set(SDL_VIDEO ON CACHE BOOL "" FORCE)
-set(SDL_JOYSTICK ON CACHE BOOL "" FORCE)
-set(SDL_HIDAPI ON CACHE BOOL "" FORCE)
-set(SDL_HAPTIC ON CACHE BOOL "" FORCE)
-set(SDL_DIALOG ON CACHE BOOL "" FORCE)
-
-FetchContent_Declare(
-		SDL3
-		GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-		GIT_TAG release-3.4.16
-		GIT_SHALLOW TRUE
-)
-
-FetchContent_MakeAvailable(SDL3)
-
-# -----------------------------------------------------------------------------
 # OpenGL
 # -----------------------------------------------------------------------------
-
 find_package(OpenGL REQUIRED)
 
 # -----------------------------------------------------------------------------
 # GLAD
 # -----------------------------------------------------------------------------
-
 FetchContent_Declare(
 		glad
 		GIT_REPOSITORY https://github.com/Dav1dde/glad.git
@@ -136,38 +108,32 @@ FetchContent_Declare(
 		GIT_SHALLOW TRUE
 		SOURCE_SUBDIR cmake
 )
-
 FetchContent_MakeAvailable(glad)
 
-# OpenGL 4.6 Core
 glad_add_library(
 		glad_gl_core_46
 		STATIC
 		REPRODUCIBLE
 		API gl:core=4.6
-		EXTENSIONS NONE		# May need to be changed in the future
+		EXTENSIONS NONE
 )
-
-# Vulkan 1.4
 glad_add_library(
 		glad_vulkan_14
 		STATIC
 		LOADER
 		API vulkan=1.4
-		EXTENSIONS NONE		# May need to be changed in the future
+		EXTENSIONS NONE
 )
 
 # -----------------------------------------------------------------------------
 # Dear ImGui
 # -----------------------------------------------------------------------------
-
 FetchContent_Declare(
 		imgui
 		GIT_REPOSITORY https://github.com/ocornut/imgui.git
 		GIT_TAG docking
 		GIT_SHALLOW TRUE
 )
-
 FetchContent_MakeAvailable(imgui)
 
 add_library(
@@ -182,24 +148,21 @@ add_library(
 		"${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp"
 		"${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp"
 )
-
 target_include_directories(
 		ImGui
 		PUBLIC
 		"${imgui_SOURCE_DIR}"
 		"${imgui_SOURCE_DIR}/backends"
 )
-
 target_compile_definitions(
 		ImGui
 		PRIVATE
 		IMGUI_IMPL_OPENGL_LOADER_GLAD
 )
-
 target_link_libraries(
 		ImGui
 		PUBLIC
-		SDL3::SDL3
+		SDL3
 
 		PRIVATE
 		OpenGL::GL
@@ -209,13 +172,11 @@ target_link_libraries(
 # -----------------------------------------------------------------------------
 # Core
 # -----------------------------------------------------------------------------
-
 add_library(
 		Core
 		SHARED
 		${PROJECT_CORE_SOURCES}
 )
-
 target_include_directories(
 		Core
 		PUBLIC
@@ -225,42 +186,36 @@ target_include_directories(
 # -----------------------------------------------------------------------------
 # Engine
 # -----------------------------------------------------------------------------
-
 add_library(
 		Engine
 		SHARED
 		${PROJECT_ENGINE_SOURCES}
 )
-
 target_include_directories(
 		Engine
 		PUBLIC
 		"${PROJECT_ENGINE_DIR}"
 )
-
 target_link_libraries(
 		Engine
 		PUBLIC
 		Core
-		SDL3::SDL3
+		SDL3
 )
 
 # -----------------------------------------------------------------------------
 # Mira OpenGL
 # -----------------------------------------------------------------------------
-
 add_library(
 		MiraGL
 		SHARED
 		${PROJECT_MIRA_GL_SOURCES}
 )
-
 target_include_directories(
 		MiraGL
 		PUBLIC
 		"${PROJECT_GL_DIR}"
 )
-
 target_link_libraries(
 		MiraGL
 		PUBLIC
@@ -275,19 +230,16 @@ target_link_libraries(
 # -----------------------------------------------------------------------------
 # Mira Vulkan
 # -----------------------------------------------------------------------------
-
 add_library(
 		MiraVK
 		SHARED
 		${PROJECT_MIRA_VK_SOURCES}
 )
-
 target_include_directories(
 		MiraVK
 		PUBLIC
 		"${PROJECT_VK_DIR}"
 )
-
 target_link_libraries(
 		MiraVK
 		PUBLIC
@@ -301,18 +253,15 @@ target_link_libraries(
 # -----------------------------------------------------------------------------
 # Editor
 # -----------------------------------------------------------------------------
-
 add_executable(
 		Editor
 		${PROJECT_EDITOR_SOURCES}
 )
-
 target_include_directories(
 		Editor
 		PRIVATE
 		"${PROJECT_EDITOR_DIR}"
 )
-
 target_link_libraries(
 		Editor
 		PRIVATE
@@ -326,7 +275,6 @@ target_link_libraries(
 # -----------------------------------------------------------------------------
 # Windows DLL exports
 # -----------------------------------------------------------------------------
-
 if(WIN32)
 	set_target_properties(
 			Core
@@ -341,13 +289,12 @@ endif()
 # -----------------------------------------------------------------------------
 # Runtime dependencies
 # -----------------------------------------------------------------------------
-
 if(WIN32)
 	add_custom_command(
 			TARGET Editor
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			$<TARGET_FILE:SDL3::SDL3>
+			$<TARGET_FILE:SDL3>
 			$<TARGET_FILE_DIR:Editor>
 	)
 endif()

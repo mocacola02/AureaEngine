@@ -38,7 +38,7 @@ struct QuaternionF
 	{
 		return {1.0f, 0.0f, 0.0f, 0.0f};
 	}
-	
+
 	[[nodiscard]] constexpr QuaternionF Inverse() const
 	{
 		return {-q.w, -q.x, -q.y, -q.z};
