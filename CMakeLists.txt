@@ -13,8 +13,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include(FetchContent)
-
 # -----------------------------------------------------------------------------
 # Paths
 # -----------------------------------------------------------------------------
@@ -26,6 +24,9 @@ set(PROJECT_MIRA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Mira")
 set(PROJECT_GL_DIR "${PROJECT_MIRA_DIR}/GL")
 set(PROJECT_VK_DIR "${PROJECT_MIRA_DIR}/VK")
 
+set(PROJECT_GLAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/glad")
+set(PROJECT_IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/ImGui")
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
@@ -33,20 +34,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 # Define SDL3 target from ThirdParty/SDL
 set(SDL3_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3")
 
-if(WIN32)
-	set(SDL3_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3/lib/SDL3.dll")
-else()
-	set(SDL3_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3/lib/SDL3.so")
-endif()
-
-set(SDL3_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3/include")
-
-add_library(SDL3 INTERFACE IMPORTED)
-
-set_target_properties(
-		SDL3 PROPERTIES
-		IMPORTED_LOCATION "${SDL3_LIBRARY}"
-		INTERFACE_INCLUDE_DIRECTORIES "${SDL3_INCLUDE_DIR}"
+add_subdirectory(
+		"${SDL3_DIR}"
+		"${CMAKE_BINARY_DIR}/SDL3"
+		EXCLUDE_FROM_ALL
 )
 
 # -----------------------------------------------------------------------------
@@ -101,58 +92,43 @@ find_package(OpenGL REQUIRED)
 # -----------------------------------------------------------------------------
 # GLAD
 # -----------------------------------------------------------------------------
-FetchContent_Declare(
-		glad
-		GIT_REPOSITORY https://github.com/Dav1dde/glad.git
-		GIT_TAG glad2
-		GIT_SHALLOW TRUE
-		SOURCE_SUBDIR cmake
+file(
+		GLOB_RECURSE PROJECT_GLAD_SOURCES
+		CONFIGURE_DEPENDS
+		"${PROJECT_GLAD_DIR}/src/*.c"
 )
-FetchContent_MakeAvailable(glad)
 
-glad_add_library(
-		glad_gl_core_46
+add_library(
+		GLAD
 		STATIC
-		REPRODUCIBLE
-		API gl:core=4.6
-		EXTENSIONS NONE
+		${PROJECT_GLAD_SOURCES}
 )
-glad_add_library(
-		glad_vulkan_14
-		STATIC
-		LOADER
-		API vulkan=1.4
-		EXTENSIONS NONE
+target_include_directories(
+		GLAD
+		PUBLIC
+		"${PROJECT_GLAD_DIR}/include"
 )
 
 # -----------------------------------------------------------------------------
 # Dear ImGui
 # -----------------------------------------------------------------------------
-FetchContent_Declare(
-		imgui
-		GIT_REPOSITORY https://github.com/ocornut/imgui.git
-		GIT_TAG docking
-		GIT_SHALLOW TRUE
-)
-FetchContent_MakeAvailable(imgui)
-
 add_library(
 		ImGui
 		STATIC
 
-		"${imgui_SOURCE_DIR}/imgui.cpp"
-		"${imgui_SOURCE_DIR}/imgui_draw.cpp"
-		"${imgui_SOURCE_DIR}/imgui_tables.cpp"
-		"${imgui_SOURCE_DIR}/imgui_widgets.cpp"
+		"${PROJECT_IMGUI_DIR}/imgui.cpp"
+		"${PROJECT_IMGUI_DIR}/imgui_draw.cpp"
+		"${PROJECT_IMGUI_DIR}/imgui_tables.cpp"
+		"${PROJECT_IMGUI_DIR}/imgui_widgets.cpp"
 
-		"${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp"
-		"${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp"
+		"${PROJECT_IMGUI_DIR}/backends/imgui_impl_sdl3.cpp"
+		"${PROJECT_IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
 )
 target_include_directories(
 		ImGui
 		PUBLIC
-		"${imgui_SOURCE_DIR}"
-		"${imgui_SOURCE_DIR}/backends"
+		"${PROJECT_IMGUI_DIR}"
+		"${PROJECT_IMGUI_DIR}/backends"
 )
 target_compile_definitions(
 		ImGui
@@ -162,11 +138,11 @@ target_compile_definitions(
 target_link_libraries(
 		ImGui
 		PUBLIC
-		SDL3
+		SDL3::SDL3
 
 		PRIVATE
 		OpenGL::GL
-		glad_gl_core_46
+		GLAD
 )
 
 # -----------------------------------------------------------------------------
@@ -200,7 +176,7 @@ target_link_libraries(
 		Engine
 		PUBLIC
 		Core
-		SDL3
+		SDL3::SDL3
 )
 
 # -----------------------------------------------------------------------------
@@ -224,7 +200,7 @@ target_link_libraries(
 
 		PRIVATE
 		OpenGL::GL
-		glad_gl_core_46
+		GLAD
 )
 
 # -----------------------------------------------------------------------------
@@ -247,7 +223,7 @@ target_link_libraries(
 		Engine
 
 		PRIVATE
-		glad_vulkan_14
+		GLAD
 )
 
 # -----------------------------------------------------------------------------
@@ -294,7 +270,7 @@ if(WIN32)
 			TARGET Editor
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			$<TARGET_FILE:SDL3>
+			$<TARGET_FILE:SDL3::SDL3>
 			$<TARGET_FILE_DIR:Editor>
 	)
 endif()
