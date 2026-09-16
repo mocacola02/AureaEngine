@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cmath>
+#include <concepts>
 
 //! Namespace used for various math helpers, primarily focusing on float and double types. -Moca
 namespace Math
@@ -111,6 +112,11 @@ namespace Math
 		}
 
 		return RoundF(value / step) * step;
+	}
+
+	constexpr float TanF(const float value)
+	{
+		return tanf(value);
 	}
 
 	// Rotation
@@ -246,9 +252,14 @@ namespace Math
 		return Round(value / step) * step;
 	}
 
+	constexpr double Tan(const double value)
+	{
+		return tan(value);
+	}
+
 	// Rotation
-	constexpr double Pi  = 3.14159265358979;
-	constexpr double Tau = 6.28318530717959;
+	constexpr double Pi  = 3.1415926535897932384626433832795028841971693993751058209749445923078164062;
+	constexpr double Tau = 6.2831853071795864769252867665590057683943387987502116419498891846156328124;
 
 	constexpr double DegreesToRadians(const double degrees)
 	{

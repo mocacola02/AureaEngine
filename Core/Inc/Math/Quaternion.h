@@ -39,6 +39,11 @@ struct Quaternion
 		return {1.0, 0.0, 0.0, 0.0};
 	}
 
+	[[nodiscard]] constexpr Quaternion Inverse() const
+	{
+		return {-q.w, -q.x, -q.y, -q.z};
+	}
+
 	[[nodiscard]] constexpr double LengthSquared() const
 	{
 		return q.LengthSquared();
