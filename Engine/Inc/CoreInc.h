@@ -2,7 +2,6 @@
 
 #include "../Core/Inc/Application.h"
 #include "../Core/Inc/Object.h"
-#include "../Core/Inc/Pointers.h"
 #include "../Core/Inc/Runtime.h"
 #include "../Core/Inc/Containers/Array.h"
 #include "../Core/Inc/Math/Math.h"
@@ -13,3 +12,4 @@
 #include "../Core/Inc/Time/PlatformTime.h"
 #include "../Core/Inc/Utility/Hash.h"
 #include "../Core/Inc/Utility/Log.h"
+#include "../Core/Inc/Utility/Memory.h"

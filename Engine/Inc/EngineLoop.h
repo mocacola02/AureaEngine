@@ -26,7 +26,8 @@ protected:
 	friend class Runtime;
 
 	//! Returns whether or not this EngineLoop is running.
-	[[nodiscard]] virtual bool IsRunning() const = 0;
+	[[nodiscard]] virtual bool IsRunning() const ;
+	virtual void SetIsRunning(bool isRunning);
 
 	//! Sets the exit code and sets to stop running.
 	virtual void Exit(int32 code);
@@ -52,9 +53,9 @@ private:
 	//! This is a private function, the FATAL macro should be used instead.
 	void InternalFatal(
 		const String& message,
-		const int32 exitCode,
+		int32 exitCode,
 		const char* file,
 		const char* function,
-		const uint32 line
+		uint32 line
 	);
 };

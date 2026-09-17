@@ -8,6 +8,11 @@ bool EngineLoop::IsRunning() const
 	return running_;
 }
 
+void EngineLoop::SetIsRunning(bool isRunning)
+{
+	running_ = isRunning;
+}
+
 void EngineLoop::Exit(const int32 code)
 {
 	exitCode_ = code;

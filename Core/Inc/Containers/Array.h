@@ -405,8 +405,41 @@ public:
 		return data_[index];
 	}
 
+	T* begin()
+	{
+		return data_;
+	}
 
+	const T* begin() const
+	{
+		return data_;
+	}
+
+	T* end()
+	{
+		if (!data_)
+		{
+			return nullptr;
+		}
+
+		return data_ + count_;
+	}
+
+	const T* end() const
+	{
+		if (!data_)
+		{
+			return nullptr;
+		}
+
+		return data_ + count_;
+	}
+
+
+	//============
 	// Operators
+	//============
+
 	//! Copies a source Array's data to this Array.
 	Array& operator=(const Array& source)
 	{

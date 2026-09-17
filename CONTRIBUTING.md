@@ -40,13 +40,6 @@ Some additional considerations:
 - Consider including a test for contributions to ease the testing and QA process.
 
 
-### Disclaimer Regarding AI
-As of writing this (9/10/2026), this engine is written purely by myself. I have experience designing game systems, starting off as a modder for an Unreal Engine 1 game and eventually moving to Godot.
-I have been using this project as an opportunity to learn C++ and combine aspects of both UE1 and Godot that I enjoy.
+### [Generative AI Usage and Guides](https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/GeneralClassLayout.jpg)
 
-I have utilized IBM Granite 4.2, [a model which has been ranked as a leader in responsible AI with ethically sourced data](https://research.ibm.com/blog/granite-ethical-ai), on my own local computer for assistance with concepts I am unfamiliar with. I cross-reference any information with additional online sources to ensure accuracy. I still write all code, with any AI suggestions being heavily scrutinized. If there is a mistake in code, it is due to my own error or misunderstanding, not due to "vibe coding".
-All documentation is written myself (besides the auto-generated aspects from Doxygen), including the repo's README and CONTRIBUTING documents (if it seems wordy, that's just how I write, ask anyone).
-
-**Fully AI-generated code contributions will not be accepted.** I believe AI is a useful tool for developers, but it is not a replacement for writing, proofreading, and testing your own code. I also encourage using ethically trained models on a local device, but that is something I can't realistically enforce. If you have capable hardware, I'd recommend giving local models a shot. Better to  run it yourself than pay an untrustworthy company an overpriced fee to ruin the environment.
-
-**Images, video, audio, etc. generated even partially with AI will not be accepted. This includes using AI generated content as a base template or reference. I personally do not agree with its use outside of learning and programming assistance, primarily due to concerns over stolen training data taken from real artists.**
+[Since I have a decent bit to say on this topic, I moved it to its own article.](https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/GeneralClassLayout.jpg)
