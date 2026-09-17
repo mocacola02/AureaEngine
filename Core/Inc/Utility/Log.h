@@ -5,219 +5,96 @@
 #include <cstdio>
 
 
-namespace Logger
+namespace Log
 {
-	enum class Type : uint8
-	{
-		Engine,
-		Render,
-		Video,
-		Audio,
-		Input,
-		Script
-	};
-
-	enum class Severity : uint8
-	{
-		Info,
-		Warn,
-		Error,
-		Fatal,
-		Debug,
-		Quiet
-	};
-
 	constexpr const char* ResetColor = "\033[0m";
 	constexpr const char* InfoColor	 = "\033[36m";
 	constexpr const char* WarnColor  = "\033[33m";
 	constexpr const char* ErrorColor = "\033[31m";
 	constexpr const char* TraceColor = "\033[90m";
 
-	inline String GetTypeName(const Type type)
-	{
-		switch (type)
-		{
-			case Type::Engine:
-			{
-				return String("Engine");
-			}
-			case Type::Render:
-			{
-				return String("Render");
-			}
-			case Type::Video:
-			{
-				return String("Video");
-			}
-			case Type::Audio:
-			{
-				return String("Audio");
-			}
-			case Type::Input:
-			{
-				return String("Input");
-			}
-			case Type::Script:
-			{
-				return String("Script");
-			}
-			default:
-			{
-				return String("Unknown");
-			}
-		}
-
-		return String("Unknown");
-	}
-
-	inline String GetSeverityName(const Severity severity)
-	{
-		switch (severity)
-		{
-			case Severity::Info:
-			{
-				return "Info";
-			}
-			case Severity::Warn:
-			{
-				return "Warn";
-			}
-			case Severity::Error:
-			{
-				return "Error";
-			}
-			case Severity::Fatal:
-			{
-				return "Fatal";
-			}
-			case Severity::Debug:
-			{
-				return "Debug";
-			}
-			case Severity::Quiet:
-			{
-				return "Quiet";
-			}
-			default:
-			{
-				return "Unknown";
-			}
-		}
-
-		return "Unknown";
-	}
-
-	inline const char* GetSeverityColor(const Severity severity)
-	{
-		switch (severity)
-		{
-			case Severity::Info:
-			case Severity::Debug:
-			case Severity::Quiet:
-			default:
-			{
-				return InfoColor;
-			}
-
-			case Severity::Warn:
-			{
-				return WarnColor;
-			}
-
-			case Severity::Error:
-			case Severity::Fatal:
-			{
-				return ErrorColor;
-			}
-		}
-
-		return InfoColor;
-	}
-
 	inline void WriteLog(
-		const char* type,
-		const char* function,
-		const char* file,
-		const int32 line,
+		const char* level,
+		const char* color,
 		const char* message,
-		const char* color
+		const char* file,
+		const char* func,
+		const uint32 line
 	)
 	{
-		const char charLine = line >= 0 ? static_cast<char>(line) : '\0';
-
 		printf(
 			"%s[%s]%s %s[%s @ %s:%u]%s %s\n",
 
 			color,
-			type,
+			level,
 			ResetColor,
 
 			TraceColor,
-			function ? function : "",
+			func ? func : "",
 			file,
-			charLine,
+			line,
 			ResetColor,
 
 			message
 		);
 	}
 
-	inline void LogInternal(
-		const String& message,
-		const Type type = Type::Engine,
-		const Severity severity = Severity::Info,
-		const bool trace = true,
-		const String& file = "",
-		const String& function = "",
-		const int32 line = -1,
-		const bool inDebug = true
-	)
+	inline void WritePrint(const char* message)
 	{
-		if (message.IsEmpty())
-		{
-			return;
-		}
+		printf("%s\n", message);
+	}
 
-		if (!inDebug && severity == Severity::Debug)
-		{
-			return;
-		}
+	inline void InternalInfo(const String& message, const char* file, const char* function, const uint32 line)
+	{
+		WriteLog("Info", InfoColor, message.CStr(), file, function, line);
+	}
 
-		String logType;
+	inline void InternalWarn(const String& message, const char* file, const char* function, const uint32 line)
+	{
+		WriteLog("Warn", WarnColor, message.CStr(), file, function, line);
+	}
 
-		// Append type
-		logType.Append("[");
-		logType.Append(GetTypeName(type));
-		logType.Append("]");
+	inline void InternalError(const String& message, const char* file, const char* function, const uint32 line)
+	{
+		WriteLog("Error", ErrorColor, message.CStr(), file, function, line);
+	}
 
-		// Append severity
-		logType.Append("[");
-		logType.Append(GetSeverityName(severity));
-		logType.Append("]");
+	inline void InternalFatal(const String& message, const char* file, const char* function, const uint32 line)
+	{
+		WriteLog("Fatal", ErrorColor, message.CStr(), file, function, line);
+	}
 
-		// Final write
-		if (trace)
-		{
-			WriteLog(
-				logType.CStr(),
-				function.CStr(),
-				file.CStr(),
-				line,
-				message.CStr(),
-				"\033[36m"
-			);
-		}
-		else
-		{
-			WriteLog(
-				logType.CStr(),
-				"",
-				"",
-				-1,
-				message.CStr(),
-				"\033[36m"
-			);
-		}
-
+	inline void InternalPrint(const String& message)
+	{
+		WritePrint(message.CStr());
 	}
 }
+
+#define LOG(message)	\
+	Log::InternalInfo(	\
+		(message),		\
+		__FILE__,		\
+		__func__,		\
+		__LINE__		\
+	)
+
+#define WARN(message)	\
+	Log::InternalWarn(	\
+		(message),		\
+		__FILE__,		\
+		__func__,		\
+		__LINE__		\
+	)
+
+#define ERROR(message)	\
+	Log::InternalError(	\
+		(message),		\
+		__FILE__,		\
+		__func__,		\
+		__LINE__		\
+	)
+
+#define PRINT(message)	\
+	Log::InternalPrint(	\
+		(message)		\
+	)

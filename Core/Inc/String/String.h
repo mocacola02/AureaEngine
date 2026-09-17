@@ -863,6 +863,7 @@ public:
 		return data_[index];
 	}
 
+
 private:
 	//! Stores a pointer to this String's first character
 	char* data_ = nullptr;
