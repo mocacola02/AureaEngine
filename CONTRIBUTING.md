@@ -40,6 +40,4 @@ Some additional considerations:
 - Consider including a test for contributions to ease the testing and QA process.
 
 
-### [Generative AI Usage and Guides]([https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/GeneralClassLayout.jpg](https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/AI.md))
-
-[Since I have a decent bit to say on this topic, I moved it to its own article.]([https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/GeneralClassLayout.jpg](https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/AI.md))
+### [Generative AI Usage and Guides](https://github.com/mocacola02/AureaEngine/blob/main/Docs/Design/AI.md)
