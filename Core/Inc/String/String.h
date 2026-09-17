@@ -23,7 +23,7 @@ public:
 	}
 
 	//! Char to String constructor
-	explicit String(const char* value)
+	String(const char* value)
 	{
 		if (!value)
 		{

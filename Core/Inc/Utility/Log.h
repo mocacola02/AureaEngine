@@ -5,7 +5,7 @@
 #include <cstdio>
 
 
-namespace Log
+namespace Logger
 {
 	enum class Type : uint8
 	{
@@ -76,35 +76,35 @@ namespace Log
 		{
 			case Severity::Info:
 			{
-				return String("Info");
+				return "Info";
 			}
 			case Severity::Warn:
 			{
-				return String("Warn");
+				return "Warn";
 			}
 			case Severity::Error:
 			{
-				return String("Error");
+				return "Error";
 			}
 			case Severity::Fatal:
 			{
-				return String("Fatal");
+				return "Fatal";
 			}
 			case Severity::Debug:
 			{
-				return String("Debug");
+				return "Debug";
 			}
 			case Severity::Quiet:
 			{
-				return String("Quiet");
+				return "Quiet";
 			}
 			default:
 			{
-				return String("Dorselessness");
+				return "Unknown";
 			}
 		}
 
-		return String("Dorselessness");
+		return "Unknown";
 	}
 
 	inline const char* GetSeverityColor(const Severity severity)
@@ -112,23 +112,22 @@ namespace Log
 		switch (severity)
 		{
 			case Severity::Info:
-			{
-				return InfoColor;
-			}
-			case Severity::Warn:
-			{
-				return WarnColor;
-			}
-			case Severity::Error:
-			case Severity::Fatal:
-			{
-				return ErrorColor;
-			}
 			case Severity::Debug:
 			case Severity::Quiet:
 			default:
 			{
 				return InfoColor;
+			}
+
+			case Severity::Warn:
+			{
+				return WarnColor;
+			}
+
+			case Severity::Error:
+			case Severity::Fatal:
+			{
+				return ErrorColor;
 			}
 		}
 
@@ -139,11 +138,13 @@ namespace Log
 		const char* type,
 		const char* function,
 		const char* file,
-		const uint32 line,
+		const int32 line,
 		const char* message,
 		const char* color
 	)
 	{
+		const char charLine = line >= 0 ? static_cast<char>(line) : '\0';
+
 		printf(
 			"%s[%s]%s %s[%s @ %s:%u]%s %s\n",
 
@@ -154,7 +155,7 @@ namespace Log
 			TraceColor,
 			function ? function : "",
 			file,
-			line,
+			charLine,
 			ResetColor,
 
 			message
@@ -163,13 +164,13 @@ namespace Log
 
 	inline void LogInternal(
 		const String& message,
-		const Type type,
-		const Severity severity,
-		const bool trace,
-		const String& file,
-		const String& function,
-		const uint32 line,
-		const bool inDebug
+		const Type type = Type::Engine,
+		const Severity severity = Severity::Info,
+		const bool trace = true,
+		const String& file = "",
+		const String& function = "",
+		const int32 line = -1,
+		const bool inDebug = true
 	)
 	{
 		if (message.IsEmpty())
@@ -195,13 +196,28 @@ namespace Log
 		logType.Append("]");
 
 		// Final write
-		WriteLog(
-			logType.CStr(),
-			function.CStr(),
-			file.CStr(),
-			line,
-			message.CStr(),
-			"\033[36m"
-		);
+		if (trace)
+		{
+			WriteLog(
+				logType.CStr(),
+				function.CStr(),
+				file.CStr(),
+				line,
+				message.CStr(),
+				"\033[36m"
+			);
+		}
+		else
+		{
+			WriteLog(
+				logType.CStr(),
+				"",
+				"",
+				-1,
+				message.CStr(),
+				"\033[36m"
+			);
+		}
+
 	}
 }
