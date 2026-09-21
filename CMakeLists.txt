@@ -16,16 +16,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # -----------------------------------------------------------------------------
 # Paths
 # -----------------------------------------------------------------------------
-set(PROJECT_CORE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Core")
-set(PROJECT_ENGINE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Engine")
-set(PROJECT_EDITOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Editor")
+set(PROJECT_CORE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/Core")
+set(PROJECT_ENGINE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/Engine")
+set(PROJECT_EDITOR_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/Editor")
+set(PROJECT_MIRA_DIR   	"${CMAKE_CURRENT_SOURCE_DIR}/Mira")
 
-set(PROJECT_MIRA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Mira")
-set(PROJECT_GL_DIR "${PROJECT_MIRA_DIR}/GL")
-set(PROJECT_VK_DIR "${PROJECT_MIRA_DIR}/VK")
+set(PROJECT_GL_DIR 		"${PROJECT_MIRA_DIR}/GL")
+set(PROJECT_VK_DIR 		"${PROJECT_MIRA_DIR}/VK")
 
-set(PROJECT_GLAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/glad")
-set(PROJECT_IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/ImGui")
+set(PROJECT_THIRDPARTY_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty")
+set(PROJECT_GLAD_DIR  		"${PROJECT_THIRDPARTY_DIR}/glad")
+set(PROJECT_IMGUI_DIR 		"${PROJECT_THIRDPARTY_DIR}/ImGui")
+set(PROJECT_ROBIN_DIR   	"${PROJECT_THIRDPARTY_DIR}/robin-map")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -145,6 +147,14 @@ target_link_libraries(
 		GLAD
 )
 
+
+# -----------------------------------------------------------------------------
+# robin-map
+# -----------------------------------------------------------------------------
+
+#add_subdirectory("ThirdParty/robin-map")
+
+
 # -----------------------------------------------------------------------------
 # Core
 # -----------------------------------------------------------------------------
@@ -158,6 +168,12 @@ target_include_directories(
 		PUBLIC
 		"${PROJECT_CORE_DIR}"
 )
+
+#target_link_libraries(
+#		Core
+#		PUBLIC
+#		tsl::robin_map
+#)
 
 # -----------------------------------------------------------------------------
 # Engine

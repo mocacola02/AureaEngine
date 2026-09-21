@@ -8,9 +8,6 @@ class WorldObject;
 class World final : public EngineLoop
 {
 public:
-	template<typename T, typename... Args>
-	T* SpawnObject(Args&&... args);
-
 	bool DestroyObject(WorldObject* object);
 	void DestroyPendingObjects();
 
@@ -40,4 +37,7 @@ protected:
 
 private:
 	Array<unique_ptr<WorldObject>> objects_;
+
+	template<typename T, typename... Args>
+	T* SpawnObject(Args&&... args);
 };

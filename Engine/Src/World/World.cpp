@@ -8,11 +8,41 @@ T* World::SpawnObject(Args&&... args)
 	unique_ptr<T> object = make_unique<T>(Forward<Args>(args)...);
 
 	T* objectPtr = object.get();
+
+	objectPtr->Initialize();
 }
 
 bool World::DestroyObject(WorldObject *object)
 {
-	return false;
+	if (!object)
+	{
+		return false;
+	}
+
+	bool found = false;
+
+	for (const unique_ptr<WorldObject>& existing : objects_)
+	{
+		if (existing.get() == object)
+		{
+			found = true;
+			break;
+		}
+	}
+
+	if (!found)
+	{
+		return false;
+	}
+
+	if (object->IsPendingDestroy())
+	{
+		return true;
+	}
+
+	object->Destroy();
+
+	return true;
 }
 
 void World::DestroyPendingObjects()
