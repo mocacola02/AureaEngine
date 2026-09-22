@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NameTable.h"
+#include "String.h"
 #include "../Math/Int.h"
 
 
@@ -9,7 +10,53 @@ class Name
 public:
 	Name() : id_(0) {}
 
-	explicit Name(const char* value) : id_(NameTable::Get().FindOrAdd(value)) {}
+	explicit Name(const char* value, const bool unique = false)
+	{
+		if (value == nullptr || *value == '\0')
+		{
+			id_ = 0;
+			return;
+		}
+
+		if (!unique)
+		{
+			id_ = NameTable::Get().FindOrAdd(value);
+		}
+		else
+		{
+			const uint32 suffix = NameTable::Get().GetUniqueSuffixCounter(value);
+			String valueStr = String(value);
+			valueStr.Append(String(suffix));
+			const char* finalValue = valueStr.CStr();
+
+			id_ = NameTable::Get().FindOrAdd(finalValue);
+			NameTable::Get().IncrementUniqueSuffixCounter(finalValue);
+		}
+	}
+
+	explicit Name(const String& value, const bool unique = false)
+	{
+		if (value.IsEmpty())
+		{
+			id_ = 0;
+			return;
+		}
+
+		if (!unique)
+		{
+			id_ = NameTable::Get().FindOrAdd(value.CStr());
+		}
+		else
+		{
+			const uint32 suffix = NameTable::Get().GetUniqueSuffixCounter(value.CStr());
+			String valueStr = value;
+			valueStr.Append(String(suffix));
+			const char* finalValue = valueStr.CStr();
+
+			id_ = NameTable::Get().FindOrAdd(finalValue);
+			NameTable::Get().IncrementUniqueSuffixCounter(finalValue);
+		}
+	}
 
 	[[nodiscard]] const char* CStr() const
 	{

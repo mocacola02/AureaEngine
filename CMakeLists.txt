@@ -16,10 +16,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # -----------------------------------------------------------------------------
 # Paths
 # -----------------------------------------------------------------------------
-set(PROJECT_CORE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/Core")
-set(PROJECT_ENGINE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/Engine")
-set(PROJECT_EDITOR_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/Editor")
-set(PROJECT_MIRA_DIR   	"${CMAKE_CURRENT_SOURCE_DIR}/Mira")
+set(PROJECT_CORE_DIR 	 "${CMAKE_CURRENT_SOURCE_DIR}/Core")
+set(PROJECT_ENGINE_DIR 	 "${CMAKE_CURRENT_SOURCE_DIR}/Engine")
+set(PROJECT_EDITOR_DIR 	 "${CMAKE_CURRENT_SOURCE_DIR}/Editor")
+set(PROJECT_MIRA_DIR   	 "${CMAKE_CURRENT_SOURCE_DIR}/Mira")
+set(PROJECT_COMPILER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Compiler")
 
 set(PROJECT_GL_DIR 		"${PROJECT_MIRA_DIR}/GL")
 set(PROJECT_VK_DIR 		"${PROJECT_MIRA_DIR}/VK")
@@ -84,6 +85,14 @@ file(
 		"${PROJECT_VK_DIR}/*.cpp"
 		"${PROJECT_VK_DIR}/*.h"
 		"${PROJECT_VK_DIR}/*.hpp"
+)
+file(
+		GLOB_RECURSE PROJECT_COMPILER_SOURCES
+		CONFIGURE_DEPENDS
+		"${PROJECT_COMPILER_DIR}/*.c"
+		"${PROJECT_COMPILER_DIR}/*.cpp"
+		"${PROJECT_COMPILER_DIR}/*.h"
+		"${PROJECT_COMPILER_DIR}/*.hpp"
 )
 
 # -----------------------------------------------------------------------------
@@ -243,25 +252,44 @@ target_link_libraries(
 )
 
 # -----------------------------------------------------------------------------
-# Editor
+# AureaEd
 # -----------------------------------------------------------------------------
 add_executable(
-		Editor
+		AureaEd
 		${PROJECT_EDITOR_SOURCES}
 )
 target_include_directories(
-		Editor
+		AureaEd
 		PRIVATE
 		"${PROJECT_EDITOR_DIR}"
 )
 target_link_libraries(
-		Editor
+		AureaEd
 		PRIVATE
 		Core
 		Engine
 		MiraGL
 		MiraVK
 		ImGui
+)
+
+# -----------------------------------------------------------------------------
+# AureaCompiler
+# -----------------------------------------------------------------------------
+add_executable(
+		AureaCompiler
+		${PROJECT_COMPILER_SOURCES}
+)
+target_include_directories(
+		AureaCompiler
+		PRIVATE
+		"${PROJECT_COMPILER_DIR}"
+)
+target_link_libraries(
+		AureaCompiler
+		PRIVATE
+		Core
+		Engine
 )
 
 # -----------------------------------------------------------------------------
@@ -283,10 +311,17 @@ endif()
 # -----------------------------------------------------------------------------
 if(WIN32)
 	add_custom_command(
-			TARGET Editor
+			TARGET AureaEd
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			$<TARGET_FILE:SDL3::SDL3>
-			$<TARGET_FILE_DIR:Editor>
+			$<TARGET_FILE_DIR:AureaEd>
+	)
+
+	add_custom_command(
+			TARGET AureaCompiler
+			POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			$<TARGET_FILE_DIR:AureaCompiler>
 	)
 endif()

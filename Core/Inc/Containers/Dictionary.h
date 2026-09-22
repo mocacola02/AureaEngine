@@ -333,6 +333,54 @@ public:
 		Rehash(requiredBucketCount);
 	}
 
+	Entry* FindEntry(const Key& key)
+	{
+		if (!buckets_ || bucketCount_ == 0)
+		{
+			return nullptr;
+		}
+
+		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
+
+		Entry* entry = buckets_[bucketIndex];
+
+		while (entry)
+		{
+			if (entry->key == key)
+			{
+				return entry;
+			}
+
+			entry = entry->next;
+		}
+
+		return nullptr;
+	}
+
+	const Entry* FindEntry(const Key& key) const
+	{
+		if (!buckets_ || bucketCount_ == 0)
+		{
+			return nullptr;
+		}
+
+		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
+
+		const Entry* entry = buckets_[bucketIndex];
+
+		while (entry)
+		{
+			if (entry->key == key)
+			{
+				return entry;
+			}
+
+			entry = entry->next;
+		}
+
+		return nullptr;
+	}
+
 	template<typename Function>
 	void ForEach(Function&& function)
 	{
@@ -492,54 +540,6 @@ private:
 		++count_;
 
 		return entry;
-	}
-
-	Entry* FindEntry(const Key& key)
-	{
-		if (!buckets_ || bucketCount_ == 0)
-		{
-			return nullptr;
-		}
-
-		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
-
-		Entry* entry = buckets_[bucketIndex];
-
-		while (entry)
-		{
-			if (entry->key == key)
-			{
-				return entry;
-			}
-
-			entry = entry->next;
-		}
-
-		return nullptr;
-	}
-
-	const Entry* FindEntry(const Key& key) const
-	{
-		if (!buckets_ || bucketCount_ == 0)
-		{
-			return nullptr;
-		}
-
-		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
-
-		const Entry* entry = buckets_[bucketIndex];
-
-		while (entry)
-		{
-			if (entry->key == key)
-			{
-				return entry;
-			}
-
-			entry = entry->next;
-		}
-
-		return nullptr;
 	}
 
 	static uint32 GetBucketIndex(const Key& key, const uint32 bucketCount)
@@ -730,5 +730,14 @@ private:
 		bucketCount_ = 0;
 
 		count_ = 0;
+	}
+
+	static void FailMissingKey()
+	{
+		#if defined(_MSC_VER)
+				__debugbreak();
+		#else
+				__builtin_trap();
+		#endif
 	}
 };

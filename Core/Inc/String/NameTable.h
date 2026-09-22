@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Containers/Dictionary.h"
 #include "../Math/Int.h"
 #include "../Utility/Hash.h"
 
@@ -163,22 +164,34 @@ public:
 		return table;
 	}
 
+	uint32 GetUniqueSuffixCounter(const char* base) const
+	{
+		const auto entry = uniqueSuffixDict_.FindEntry(base);
+		return entry ? entry->value : 0;
+	}
+
+	void IncrementUniqueSuffixCounter(const char* base)
+	{
+		const uint32 current = GetUniqueSuffixCounter(base);
+		uniqueSuffixDict_[base] = current + 1;
+	}
+
 private:
 	struct Entry
 	{
 		char* data = nullptr;
-
 		uint32 length = 0;
 		uint32 hash	  = 0;
 	};
 
 	Entry* entries_ = nullptr;
-
 	uint32 entryCount_	  = 0;
 	uint32 entryCapacity_ = 0;
 
 	uint32* buckets_		 = nullptr;
 	uint32  bucketCapacity_ = 0;
+
+	Dictionary<const char*, uint32> uniqueSuffixDict_;
 
 
 	//==================

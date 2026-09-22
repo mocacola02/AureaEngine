@@ -19,6 +19,11 @@ public:
 		return id_;
 	}
 
+	[[nodiscard]] virtual constexpr String GetClassName() const
+	{
+		return "Object";
+	}
+
 	template<typename T>
 	[[nodiscard]] bool IsOfType() const
 	{
@@ -26,12 +31,10 @@ public:
 	}
 
 protected:
-	Name name_;
-	uint32 id_ = 0;
-
-	Object() : id_(0) {}
-	Object(const uint32 id, const Name& name) : id_(0), name_(name) {}
-	explicit Object(const Name& name) : id_(0), name_(name) {}
+	Object()
+	{
+		SetName(Name(Object::GetClassName(), true));
+	}
 
 	void SetName(const Name& name)
 	{
@@ -42,4 +45,8 @@ protected:
 	{
 		id_ = id;
 	}
+
+private:
+	Name name_;
+	uint32 id_ = 0;
 };
