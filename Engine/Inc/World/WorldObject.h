@@ -28,11 +28,16 @@ public:
 	[[nodiscard]] bool IsPendingDestroy() const;
 	void Destroy();
 
-	[[nodiscard]] bool IsTickable() const;
+	[[nodiscard]] bool ShouldTick(bool parentShouldTick, double deltaTime);
 	void SetTickMode(const TickMode& tickMode);
+	[[nodiscard]] TickMode GetTickMode() const;
 
 	WorldObject*	   GetParent();
 	[[nodiscard]] const WorldObject* GetParent() const;
+
+	WorldObject*	GetRoot();
+	[[nodiscard]] const WorldObject* GetRoot() const;
+	[[nodiscard]] bool IsRoot() const;
 
 	[[nodiscard]] const Array<WorldObject*>& GetChildren() const;
 
@@ -41,8 +46,11 @@ public:
 
 	[[nodiscard]] bool HasParent() const;
 	[[nodiscard]] bool HasChildren() const;
-	bool HasChild(const WorldObject* object) const;
+	bool HasChild(WorldObject *object) const;
 	bool IsChildOf(const WorldObject* object) const;
+
+	bool HasDescendent(WorldObject* object) const;
+	bool IsDescendentOf(const WorldObject* object) const;
 
 	bool SetParent(WorldObject* parent, bool keepWorldTransform = true);
 	void RemoveParent(bool keepWorldTransform = true);
@@ -53,23 +61,28 @@ public:
 protected:
 	friend class World;
 
-	bool started_		 = false;
-	bool pendingDestroy_ = false;
-
+	bool started_		   = false;
+	bool pendingDestroy_   = false;
+	bool canTickThisFrame_ = false;
 
 	TickMode tickMode_ = TickMode::Inherit;
-
 	uint32 ticksPerSecond_ = 0;
-
 	double tickAccumlator_ = 0.0;
 
+	uint64 tickCount_ = 0;
+	double lifetime_ = 0.0;
+
 	WorldObject*		parent_ = nullptr;
+	WorldObject*		root_	= nullptr;
 	Array<WorldObject*> children_;
 
 	World* world_ = nullptr;
 
 
-	bool CanTick(double deltaTime);
+	bool AccumulateTick(double deltaTime);
+
+	void SetWorld(World* world);
+	void UpdateRoot();
 
 	virtual void OnInitialize() {}
 	virtual void OnPreStart()	{}
@@ -79,9 +92,4 @@ protected:
 	virtual void OnTick(double deltaTime) {}
 
 	virtual void OnDestroy() {}
-
-	void SetWorld(World* world)
-	{
-		world_ = world;
-	}
 };

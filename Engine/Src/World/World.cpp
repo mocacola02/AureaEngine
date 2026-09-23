@@ -14,7 +14,7 @@ T* World::SpawnObject(Args&&... args)
 	return nullptr;
 }
 
-bool World::DestroyObject(WorldObject *object)
+bool World::DestroyObject(WorldObject* object)
 {
 	if (!object)
 	{
@@ -23,9 +23,9 @@ bool World::DestroyObject(WorldObject *object)
 
 	bool found = false;
 
-	for (const unique_ptr<WorldObject>& existing : objects_)
+	for (const WorldObject* existing : objects_)
 	{
-		if (existing.get() == object)
+		if (existing == object)
 		{
 			found = true;
 			break;
@@ -49,11 +49,12 @@ bool World::DestroyObject(WorldObject *object)
 
 void World::DestroyPendingObjects()
 {
+	// We'll destroy objects from the "bottom up."
 	for (uint32 i = objects_.Count(); i > 0; --i)
 	{
 		const uint32 index = i - 1;
 
-		WorldObject* object = objects_[index].get();
+		WorldObject* object = objects_[index];
 
 		if (!object)
 		{
@@ -84,25 +85,26 @@ void World::DestroyPendingObjects()
 	}
 }
 
-Array<unique_ptr<WorldObject>>& World::GetObjects()
+Array<WorldObject*>& World::GetObjects()
 {
 	return objects_;
 }
 
-const Array<unique_ptr<WorldObject>>& World::GetObjects() const
+const Array<WorldObject*>& World::GetObjects() const
 {
 	return objects_;
 }
 
 WorldObject* World::FindObjectByID(const uint32 id)
 {
-	for (uint32 i = 0; i < objects_.Count(); ++i)
-	{
-		WorldObject* object = objects_[i].get();
+	uint32 index = 0;
 
+	for (WorldObject* object : objects_)
+	{
 		if (!object)
 		{
-			objects_.RemoveAt(i);
+			objects_.RemoveAt(index);
+			++index;
 			continue;
 		}
 
@@ -110,6 +112,8 @@ WorldObject* World::FindObjectByID(const uint32 id)
 		{
 			return object;
 		}
+
+		++index;
 	}
 
 	return nullptr;
@@ -117,10 +121,8 @@ WorldObject* World::FindObjectByID(const uint32 id)
 
 const WorldObject* World::FindObjectByID(const uint32 id) const
 {
-	for (uint32 i = 0; i < objects_.Count(); ++i)
+	for (const WorldObject* object : objects_)
 	{
-		const WorldObject* object = objects_[i].get();
-
 		if (!object)
 		{
 			continue;
@@ -137,13 +139,14 @@ const WorldObject* World::FindObjectByID(const uint32 id) const
 
 WorldObject* World::FindObjectByName(const Name& name)
 {
-	for (uint32 i = 0; i < objects_.Count(); ++i)
-	{
-		WorldObject* object = objects_[i].get();
+	uint32 index = 0;
 
+	for (WorldObject* object : objects_)
+	{
 		if (!object)
 		{
-			objects_.RemoveAt(i);
+			objects_.RemoveAt(index);
+			++index;
 			continue;
 		}
 
@@ -151,6 +154,8 @@ WorldObject* World::FindObjectByName(const Name& name)
 		{
 			return object;
 		}
+
+		++index;
 	}
 
 	return nullptr;
@@ -158,10 +163,8 @@ WorldObject* World::FindObjectByName(const Name& name)
 
 const WorldObject* World::FindObjectByName(const Name &name) const
 {
-	for (uint32 i = 0; i < objects_.Count(); ++i)
+	for (const WorldObject* object : objects_)
 	{
-		const WorldObject* object = objects_[i].get();
-
 		if (!object)
 		{
 			continue;
@@ -180,16 +183,14 @@ Array<WorldObject*> World::GetRootObjects() const
 {
 	Array<WorldObject*> rootObjects = {};
 
-	for (uint32 i = 0; i < objects_.Count(); ++i)
+	for (WorldObject* object : objects_)
 	{
-		WorldObject* object = objects_[i].get();
-
 		if (!object)
 		{
 			continue;
 		}
 
-		if (!object->GetParent())
+		if (!object->HasParent())
 		{
 			rootObjects.Add(object);
 		}
@@ -198,9 +199,39 @@ Array<WorldObject*> World::GetRootObjects() const
 	return rootObjects;
 }
 
+// CLEANUP: This all feels very messy
+Array<WorldObject*> World::GetTickableChildren(const WorldObject* root, const bool rootShouldTick, const double deltaTime)
+{
+	Array<WorldObject*> tickableChildren = {};
+
+	for (WorldObject* child : root->GetChildren())
+	{
+		const bool childShouldTick = child->ShouldTick(rootShouldTick, deltaTime);
+
+		if (childShouldTick)
+		{
+			tickableChildren.Add(child);
+		}
+
+		if (Array<WorldObject*> tickableChildrenChildren = GetTickableChildren(child, childShouldTick, deltaTime);
+			!tickableChildrenChildren.IsEmpty()
+		)
+		{
+			tickableChildren.Combine(tickableChildrenChildren);
+		}
+	}
+
+	return tickableChildren;
+}
+
 uint32 World::GetObjectCount() const
 {
 	return objects_.Count();
+}
+
+bool World::IsPaused() const
+{
+	return paused_;
 }
 
 void World::Exit(const int32 code)
@@ -211,7 +242,7 @@ void World::Exit(const int32 code)
 
 bool World::Initialize()
 {
-	for (const unique_ptr<WorldObject>& object : objects_)
+	for (WorldObject* object : objects_)
 	{
 		if (!object)
 		{
@@ -237,18 +268,27 @@ void World::Tick(const double deltaTime)
 		return;
 	}
 
-	for (const unique_ptr<WorldObject>&  object : objects_)
+	Array<WorldObject*> tickList;
+
+	for (WorldObject* root : GetRootObjects())
 	{
-		if (!object)
+		const bool shouldRootTick = root->ShouldTick(true, deltaTime);
+
+		if (shouldRootTick)
 		{
-			continue;
+			tickList.Add(root);
 		}
 
-		if (object->IsPendingDestroy())
+		if (const Array<WorldObject*> tickableObjects = GetTickableChildren(root, shouldRootTick, deltaTime);
+			!tickableObjects.IsEmpty()
+		)
 		{
-			continue;
+			tickList.Combine(tickableObjects);
 		}
+	}
 
+	for (WorldObject* object : tickList)
+	{
 		object->Tick(deltaTime);
 	}
 
@@ -257,7 +297,7 @@ void World::Tick(const double deltaTime)
 
 void World::Shutdown()
 {
-	for (const unique_ptr<WorldObject>& object : objects_)
+	for (WorldObject* object : objects_)
 	{
 		if (!object)
 		{
@@ -267,7 +307,7 @@ void World::Shutdown()
 		object->RemoveParent();
 	}
 
-	for (const unique_ptr<WorldObject>& object : objects_)
+	for (WorldObject* object : objects_)
 	{
 		if (!object)
 		{

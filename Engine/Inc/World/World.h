@@ -11,10 +11,10 @@ public:
 	bool DestroyObject(WorldObject* object);
 	void DestroyPendingObjects();
 
-	Array<unique_ptr<WorldObject>>&		  GetObjects();
-	[[nodiscard]] const Array<unique_ptr<WorldObject>>& GetObjects() const;
+	Array<WorldObject*>& GetObjects();
+	[[nodiscard]] const Array<WorldObject*>& GetObjects() const;
 
-	WorldObject*		FindObjectByID(uint32 id);
+	WorldObject* FindObjectByID(uint32 id);
 	[[nodiscard]] const WorldObject* FindObjectByID(uint32 id) const;
 
 	WorldObject*		FindObjectByName(const Name& name);
@@ -22,7 +22,11 @@ public:
 
 	[[nodiscard]] Array<WorldObject*> GetRootObjects() const;
 
+	static Array<WorldObject*> GetTickableChildren(const WorldObject* root, bool rootShouldTick, double deltaTime);
+
 	[[nodiscard]] uint32 GetObjectCount() const;
+
+	[[nodiscard]] bool IsPaused() const;
 
 protected:
 	void Exit(int32 code) override;
@@ -34,7 +38,9 @@ protected:
 	void Shutdown() override;
 
 private:
-	Array<unique_ptr<WorldObject>> objects_;
+	bool paused_ = false;
+
+	Array<WorldObject*> objects_;
 
 	template<typename T, typename... Args>
 	T* SpawnObject(Args&&... args);

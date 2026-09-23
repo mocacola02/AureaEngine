@@ -6,10 +6,10 @@
 //===================================================
 #pragma once
 
-#include <algorithm>
-
+#include "../Utility/Memory.h"
 #include "../Math/Int.h"
 
+#include <algorithm>
 #include <ranges>
 
 
@@ -99,6 +99,15 @@ public:
 		new (&data_[index]) T(static_cast<T&&>(value));
 
 		++count_;
+	}
+
+	//! Combines this Array with another given Array by adding the other Array's elements to this Array.
+	void Combine(const Array& other)
+	{
+		for (uint32 i = 0; i < other.Count(); ++i)
+		{
+			Add(other[i]);
+		}
 	}
 
 	// AureaScript (or whatever I call it) will likely also have Append as an alias for Add().
@@ -290,6 +299,27 @@ public:
 	// void Sort()
 	// {
 	// }
+
+	void RemoveDuplicates()
+	{
+		if (Count() <= 1)
+		{
+			return;
+		}
+
+		Array unique;
+		unique.Reserve(Count());
+
+		for (uint32 i = 0; i < Count(); ++i)
+		{
+			if (const T& value = (*this)[i]; !unique.Contains(value))
+			{
+				unique.Add(value);
+			}
+		}
+
+		*this = Move(unique);
+	}
 
 	//! Returns the count of valid elements in this Array
 	[[nodiscard]] constexpr uint32 Count() const

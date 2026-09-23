@@ -63,6 +63,11 @@ public:
 		return NameTable::Get().GetString(id_);
 	}
 
+	[[nodiscard]] const String& ToString() const
+	{
+		return String(CStr());
+	}
+
 	[[nodiscard]] uint32 Length() const
 	{
 		return NameTable::Get().GetLength(id_);
