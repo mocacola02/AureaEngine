@@ -41,17 +41,17 @@ public:
 		}
 	}
 
-	double GetDeltaTime() const
+	[[nodiscard]] double GetDeltaTime() const
 	{
 		return deltaTime_;
 	}
 
-	double GetElapsedTime() const
+	[[nodiscard]] double GetElapsedTime() const
 	{
 		return elapsedTime_;
 	}
 
-	double GetFPS() const
+	[[nodiscard]] double GetFPS() const
 	{
 		return fps_;
 	}

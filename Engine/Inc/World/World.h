@@ -20,13 +20,11 @@ public:
 	WorldObject*		FindObjectByName(const Name& name);
 	[[nodiscard]] const WorldObject* FindObjectByName(const Name& name) const;
 
-	[[nodiscard]] Array<WorldObject*>& GetRootObjects() const;
+	[[nodiscard]] Array<WorldObject*> GetRootObjects() const;
 
 	[[nodiscard]] uint32 GetObjectCount() const;
 
 protected:
-	[[nodiscard]] bool IsRunning() const override;
-
 	void Exit(int32 code) override;
 
 	bool Initialize() override;

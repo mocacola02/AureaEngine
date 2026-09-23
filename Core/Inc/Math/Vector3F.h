@@ -21,7 +21,7 @@ struct Vector3F
 	//! Constructs a default Vector3F, equal to Zero().
 	constexpr Vector3F() = default;
 	//! Constructs a Vector3F of a given x, y, and z float value.
-	constexpr Vector3F(const float x, const float y, const float z) : x(x), y(y), z(z) {};
+	constexpr Vector3F(const float x, const float y, const float z) : x(x), y(y), z(z) {}
 
 	//=================
 	// Static Presets
@@ -234,9 +234,8 @@ struct Vector3F
 	[[nodiscard]] constexpr Vector3F LimitLength(const float maxLength = 1.0f) const
 	{
 		const float lengthSquared = LengthSquared();
-		const float maxLengthSquared = maxLength * maxLength;
 
-		if (lengthSquared <= maxLengthSquared)
+		if (const float maxLengthSquared = maxLength * maxLength; lengthSquared <= maxLengthSquared)
 		{
 			return *this;
 		}

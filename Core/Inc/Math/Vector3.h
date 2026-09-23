@@ -22,7 +22,7 @@ struct Vector3
 	//! Constructs a default Vector3, equal to Zero().
 	constexpr Vector3() = default;
 	//! Constructs a Vector3 of a given x, y, and z double value.
-	constexpr Vector3(const double x, const double y, const double z) : x(x), y(y), z(z) {};
+	constexpr Vector3(const double x, const double y, const double z) : x(x), y(y), z(z) {}
 
 	//=================
 	// Static Presets
@@ -235,9 +235,8 @@ struct Vector3
 	[[nodiscard]] constexpr Vector3 LimitLength(const double maxLength = 1.0) const
 	{
 		const double lengthSquared = LengthSquared();
-		const double maxLengthSquared = maxLength * maxLength;
 
-		if (lengthSquared <= maxLengthSquared)
+		if (const double maxLengthSquared = maxLength * maxLength; lengthSquared <= maxLengthSquared)
 		{
 			return *this;
 		}

@@ -7,7 +7,6 @@
 #pragma once
 
 #include <cmath>
-#include <concepts>
 
 //! Namespace used for various math helpers, primarily focusing on float and double types. -Moca
 namespace Math

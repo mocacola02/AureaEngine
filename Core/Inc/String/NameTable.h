@@ -54,9 +54,9 @@ public:
 		{
 			const uint32 id = buckets_[index] - 1;
 
-			const Entry& entry = entries_[id];
-
-			if (entry.hash == hash && entry.length == length && Equal(entry.data, value, length))
+			if (const Entry& entry = entries_[id];
+				entry.hash == hash && entry.length == length && Equal(entry.data, value, length)
+			)
 			{
 				outID = id;
 				return true;
@@ -90,9 +90,9 @@ public:
 		{
 			const uint32 id = buckets_[index] - 1;
 
-			const Entry& entry = entries_[id];
-
-			if (entry.hash == hash && entry.length == length && Equal(entry.data, value, length))
+			if (const Entry& entry = entries_[id];
+				entry.hash == hash && entry.length == length && Equal(entry.data, value, length)
+			)
 			{
 				return id;
 			}
@@ -132,7 +132,7 @@ public:
 		return id;
 	}
 
-	const char* GetString(const uint32 id) const
+	[[nodiscard]] const char* GetString(const uint32 id) const
 	{
 		if (id >= entryCount_)
 		{
@@ -142,7 +142,7 @@ public:
 		return entries_[id].data;
 	}
 
-	uint32 GetLength(const uint32 id) const
+	[[nodiscard]] uint32 GetLength(const uint32 id) const
 	{
 		if (id >= entryCount_)
 		{
@@ -152,7 +152,7 @@ public:
 		return entries_[id].length;
 	}
 
-	uint32 Count() const
+	[[nodiscard]] uint32 Count() const
 	{
 		return entryCount_ - 1;
 	}
@@ -242,7 +242,7 @@ private:
 	{
 		const uint32 newCapacity = entryCapacity_ * 2;
 
-		Entry* newEntries = new Entry[newCapacity];
+		auto* newEntries = new Entry[newCapacity];
 
 		for (uint32 i = 0; i < entryCount_; ++i)
 		{
@@ -255,7 +255,7 @@ private:
 		entryCapacity_ = newCapacity;
 	}
 
-	uint32 FindEmptyBucket(const uint32 hash) const
+	[[nodiscard]] uint32 FindEmptyBucket(const uint32 hash) const
 	{
 		uint32 index = hash % bucketCapacity_;
 

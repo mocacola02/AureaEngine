@@ -36,12 +36,12 @@ namespace Hashing
 
 	constexpr uint64 Combine64(const uint64 first, const uint64 second)
 	{
-		return Mix64(first ^ (second + 0x9e3779b97f4a7c15ULL + (first << 6ULL) + (first >> 2ULL)));
+		return Mix64(first ^ second + 0x9e3779b97f4a7c15ULL + (first << 6ULL) + (first >> 2ULL));
 	}
 
 	constexpr uint32 Combine32(const uint32 first, const uint32 second)
 	{
-		return Mix32(first ^ (second + 0x9e3779b9U + (first << 6U) + (first >> 2U)));
+		return Mix32(first ^ second + 0x9e3779b9U + (first << 6U) + (first >> 2U));
 	}
 
 	constexpr uint32 Fold64To32(const uint64 value)
@@ -178,7 +178,7 @@ struct Hash<T*>
 {
 	static uint32 Get(const T* value)
 	{
-		const uint32 address = static_cast<uint32>(reinterpret_cast<uintptr>(value));
+		const auto address = static_cast<uint32>(reinterpret_cast<uintptr>(value));
 
 		return Hashing::Mix32(address);
 	}

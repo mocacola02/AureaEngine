@@ -86,7 +86,7 @@ struct QuaternionF
 
 		const Vector3F uuv = qVector.Cross(uv);
 
-		return vector + ((uv * q.w) + uuv) * 2.0f;
+		return vector + (uv * q.w + uuv) * 2.0f;
 	}
 
 	constexpr Vector4F operator*(const Vector4F& vector) const

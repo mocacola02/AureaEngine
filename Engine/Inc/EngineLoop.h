@@ -25,6 +25,11 @@ protected:
 	// CONSIDER: Maybe this should be reverse? If the EngineLoop/World owns the "higher level" objects maybe EngineLoop/World should be more open?
 	friend class Runtime;
 
+	//! Tracks if this EngineLoop is running or not.
+	bool running_ = false;
+	//! Code to return to the Application when exiting. Set via Exit()
+	int32 exitCode_ = 0;
+
 	//! Returns whether or not this EngineLoop is running.
 	[[nodiscard]] virtual bool IsRunning() const ;
 	virtual void SetIsRunning(bool isRunning);
@@ -43,11 +48,6 @@ protected:
 	virtual void Shutdown() = 0;
 
 private:
-	//! Tracks if this EngineLoop is running or not.
-	bool running_ = false;
-	//! Code to return to the Application when exiting. Set via Exit()
-	int32 exitCode_ = 0;
-
 	//! Logs a fatal error and produces a pop up window with the message.
 	//! When the window is closed, Exit(exitCode) is called.
 	//! This is a private function, the FATAL macro should be used instead.

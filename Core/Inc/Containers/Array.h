@@ -287,24 +287,24 @@ public:
 	//! Object references are sorted based on object name.
 	//! Unsupported types will not change.
 	// TODO: Implement this
-	void Sort()
-	{
-	}
+	// void Sort()
+	// {
+	// }
 
 	//! Returns the count of valid elements in this Array
-	constexpr uint32 Count() const
+	[[nodiscard]] constexpr uint32 Count() const
 	{
 		return count_;
 	}
 
 	//! Returns the capacity (valid elements + empty elements) of this Array
-	constexpr uint32 Capacity() const
+	[[nodiscard]] [[nodiscard]] constexpr uint32 Capacity() const
 	{
 		return capacity_;
 	}
 
 	//! Returns whether or not this Array is empty (aka count_ == 0)
-	constexpr bool IsEmpty() const
+	[[nodiscard]] [[nodiscard]] constexpr bool IsEmpty() const
 	{
 		return count_ == 0;
 	}
@@ -509,13 +509,13 @@ private:
 			return nullptr;
 		}
 
-		return static_cast<T*>(::operator new(sizeof(T) * capacity));
+		return static_cast<T*>(operator new(sizeof(T) * capacity));
 	}
 
 	//! Deallocates a given buffer.
 	static void Deallocate(T* data)
 	{
-		::operator delete(static_cast<void*>(data));
+		operator delete(static_cast<void*>(data));
 	}
 
 	//! Destroys all elements in the data buffer and sets count to 0.

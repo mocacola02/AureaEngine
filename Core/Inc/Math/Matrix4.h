@@ -32,7 +32,7 @@ struct Matrix4
 		{
 			for (uint8 j = 0; j < 4; ++j)
 			{
-				m[i][j] = (i == j) ? value : 0.0;
+				m[i][j] = i == j ? value : 0.0;
 			}
 		}
 	}
@@ -138,7 +138,7 @@ struct Matrix4
 
 			for (uint8 j = 0; j < 4; ++j)
 			{
-				a[i][j + 4] = (j == i ? 1.0 : 0.0);
+				a[i][j + 4] = j == i ? 1.0 : 0.0;
 			}
 		}
 
@@ -185,9 +185,7 @@ struct Matrix4
 					continue;
 				}
 
-				const double factor = a[i][col];
-
-				if (Math::Abs(factor) > 1e-12)
+				if (const double factor = a[i][col]; Math::Abs(factor) > 1e-12)
 				{
 					for (uint8 j = col; j < 8; ++j)
 					{

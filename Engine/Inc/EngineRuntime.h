@@ -9,11 +9,13 @@
 #include "RenderManager.h"
 #include "WindowManager.h"
 
+class EditorApplication;
+
 //! The engine runtime handles the engine's various managers,
 //! and it owns and ticks the EngineLoop (World, by default).
 class EngineRuntime final : public Runtime
 {
-protected:
+public:
 	bool Initialize() override;
 	void Tick(double deltaTime_) override;
 	void Shutdown() override;

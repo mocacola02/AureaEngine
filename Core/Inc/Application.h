@@ -22,7 +22,7 @@ public:
 
 	//! Returns the runtime's exit code.
 	//! If no runtime is found, returns -1.
-	[[nodiscard]] int32 GetExitCode() const;
+	[[nodiscard]] virtual int32 GetExitCode() const;
 
 private:
 	//! Pointer to the current runtime.

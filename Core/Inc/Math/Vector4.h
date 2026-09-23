@@ -23,7 +23,7 @@ struct Vector4
 	//! Constructs a default Vector4, equal to Zero().
 	constexpr Vector4() = default;
 	//! Constructs a Vector4 of a given w, x, y, and z double value.
-	constexpr Vector4(const double w, const double x, const double y, const double z) : w(w), x(x), y(y), z(z) {};
+	constexpr Vector4(const double w, const double x, const double y, const double z) : w(w), x(x), y(y), z(z) {}
 
 
 	//=================
@@ -179,9 +179,8 @@ struct Vector4
 	[[nodiscard]] constexpr Vector4 LimitLength(const double maxLength = 1.0) const
 	{
 		const double lengthSquared = LengthSquared();
-		const double maxLengthSquared = maxLength * maxLength;
 
-		if (lengthSquared <= maxLengthSquared)
+		if (const double maxLengthSquared = maxLength * maxLength; lengthSquared <= maxLengthSquared)
 		{
 			return *this;
 		}

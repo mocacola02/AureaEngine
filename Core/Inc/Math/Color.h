@@ -39,15 +39,7 @@ struct Color
 	// Operators
 	//============
 
-	constexpr Color& operator=(const Color& other)
-	{
-		r = other.r;
-		g = other.g;
-		b = other.b;
-		a = other.a;
-
-		return *this;
-	}
+	constexpr Color& operator=(const Color& other) = default;
 
 	constexpr Color operator+(const Color& other) const
 	{

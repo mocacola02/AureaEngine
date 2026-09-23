@@ -56,22 +56,22 @@ public:
 	// Helpers
 	//==========
 
-	uint32 Count() const
+	[[nodiscard]] [[nodiscard]] uint32 Count() const
 	{
 		return count_;
 	}
 
-	uint32 Capacity() const
+	[[nodiscard]] [[nodiscard]] uint32 Capacity() const
 	{
 		return bucketCount_;
 	}
 
-	bool IsEmpty() const
+	[[nodiscard]] bool IsEmpty() const
 	{
 		return count_ == 0;
 	}
 
-	double LoadFactor() const
+	[[nodiscard]] double LoadFactor() const
 	{
 		if (bucketCount_ == 0)
 		{
@@ -83,9 +83,7 @@ public:
 
 	void Set(const Key& key, const Value& value)
 	{
-		Entry* existing = FindEntry(key);
-
-		if (existing)
+		if (Entry* existing = FindEntry(key))
 		{
 			existing->value = value;
 			return;
@@ -98,9 +96,7 @@ public:
 
 	void Set(Key&& key, Value&& value)
 	{
-		Entry* existing = FindEntry(key);
-
-		if (existing)
+		if (Entry* existing = FindEntry(key))
 		{
 			existing->value = static_cast<Value&&>(value);
 			return;
@@ -113,9 +109,7 @@ public:
 
 	void Set(const Key& key, Value&& value)
 	{
-		Entry* existing = FindEntry(key);
-
-		if (existing)
+		if (Entry* existing = FindEntry(key))
 		{
 			existing->value = static_cast<Value&&>(value);
 			return;
@@ -128,9 +122,7 @@ public:
 
 	void Set(Key&& key, const Value& value)
 	{
-		Entry* existing = FindEntry(key);
-
-		if (existing)
+		if (Entry* existing = FindEntry(key))
 		{
 			existing->value = value;
 			return;
@@ -195,7 +187,7 @@ public:
 		return &entry -> value;
 	}
 
-	const Value* Find(const Key& key) const
+	[[nodiscard]] const Value* Find(const Key& key) const
 	{
 		const Entry* entry = FindEntry(key);
 
@@ -219,7 +211,7 @@ public:
 		return entry->value;
 	}
 
-	const Value& Get(const Key& key) const
+	[[nodiscard]] const Value& Get(const Key& key) const
 	{
 		const Entry* entry = FindEntry(key);
 
@@ -245,7 +237,7 @@ public:
 		return true;
 	}
 
-	bool Contains(const Key& key) const
+	[[nodiscard]] bool Contains(const Key& key) const
 	{
 		return FindEntry(key) != nullptr;
 	}
@@ -357,7 +349,7 @@ public:
 		return nullptr;
 	}
 
-	const Entry* FindEntry(const Key& key) const
+	[[nodiscard]] const Entry* FindEntry(const Key& key) const
 	{
 		if (!buckets_ || bucketCount_ == 0)
 		{
@@ -450,9 +442,7 @@ public:
 
 	Value& operator[](const Key& key)
 	{
-		Entry* entry = FindEntry(key);
-
-		if (entry)
+		if (Entry* entry = FindEntry(key))
 		{
 			return entry->value;
 		}
@@ -486,7 +476,7 @@ private:
 	{
 		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
 
-		Entry* entry = new Entry(key, value);
+		auto* entry = new Entry(key, value);
 
 		entry->next = buckets_[bucketIndex];
 
@@ -501,7 +491,7 @@ private:
 	{
 		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
 
-		Entry* entry = new Entry(static_cast<Key&&>(key), static_cast<Value&&>(value));
+		auto* entry = new Entry(static_cast<Key&&>(key), static_cast<Value&&>(value));
 
 		entry->next = buckets_[bucketIndex];
 
@@ -516,7 +506,7 @@ private:
 	{
 		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
 
-		Entry* entry = new Entry(key, static_cast<Value&&>(value));
+		auto* entry = new Entry(key, static_cast<Value&&>(value));
 
 		entry->next = buckets_[bucketIndex];
 
@@ -531,7 +521,7 @@ private:
 	{
 		const uint32 bucketIndex = GetBucketIndex(key, bucketCount_);
 
-		Entry* entry = new Entry(static_cast<Key&&>(key), value);
+		auto* entry = new Entry(static_cast<Key&&>(key), value);
 
 		entry->next = buckets_[bucketIndex];
 
@@ -544,7 +534,7 @@ private:
 
 	static uint32 GetBucketIndex(const Key& key, const uint32 bucketCount)
 	{
-		return Hasher::Get(key) & (bucketCount - 1);
+		return Hasher::Get(key) & bucketCount - 1;
 	}
 
 	void EnsureInsertCapacity()
@@ -556,9 +546,9 @@ private:
 			return;
 		}
 
-		const uint32 maximumEntries = static_cast<uint32>(static_cast<double>(bucketCount_) * maxLoadFactor_);
-
-		if (count_ + 1 <= maximumEntries)
+		if (
+			const auto maximumEntries = static_cast<uint32>(static_cast<double>(bucketCount_) * maxLoadFactor_);
+			count_ + 1 <= maximumEntries)
 		{
 			return;
 		}
@@ -580,7 +570,7 @@ private:
 			return;
 		}
 
-		Entry** newBuckets = new Entry*[newBucketCount];
+		auto** newBuckets = new Entry*[newBucketCount];
 
 		for (uint32 i = 0; i < newBucketCount; ++i)
 		{

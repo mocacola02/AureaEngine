@@ -8,7 +8,7 @@ bool EngineLoop::IsRunning() const
 	return running_;
 }
 
-void EngineLoop::SetIsRunning(bool isRunning)
+void EngineLoop::SetIsRunning(const bool isRunning)
 {
 	running_ = isRunning;
 }

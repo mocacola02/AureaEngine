@@ -36,6 +36,9 @@ protected:
 		SetName(Name(Object::GetClassName(), true));
 	}
 
+	explicit Object(const Name& name) : name_(name) {}
+	Object(const uint32 id, const Name& name) : id_(id), name_(name) {}
+
 	void SetName(const Name& name)
 	{
 		name_ = name;
@@ -47,6 +50,6 @@ protected:
 	}
 
 private:
-	Name name_;
 	uint32 id_ = 0;
+	Name name_;
 };

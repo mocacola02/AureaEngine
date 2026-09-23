@@ -23,7 +23,7 @@ struct Vector4F
 	//! Constructs a default Vector4F, equal to Zero().
 	constexpr Vector4F() = default;
 	//! Constructs a Vector4F of a given w, x, y, and z float value.
-	constexpr Vector4F(const float w, const float x, const float y, const float z) : w(w), x(x), y(y), z(z) {};
+	constexpr Vector4F(const float w, const float x, const float y, const float z) : w(w), x(x), y(y), z(z) {}
 
 
 	//=================
@@ -179,9 +179,8 @@ struct Vector4F
 	[[nodiscard]] constexpr Vector4F LimitLength(const float maxLength = 1.0f) const
 	{
 		const float lengthSquared = LengthSquared();
-		const float maxLengthSquared = maxLength * maxLength;
 
-		if (lengthSquared <= maxLengthSquared)
+		if (const float maxLengthSquared = maxLength * maxLength; lengthSquared <= maxLengthSquared)
 		{
 			return *this;
 		}

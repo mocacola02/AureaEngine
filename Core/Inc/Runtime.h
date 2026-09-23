@@ -8,9 +8,7 @@
 //! EngineLoop/World and various managers. See EngineRuntime for more info.
 class Runtime : public Object
 {
-protected:
-	friend class Application;
-
+public:
 	virtual bool Initialize() = 0;
 	virtual void Tick(double deltaTime_) = 0;
 	virtual void Shutdown() = 0;

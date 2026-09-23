@@ -32,7 +32,7 @@ struct Matrix4F
 		{
 			for (uint8 j = 0; j < 4; ++j)
 			{
-				m[i][j] = (i == j) ? value : 0.0f;
+				m[i][j] = i == j ? value : 0.0f;
 			}
 		}
 	}
@@ -138,7 +138,7 @@ struct Matrix4F
 
 			for (uint8 j = 0; j < 4; ++j)
 			{
-				a[i][j + 4] = (j == i ? 1.0f : 0.0f);
+				a[i][j + 4] = j == i ? 1.0f : 0.0f;
 			}
 		}
 
@@ -185,9 +185,7 @@ struct Matrix4F
 					continue;
 				}
 
-				const float factor = a[i][col];
-
-				if (Math::AbsF(factor) > 1e-12f)
+				if (const float factor = a[i][col]; Math::AbsF(factor) > 1e-12f)
 				{
 					for (uint8 j = col; j < 8; ++j)
 					{

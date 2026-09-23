@@ -23,6 +23,8 @@ public:
 	}
 
 	//! Char to String constructor
+	// Maybe I'm doing it wrong, but making this explicit makes this constructor much more annoying, so I'm disabling that warning
+	// ReSharper disable once CppNonExplicitConvertingConstructor
 	String(const char* value)
 	{
 		if (!value)
@@ -584,9 +586,7 @@ public:
 			return {};
 		}
 
-		uint32 available = length_ - start;
-
-		if (count > available)
+		if (const uint32 available = length_ - start; count > available)
 		{
 			count = available;
 		}
@@ -801,9 +801,7 @@ public:
 			return false;
 		}
 
-		const uint32 rightLength = StringLength(right);
-
-		if (length_ != rightLength)
+		if (const uint32 rightLength = StringLength(right); length_ != rightLength)
 		{
 			return false;
 		}
@@ -906,7 +904,7 @@ private:
 			return;
 		}
 
-		if (valueLength > (MaxInt<uint32> - length_ - 1))
+		if (valueLength > MaxInt<uint32> - length_ - 1)
 		{
 			return;
 		}

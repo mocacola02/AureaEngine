@@ -21,34 +21,34 @@ public:
 	void Start();
 	void PostStart();
 
-	void Tick(const double deltaTime);
+	void Tick(double deltaTime);
 
-	bool HasStarted() const;
+	[[nodiscard]] bool HasStarted() const;
 
-	bool IsPendingDestroy() const;
+	[[nodiscard]] bool IsPendingDestroy() const;
 	void Destroy();
 
-	bool IsTickable() const;
+	[[nodiscard]] bool IsTickable() const;
 	void SetTickMode(const TickMode& tickMode);
 
 	WorldObject*	   GetParent();
-	const WorldObject* GetParent() const;
+	[[nodiscard]] const WorldObject* GetParent() const;
 
-	const Array<WorldObject*>& GetChildren() const;
+	[[nodiscard]] const Array<WorldObject*>& GetChildren() const;
 
 	void AddChild(WorldObject* object);
 	void RemoveChild(WorldObject* object);
 
-	bool HasParent() const;
-	bool HasChildren() const;
+	[[nodiscard]] bool HasParent() const;
+	[[nodiscard]] bool HasChildren() const;
 	bool HasChild(const WorldObject* object) const;
 	bool IsChildOf(const WorldObject* object) const;
 
-	bool SetParent(WorldObject* parent, const bool keepWorldTransform = true);
+	bool SetParent(WorldObject* parent, bool keepWorldTransform = true);
 	void RemoveParent(bool keepWorldTransform = true);
 
 	World* GetWorld();
-	const World* GetWorld() const;
+	[[nodiscard]] const World* GetWorld() const;
 
 protected:
 	friend class World;
@@ -69,7 +69,7 @@ protected:
 	World* world_ = nullptr;
 
 
-	bool CanTick(const double deltaTime);
+	bool CanTick(double deltaTime);
 
 	virtual void OnInitialize() {}
 	virtual void OnPreStart()	{}
