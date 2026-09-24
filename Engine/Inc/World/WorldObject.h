@@ -16,7 +16,7 @@ enum class TickMode : uint8
 class WorldObject : public Object
 {
 public:
-	void Initialize();
+	void Initialize() override;
 	void PreStart();
 	void Start();
 	void PostStart();
@@ -41,9 +41,6 @@ public:
 
 	[[nodiscard]] const Array<WorldObject*>& GetChildren() const;
 
-	void AddChild(WorldObject* object);
-	void RemoveChild(WorldObject* object);
-
 	[[nodiscard]] bool HasParent() const;
 	[[nodiscard]] bool HasChildren() const;
 	bool HasChild(WorldObject *object) const;
@@ -52,8 +49,8 @@ public:
 	bool HasDescendent(WorldObject* object) const;
 	bool IsDescendentOf(const WorldObject* object) const;
 
-	bool SetParent(WorldObject* parent, bool keepWorldTransform = true);
-	void RemoveParent(bool keepWorldTransform = true);
+	bool SetParent(WorldObject* parent);
+	void RemoveParent();
 
 	World* GetWorld();
 	[[nodiscard]] const World* GetWorld() const;
@@ -66,8 +63,8 @@ protected:
 	bool canTickThisFrame_ = false;
 
 	TickMode tickMode_ = TickMode::Inherit;
-	uint32 ticksPerSecond_ = 0;
-	double tickAccumlator_ = 0.0;
+	uint32	 ticksPerSecond_ = 0;
+	double	 tickAccumlator_ = 0.0;
 
 	uint64 tickCount_ = 0;
 	double lifetime_ = 0.0;
@@ -82,6 +79,10 @@ protected:
 	bool AccumulateTick(double deltaTime);
 
 	void SetWorld(World* world);
+
+	void AddChild(WorldObject* object);
+	void RemoveChild(WorldObject* object);
+
 	void UpdateRoot();
 
 	virtual void OnInitialize() {}

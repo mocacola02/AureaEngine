@@ -4,6 +4,7 @@
 #include "../EngineLoop.h"
 
 class WorldObject;
+class Camera3D;
 
 class World final : public EngineLoop
 {
@@ -28,6 +29,8 @@ public:
 
 	[[nodiscard]] bool IsPaused() const;
 
+	bool SetCamera3D(Camera3D* camera);
+
 protected:
 	void Exit(int32 code) override;
 
@@ -41,6 +44,8 @@ private:
 	bool paused_ = false;
 
 	Array<WorldObject*> objects_;
+
+	Camera3D* camera3D_ = nullptr;
 
 	template<typename T, typename... Args>
 	T* SpawnObject(Args&&... args);

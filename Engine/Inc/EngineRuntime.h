@@ -5,9 +5,9 @@
 #include "EngineLoop.h"
 
 #include "ConfigManager.h"
-#include "InputManager.h"
+#include "Managers/InputManager.h"
 #include "RenderManager.h"
-#include "WindowManager.h"
+#include "Managers/WindowManager.h"
 
 class EditorApplication;
 

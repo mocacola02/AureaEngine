@@ -140,16 +140,6 @@ const Array<WorldObject*>& WorldObject::GetChildren() const
 	return children_;
 }
 
-void WorldObject::AddChild(WorldObject* object)
-{
-	children_.Add(object);
-}
-
-void WorldObject::RemoveChild(WorldObject* object)
-{
-	children_.Remove(object);
-}
-
 bool WorldObject::HasParent() const
 {
 	return parent_ != nullptr;
@@ -205,7 +195,7 @@ bool WorldObject::IsDescendentOf(const WorldObject* object) const
 	return false;
 }
 
-bool WorldObject::SetParent(WorldObject* parent, bool keepWorldTransform)
+bool WorldObject::SetParent(WorldObject* parent)
 {
 	if (!parent)
 	{
@@ -235,13 +225,17 @@ bool WorldObject::SetParent(WorldObject* parent, bool keepWorldTransform)
 	parent_ = parent;
 	parent_->AddChild(this);
 
+	UpdateRoot();
+
 	return true;
 }
 
-void WorldObject::RemoveParent(bool keepWorldTransform = true)
+void WorldObject::RemoveParent()
 {
 	parent_->RemoveChild(this);
 	parent_ = nullptr;
+
+	UpdateRoot();
 }
 
 World* WorldObject::GetWorld()
@@ -278,6 +272,16 @@ bool WorldObject::AccumulateTick(const double deltaTime)
 void WorldObject::SetWorld(World* world)
 {
 	world_ = world;
+}
+
+void WorldObject::AddChild(WorldObject* object)
+{
+	children_.Add(object);
+}
+
+void WorldObject::RemoveChild(WorldObject* object)
+{
+	children_.Remove(object);
 }
 
 void WorldObject::UpdateRoot()

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CoreInc.h"
+#include "../CoreInc.h"
 
 
 class WindowManager final : public Object

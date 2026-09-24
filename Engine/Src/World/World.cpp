@@ -1,5 +1,6 @@
 #include "../../Inc/World/World.h"
 #include "../../Inc/World/WorldObject.h"
+#include "Inc/World/3D/Camera3D.h"
 
 // TODO: Implement this for real
 template<typename T, typename... Args>
@@ -67,7 +68,7 @@ void World::DestroyPendingObjects()
 			continue;
 		}
 
-		object->RemoveParent(false);
+		object->RemoveParent();
 
 		while (!object->GetChildren().IsEmpty())
 		{
@@ -78,7 +79,7 @@ void World::DestroyPendingObjects()
 				break;
 			}
 
-			child->RemoveParent(true);
+			child->RemoveParent();
 		}
 
 		objects_.RemoveAt(index);
@@ -232,6 +233,17 @@ uint32 World::GetObjectCount() const
 bool World::IsPaused() const
 {
 	return paused_;
+}
+
+bool World::SetCamera3D(Camera3D* camera)
+{
+	if (camera && !camera->IsPendingDestroy())
+	{
+		camera3D_ = camera;
+		return true;
+	}
+
+	return false;
 }
 
 void World::Exit(const int32 code)

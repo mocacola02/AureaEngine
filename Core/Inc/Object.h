@@ -7,7 +7,18 @@
 class Object
 {
 public:
+	Object()
+	{
+		SetName(Name(Object::GetClassName(), true));
+	}
+
+	explicit Object(const Name& name) : name_(name) {}
+	Object(const uint32 id, const Name& name) : id_(id), name_(name) {}
+
 	virtual ~Object() = default;
+
+	virtual void Initialize() {}
+	virtual void Shutdown() {}
 
 	[[nodiscard]] const Name& GetName() const
 	{
@@ -31,14 +42,6 @@ public:
 	}
 
 protected:
-	Object()
-	{
-		SetName(Name(Object::GetClassName(), true));
-	}
-
-	explicit Object(const Name& name) : name_(name) {}
-	Object(const uint32 id, const Name& name) : id_(id), name_(name) {}
-
 	void SetName(const Name& name)
 	{
 		name_ = name;
