@@ -4,10 +4,10 @@
 
 #include "EngineLoop.h"
 
-#include "ConfigManager.h"
-#include "Managers/InputManager.h"
-#include "RenderManager.h"
-#include "Managers/WindowManager.h"
+#include "Config/ConfigManager.h"
+#include "Input/InputManager.h"
+#include "Rendering/RenderManager.h"
+#include "Rendering/WindowManager.h"
 
 class EditorApplication;
 
@@ -23,6 +23,8 @@ public:
 	void SetIsRunning(bool isRunning) override;
 	[[nodiscard]] bool IsRunning() const override;
 
+	//! Sets the exit code and sets to stop running.
+	void Exit(int32 code);
 	[[nodiscard]] int32 GetExitCode() const override;
 
 private:

@@ -1,7 +1,13 @@
 #include "../Inc/EngineLoop.h"
+#include "../Inc/EngineRuntime.h"
 
-#include "SDL3/SDL_messagebox.h"
-
+void EngineLoop::Initialize()
+{
+	if (!LoopInit())
+	{
+		GetRuntime()->FATAL("Could not initialize EngineLoop.", -1);
+	}
+}
 
 bool EngineLoop::IsRunning() const
 {
@@ -24,23 +30,13 @@ int32 EngineLoop::GetExitCode() const
 	return exitCode_;
 }
 
-bool EngineLoop::Initialize()
+bool EngineLoop::LoopInit()
 {
 	running_ = true;
 	return true;
 }
 
-void EngineLoop::InternalFatal(
-		const String& message,
-		const int32 exitCode,
-		const char* file,
-		const char* function,
-		const uint32 line
-)
+EngineRuntime* EngineLoop::GetRuntime() const
 {
-	Log::InternalFatal(message, file, function, line);
-
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FATAL ERROR", message.CStr(), nullptr);
-
-	Exit(exitCode);
+	return runtime_;
 }

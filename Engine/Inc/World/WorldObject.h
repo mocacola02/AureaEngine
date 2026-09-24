@@ -17,13 +17,13 @@ class WorldObject : public Object
 {
 public:
 	void Initialize() override;
+
 	void PreStart();
 	void Start();
 	void PostStart();
+	[[nodiscard]] bool HasStarted() const;
 
 	void Tick(double deltaTime);
-
-	[[nodiscard]] bool HasStarted() const;
 
 	[[nodiscard]] bool IsPendingDestroy() const;
 	void Destroy();

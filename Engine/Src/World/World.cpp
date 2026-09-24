@@ -48,6 +48,7 @@ bool World::DestroyObject(WorldObject* object)
 	return true;
 }
 
+//! TODO: Ensure proper handling of children, OnDestroy, and actual object deletion
 void World::DestroyPendingObjects()
 {
 	// We'll destroy objects from the "bottom up."
@@ -67,6 +68,8 @@ void World::DestroyPendingObjects()
 		{
 			continue;
 		}
+
+		object->OnDestroy();
 
 		object->RemoveParent();
 

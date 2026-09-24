@@ -2,8 +2,9 @@
 
 #include "../String/String.h"
 
-#include <cstdio>
+#include <SDL3/SDL_messagebox.h>
 
+#include <cstdio>
 
 namespace Log
 {
@@ -61,7 +62,9 @@ namespace Log
 
 	inline void InternalFatal(const String& message, const char* file, const char* function, const uint32 line)
 	{
-		WriteLog("Fatal", ErrorColor, message.CStr(), file, function, line);
+		InternalError(message, file, function, line);
+
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FATAL ERROR", message.CStr(), nullptr);
 	}
 
 	inline void InternalPrint(const String& message)
@@ -88,6 +91,14 @@ namespace Log
 
 #define ERROR(message)	\
 	Log::InternalError(	\
+		(message),		\
+		__FILE__,		\
+		__func__,		\
+		__LINE__		\
+	)
+
+#define FATAL(message)	\
+	Log::InternalFatal(		\
 		(message),		\
 		__FILE__,		\
 		__func__,		\

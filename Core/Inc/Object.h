@@ -17,7 +17,7 @@ public:
 
 	virtual ~Object() = default;
 
-	virtual void Initialize() {}
+	virtual bool Initialize();
 	virtual void Shutdown() {}
 
 	[[nodiscard]] const Name& GetName() const
