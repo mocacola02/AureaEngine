@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../CoreInc.h"
+#include "RenderSettings.h"
 
 
 struct Shader;
@@ -10,20 +11,47 @@ class MeshData;
 class RenderDevice : public Object
 {
 public:
+	//! Destructor
 	~RenderDevice() override = default;
 
+
+	//=========
+	// Events
+	//=========
+
 	virtual bool DeviceInit(Window& window);
+
+
+	//=========
+	// Render
+	//=========
 
 	virtual void PreRender()  = 0;
 	virtual void PostRender() = 0;
 
+
+	//===============
+	// Mesh Helpers
+	//===============
+
 	virtual UUID& CreateMesh(const MeshData& meshData) = 0;
+	virtual void DrawMesh(UUID& mesh, UUID& shader) = 0;
 	virtual void DestroyMesh(UUID& mesh) = 0;
+
+
+	//=================
+	// Shader Helpers
+	//=================
 
 	virtual UUID& CreateShader(const Shader& shader) = 0;
 	virtual void SetMainShader(UUID& shader) = 0;
 	virtual void SetPresentShader(UUID& shader) = 0;
 	virtual void DestroyShader(UUID& shader) = 0;
+
+
+	//=========================
+	// Shader Uniform Helpers
+	//=========================
 
 	virtual void SetShaderBool		(UUID& shaderHandle, const String& name, bool	  value) = 0;
 
@@ -54,4 +82,34 @@ public:
 	virtual void SetViewUniform		 (const Matrix4F& view)		  = 0;
 	virtual void SetProjectionUniform(const Matrix4F& projection) = 0;
 	virtual void SetModelUniform	 (const Matrix4F& model)	  = 0;
+
+
+	//==================
+	// Render Settings
+	//==================
+
+	virtual void ApplySettings(const RenderSettings& settings) = 0;
+	virtual void SetHDR(bool enabled) = 0;
+	virtual void SetAA(const AAMode& mode, uint8 samples) = 0;
+	virtual void SetVSync(const VSyncMode& mode) = 0;
+
+
+	//===============
+	// Misc Helpers
+	//===============
+
+	virtual void PrintRendererInfo() = 0;
+
+
+private:
+	virtual bool CreateHDRFramebuffer(int32 width, int32 height) = 0;
+	virtual bool ResizeHDRFramebuffer(int32 width, int32 height) = 0;
+	virtual void DestroyHDRFramebuffer() = 0;
+
+	virtual bool CreatePresentResources() = 0;
+	virtual void DestroyPresentResources() = 0;
+
+	virtual void PresentFrame(UUID& presentShader) = 0;
+
+	virtual void UpdateHDROutputState() = 0;
 };
