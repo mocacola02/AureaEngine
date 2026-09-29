@@ -7,7 +7,7 @@
 #include "Config/ConfigManager.h"
 #include "Input/InputManager.h"
 #include "Rendering/RenderManager.h"
-#include "Rendering/WindowManager.h"
+#include "Window/WindowManager.h"
 
 class EditorApplication;
 

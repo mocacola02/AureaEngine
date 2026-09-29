@@ -10,7 +10,7 @@ class EngineRuntime;
 class EngineLoop : public Object
 {
 public:
-	void Initialize() override;
+	bool Initialize() override;
 
 protected:
 	// Runtime should have access, anything else should communicate via Runtime

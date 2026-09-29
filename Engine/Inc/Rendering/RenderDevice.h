@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../CoreInc.h"
-#include "RenderSettings.h"
+#include "../Config/DisplaySettings.h"
 
 
 struct Shader;
@@ -61,10 +61,10 @@ public:
 	virtual void SetShaderFloat		(UUID& shaderHandle, const String& name, float	  value) = 0;
 	virtual void SetShaderDouble	(UUID& shaderHandle, const String& name, double	  value) = 0;
 
-	//virtual void SetShaderIVec2	(UUID& shaderHandle, const String& name, Vector2I value) = 0;
-	//virtual void SetShaderUVec2	(UUID& shaderHandle, const String& name, Vector2U value) = 0;
-	//virtual void SetShaderVec2	(UUID& shaderHandle, const String& name, Vector2F value) = 0;
-	//virtual void SetShaderDVec2	(UUID& shaderHandle, const String& name, Vector2  value) = 0;
+	virtual void SetShaderIVec2	(UUID& shaderHandle, const String& name, Vector2I value) = 0;
+	virtual void SetShaderUVec2	(UUID& shaderHandle, const String& name, Vector2U value) = 0;
+	virtual void SetShaderVec2	(UUID& shaderHandle, const String& name, Vector2F value) = 0;
+	virtual void SetShaderDVec2	(UUID& shaderHandle, const String& name, Vector2  value) = 0;
 
 	//virtual void SetShaderIVec3	(UUID& shaderHandle, const String& name, Vector3I value) = 0;
 	//virtual void SetShaderUVec3	(UUID& shaderHandle, const String& name, Vector3U value) = 0;

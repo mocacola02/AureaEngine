@@ -12,6 +12,77 @@
 namespace Math
 {
 	//========
+	// int32
+	//========
+
+	constexpr int32 AbsI(const int32 value)
+	{
+		return value < 0 ? -value : value;
+	}
+
+	constexpr int32 ClampI(const int32 value, const int32 min, const int32 max)
+	{
+		return value < min ? min : value > max ? max : value;
+	}
+
+	constexpr int32 MaxI(const int32 a, const int32 b)
+	{
+		return a > b ? a : b;
+	}
+
+	constexpr int32 MinI(const int32 a, const int32 b)
+	{
+		return a < b ? a : b;
+	}
+
+	constexpr int32 SignI(const int32 value)
+	{
+		return value > 0 ? 1 : value < 0 ? -1 : 0;
+	}
+
+	constexpr bool IsFiniteI(const int32 value)
+	{
+		return isfinite(value);
+	}
+
+
+	//========
+	// uint32
+	//========
+
+	constexpr uint32 AbsU(const uint32 value)
+	{
+		return value < 0 ? -value : value;
+	}
+
+	constexpr uint32 ClampU(const uint32 value, const uint32 min, const uint32 max)
+	{
+		return value < min ? min : value > max ? max : value;
+	}
+
+	constexpr uint32 MaxU(const uint32 a, const uint32 b)
+	{
+		return a > b ? a : b;
+	}
+
+	constexpr uint32 MinU(const uint32 a, const uint32 b)
+	{
+		return a < b ? a : b;
+	}
+
+	constexpr uint32 SignU(const uint32 value)
+	{
+		return value > 0 ? 1 : value < 0 ? -1 : 0;
+	}
+
+	constexpr bool IsFiniteU(const uint32 value)
+	{
+		return isfinite(value);
+	}
+
+
+
+	//========
 	// Float
 	//========
 

@@ -2,9 +2,7 @@
 
 #include "../Object.h"
 #include "Memory.h"
-
-#include <cstddef>
-#include <type_traits>
+#include "Types.h"
 
 
 class RefCounted : public Object
@@ -56,7 +54,7 @@ private:
 template<typename T>
 class Ref
 {
-	static_assert(std::is_base_of_v<RefCounted, T>, "Ref<T> requires T to inherit from RefCounted");
+	static_assert(is_base_of_v<RefCounted, T>, "Ref<T> requires T to inherit from RefCounted");
 
 	template<typename U>
 	friend class Ref;
@@ -64,7 +62,7 @@ class Ref
 public:
 	constexpr Ref() noexcept = default;
 
-	explicit constexpr Ref(std::nullptr_t) noexcept
+	explicit constexpr Ref(nullptr_t) noexcept
 	{
 	}
 
@@ -85,7 +83,7 @@ public:
 
 
 	template<typename U>
-	requires std::is_convertible_v<U*, T*>
+	requires is_convertible_v<U*, T*>
 	explicit Ref(Ref<U>&& other) noexcept : pointer_(other.pointer_)
 	{
 		other.pointer_ = nullptr;
@@ -99,7 +97,7 @@ public:
 
 	Ref& operator=(const Ref& other)
 	{
-		if (this != &other)
+		if (this == &other)
 		{
 			return *this;
 		}
@@ -111,7 +109,7 @@ public:
 
 	Ref& operator=(Ref&& other) noexcept
 	{
-		if (this != &other)
+		if (this == &other)
 		{
 			return *this;
 		}
@@ -125,7 +123,7 @@ public:
 	}
 
 	template<typename U>
-	requires std::is_convertible_v<U*, T*>
+	requires is_convertible_v<U*, T*>
 	Ref& operator=(const Ref<U>& other) noexcept
 	{
 		Assign(other.pointer_);
@@ -134,7 +132,7 @@ public:
 	}
 
 	template<typename U>
-	requires std::is_convertible_v<U*, T*>
+	requires is_convertible_v<U*, T*>
 	Ref& operator=(Ref<U>&& other) noexcept
 	{
 		ReleaseRef();
@@ -145,7 +143,7 @@ public:
 		return *this;
 	}
 
-	Ref& operator=(std::nullptr_t)
+	Ref& operator=(nullptr_t)
 	{
 		Reset();
 
@@ -224,12 +222,12 @@ public:
 		return pointer_ != other.pointer_;
 	}
 
-	bool operator==(std::nullptr_t) const noexcept
+	bool operator==(nullptr_t) const noexcept
 	{
 		return pointer_ == nullptr;
 	}
 
-	bool operator!=(std::nullptr_t) const noexcept
+	bool operator!=(nullptr_t) const noexcept
 	{
 		return pointer_ != nullptr;
 	}
@@ -289,6 +287,6 @@ private:
 template<typename T, typename... Args>
 Ref<T> MakeRef(Args&&... args)
 {
-	static_assert(std::is_base_of_v<RefCounted, T>, "MakeRef<T> requires T to inherit from RefCounted");
+	static_assert(is_base_of_v<RefCounted, T>, "MakeRef<T> requires T to inherit from RefCounted");
 	return Ref<T>(new T(Forward<Args>(args)...));
 }

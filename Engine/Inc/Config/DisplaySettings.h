@@ -17,19 +17,40 @@ enum class AAMode : uint8
 	MSAA
 };
 
-enum class ScreenFormat : uint8
+enum class FilterMode : uint8
 {
-	SDR,
-	HDR
+	Bilinear,
+	Catmull,
+	ThreePoint,
+	Nearest
 };
 
-struct RenderSettings
+struct WindowDisplaySettings
 {
-	ScreenFormat screenFormat = ScreenFormat::HDR;
+	//! Requests HDR output on the window.
+	bool requestHDR = true;
 
+};
+
+struct ViewportSettings
+{
+	//! Allows using tonemapping to properly display HDR render targets on SDR displays.
+	bool allowHDRTonemapping = true;
+
+	//! Filter mode to use when scaling the viewport.
+	FilterMode upscaleMode = FilterMode::Bilinear;
+
+	// Anti-Aliasing
 	AAMode antiAliasingMode	  = AAMode::MSAA;
 	uint8 antiAliasingSamples = 4;
 
+	// Textures
+	uint32 maxTextureResolution = MaxInt<uint32>;
+	uint8 anisotropicFilterLevel = 4;
+	FilterMode textureFilterMode = FilterMode::Catmull;
+
+	// V-Sync
+	bool useVRR = true;
 	VSyncMode vSyncMode = VSyncMode::On;
 };
 

@@ -1,12 +1,15 @@
 #include "../Inc/EngineLoop.h"
 #include "../Inc/EngineRuntime.h"
 
-void EngineLoop::Initialize()
+bool EngineLoop::Initialize()
 {
 	if (!LoopInit())
 	{
-		GetRuntime()->FATAL("Could not initialize EngineLoop.", -1);
+		ERROR("Could not initialize EngineLoop.");
+		return false;
 	}
+
+	return true;
 }
 
 bool EngineLoop::IsRunning() const

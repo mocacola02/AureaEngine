@@ -16,7 +16,7 @@ enum class TickMode : uint8
 class WorldObject : public Object
 {
 public:
-	void Initialize() override;
+	bool Initialize() override;
 
 	void PreStart();
 	void Start();
@@ -26,6 +26,7 @@ public:
 	void Tick(double deltaTime);
 
 	[[nodiscard]] bool IsPendingDestroy() const;
+
 	void Destroy();
 
 	[[nodiscard]] bool ShouldTick(bool parentShouldTick, double deltaTime);
