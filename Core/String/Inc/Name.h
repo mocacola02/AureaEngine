@@ -58,27 +58,27 @@ public:
 		}
 	}
 
-	[[nodiscard]] const char* CStr() const
+	const char* CStr() const
 	{
 		return NameTable::Get().GetString(id_);
 	}
 
-	[[nodiscard]] const String& ToString() const
+	const String& ToString() const
 	{
 		return String(CStr());
 	}
 
-	[[nodiscard]] uint32 Length() const
+	uint32 Length() const
 	{
 		return NameTable::Get().GetLength(id_);
 	}
 
-	[[nodiscard]] uint32 ID() const
+	uint32 ID() const
 	{
 		return id_;
 	}
 
-	[[nodiscard]] bool IsEmpty() const
+	bool IsEmpty() const
 	{
 		return id_ == 0;
 	}

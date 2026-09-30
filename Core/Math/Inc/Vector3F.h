@@ -66,7 +66,7 @@ struct Vector3F
 	// but no code has been pulled from Godot's source. -Moca
 
 	//! Returns the absolute value (positive value) of this Vector3F.
-	[[nodiscard]] constexpr Vector3F Abs() const
+	constexpr Vector3F Abs() const
 	{
 		return {
 			Math::AbsF(x),
@@ -75,19 +75,19 @@ struct Vector3F
 		};
 	}
 
-	[[nodiscard]] constexpr float AngleXY() const
+	constexpr float AngleXY() const
 	{
 		return Math::Atan2F(y, x);
 	}
 
 	//! Returns the minimum angle to a given Vector3F in radians.
-	[[nodiscard]] constexpr float AngleTo(const Vector3F& other) const
+	constexpr float AngleTo(const Vector3F& other) const
 	{
 		return Math::Atan2F(Cross(other).Length(), Dot(other));
 	}
 
 	//! Returns the direction the cubic Bézier curve is heading at parameter t (its tangent vector).
-	[[nodiscard]] constexpr Vector3F BezierDerivative(
+	constexpr Vector3F BezierDerivative(
 		const Vector3F& control1, const Vector3F& control2,
 		const Vector3F& end, const float t) const
 	{
@@ -99,7 +99,7 @@ struct Vector3F
 	}
 
 	//! Returns the point on the cubic Bézier curve when moving t fraction along it.
-	[[nodiscard]] constexpr Vector3F BezierInterpolate(
+	constexpr Vector3F BezierInterpolate(
 		const Vector3F& control1, const Vector3F& control2,
 		const Vector3F& end, const float t) const
 	{
@@ -114,13 +114,13 @@ struct Vector3F
 	}
 
 	//! Returns the rounded up value of this Vector3F.
-	[[nodiscard]] constexpr Vector3F Ceil() const
+	constexpr Vector3F Ceil() const
 	{
 		return {Math::CeilF(x), Math::CeilF(y), Math::CeilF(z)};
 	}
 
 	//! Returns the clamped value of this Vector3F between a given minimum Vector3F and maximum Vector3F value.
-	[[nodiscard]] constexpr Vector3F Clamp(const Vector3F& min, const Vector3F& max) const
+	constexpr Vector3F Clamp(const Vector3F& min, const Vector3F& max) const
 	{
 		return {
 			Math::ClampF(x, min.x, max.x),
@@ -130,7 +130,7 @@ struct Vector3F
 	}
 
 	//!  Returns the clamped value of this Vector3F between a given minimum float and maximum float value.
-	[[nodiscard]] constexpr Vector3F Clamp(const float min, const float max) const
+	constexpr Vector3F Clamp(const float min, const float max) const
 	{
 		return {
 			Math::ClampF(x, min, max),
@@ -140,7 +140,7 @@ struct Vector3F
 	}
 
 	//! Returns the cross product of this Vector3F and another Vector3F.
-	[[nodiscard]] constexpr Vector3F Cross(const Vector3F& other) const
+	constexpr Vector3F Cross(const Vector3F& other) const
 	{
 		return {
 			y * other.z - z * other.y,
@@ -150,7 +150,7 @@ struct Vector3F
 	}
 
 	//! Returns the interpolated Vector3F using the given weight.
-	[[nodiscard]] constexpr Vector3F CubicInterpolate(
+	constexpr Vector3F CubicInterpolate(
 		const Vector3F& b, const Vector3F& preA,
 		const Vector3F& preB, const float weight) const
 	{
@@ -163,19 +163,19 @@ struct Vector3F
 	}
 
 	//! Returns the normalized Vector3F pointed from this Vector3F to another given Vector3F.
-	[[nodiscard]] constexpr Vector3F DirectionTo(const Vector3F& other) const
+	constexpr Vector3F DirectionTo(const Vector3F& other) const
 	{
 		return (other - *this).Normalized();
 	}
 
 	//! Returns the squared distance between this Vector3F and another given Vector3F.
-	[[nodiscard]] constexpr float DistanceSquaredTo(const Vector3F& other) const
+	constexpr float DistanceSquaredTo(const Vector3F& other) const
 	{
 		return (other - *this).LengthSquared();
 	}
 
 	//! Returns the dot product of this Vector3F and another given Vector3F.
-	[[nodiscard]] constexpr float Dot(const Vector3F& other) const
+	constexpr float Dot(const Vector3F& other) const
 	{
 		return	x * other.x +
 				y * other.y +
@@ -183,7 +183,7 @@ struct Vector3F
 	}
 
 	//! Returns the rounded down value of this Vector3F.
-	[[nodiscard]] constexpr Vector3F Floor() const
+	constexpr Vector3F Floor() const
 	{
 		return {
 			Math::FloorF(x),
@@ -193,7 +193,7 @@ struct Vector3F
 	}
 
 	//! Returns whether or not this Vector3F is finite.
-	[[nodiscard]] constexpr bool IsFinite() const
+	constexpr bool IsFinite() const
 	{
 		return	Math::IsFiniteF(x) &&
 				Math::IsFiniteF(y) &&
@@ -201,13 +201,13 @@ struct Vector3F
 	}
 
 	//! Returns whether or not this Vector3F is normalized.
-	[[nodiscard]] constexpr bool IsNormalized(const float epsilon = 0.00001f) const
+	constexpr bool IsNormalized(const float epsilon = 0.00001f) const
 	{
 		return Math::IsEqualApproxF(LengthSquared(), 1.0f, epsilon);
 	}
 
 	//! Returns the squared length of this Vector3F.
-	[[nodiscard]] constexpr float LengthSquared() const
+	constexpr float LengthSquared() const
 	{
 		return	x * x +
 				y * y +
@@ -215,13 +215,13 @@ struct Vector3F
 	}
 
 	//! Returns the length of this Vector3F.
-	[[nodiscard]] constexpr float Length() const
+	constexpr float Length() const
 	{
 		return Math::SqrtF(LengthSquared());
 	}
 
 	//! Returns the point between this Vector3F and a given target Vector3F based on a given weight.
-	[[nodiscard]] constexpr Vector3F Lerp(const Vector3F& target, const float weight) const
+	constexpr Vector3F Lerp(const Vector3F& target, const float weight) const
 	{
 		return {
 			Math::LerpF(x,  target.x, weight),
@@ -231,7 +231,7 @@ struct Vector3F
 	}
 
 	//! Returns the value of this Vector3F with its length limited to a given max length.
-	[[nodiscard]] constexpr Vector3F LimitLength(const float maxLength = 1.0f) const
+	constexpr Vector3F LimitLength(const float maxLength = 1.0f) const
 	{
 		const float lengthSquared = LengthSquared();
 
@@ -246,7 +246,7 @@ struct Vector3F
 	}
 
 	//! Returns a Vector3F value where each component is the larger value between this Vector3F and another given Vector3F.
-	[[nodiscard]] constexpr Vector3F Max(const Vector3F& other) const
+	constexpr Vector3F Max(const Vector3F& other) const
 	{
 		return {
 			Math::MaxF(x, other.x),
@@ -256,7 +256,7 @@ struct Vector3F
 	}
 
 	//! Returns a Vector3F value where each component is the larger value between this Vector3F and a given float value.
-	[[nodiscard]] constexpr Vector3F Max(const float value) const
+	constexpr Vector3F Max(const float value) const
 	{
 		return {
 			Math::MaxF(x, value),
@@ -266,7 +266,7 @@ struct Vector3F
 	}
 
 	//! Returns a Vector3F value where each component is the smaller value between this Vector3F and another given Vector3F.
-	[[nodiscard]] constexpr Vector3F Min(const Vector3F& other) const
+	constexpr Vector3F Min(const Vector3F& other) const
 	{
 		return {
 			Math::MinF(x, other.x),
@@ -276,7 +276,7 @@ struct Vector3F
 	}
 
 	//! Returns a Vector3F value where each component is the smaller value between this Vector3F and a given float value.
-	[[nodiscard]] constexpr Vector3F Min(const float value) const
+	constexpr Vector3F Min(const float value) const
 	{
 		return {
 			Math::MinF(x, value),
@@ -286,7 +286,7 @@ struct Vector3F
 	}
 
 	//! Returns the point reached after moving this Vector3F toward another given Vector3F by up to a given delta distance.
-	[[nodiscard]] constexpr Vector3F MoveToward(const Vector3F& other, const float delta) const
+	constexpr Vector3F MoveToward(const Vector3F& other, const float delta) const
 	{
 		const Vector3F difference = other - *this;
 		const float distance = difference.Length();
@@ -300,7 +300,7 @@ struct Vector3F
 	}
 
 	//! Returns the unit-length Vector3F in the same direction as this Vector3F.
-	[[nodiscard]] constexpr Vector3F Normalized() const
+	constexpr Vector3F Normalized() const
 	{
 		const float length = Length();
 
@@ -313,7 +313,7 @@ struct Vector3F
 	}
 
 	//! Returns a Vector3F with each component in the range [0, mod] for its corresponding component of a given Vector3F mod value.
-	[[nodiscard]] constexpr Vector3F PosMod(const Vector3F& mod) const
+	constexpr Vector3F PosMod(const Vector3F& mod) const
 	{
 		return {
 			Math::PosModF(x, mod.x),
@@ -323,7 +323,7 @@ struct Vector3F
 	}
 
 	//! Returns a Vector3F with each component in the range [0, mod] for a given float mod value.
-	[[nodiscard]] constexpr Vector3F PosMod(const float mod) const
+	constexpr Vector3F PosMod(const float mod) const
 	{
 		return {
 			Math::PosModF(x, mod),
@@ -333,7 +333,7 @@ struct Vector3F
 	}
 
 	//! Returns the Vector3F result of projecting this Vector3F onto another given Vector3F.
-	[[nodiscard]] constexpr Vector3F Project(const Vector3F& other) const
+	constexpr Vector3F Project(const Vector3F& other) const
 	{
 		const float denominator = other.LengthSquared();
 
@@ -346,13 +346,13 @@ struct Vector3F
 	}
 
 	//! Returns the reflected Vector3F result across a given surface normal Vector3F value.
-	[[nodiscard]] constexpr Vector3F Reflect(const Vector3F& normal) const
+	constexpr Vector3F Reflect(const Vector3F& normal) const
 	{
 		return *this - normal * (2.0f * Dot(normal));
 	}
 
 	//! Returns the rotated Vector3F result around a given axis by a given angle.
-	[[nodiscard]] constexpr Vector3F Rotated(const Vector3F& axis, const float angle) const
+	constexpr Vector3F Rotated(const Vector3F& axis, const float angle) const
 	{
 		const Vector3F normalizedAxis = axis.Normalized();
 		const float cosine = Math::CosF(angle);
@@ -363,7 +363,7 @@ struct Vector3F
 	}
 
 	//! Returns the Vector3F result of rounding this Vector3F's components to the nearest whole number (integer).
-	[[nodiscard]] constexpr Vector3F Round() const
+	constexpr Vector3F Round() const
 	{
 		return {
 			Math::RoundF(x),
@@ -373,7 +373,7 @@ struct Vector3F
 	}
 
 	//! Returns -1 if a component is negative, 0 if zero, and +1 if positive for each component of this Vector3F.
-	[[nodiscard]] constexpr Vector3F Sign() const
+	constexpr Vector3F Sign() const
 	{
 		return {
 			Math::SignF(x),
@@ -383,7 +383,7 @@ struct Vector3F
 	}
 
 	//! Returns the spherical interpolated Vector3F between this Vector and another given Vector3F at a given weight.
-	[[nodiscard]] constexpr Vector3F Slerp(const Vector3F& other, const float weight) const
+	constexpr Vector3F Slerp(const Vector3F& other, const float weight) const
 	{
 		const float startLength = Length();
 		const float endLength	 = other.Length();
@@ -416,13 +416,13 @@ struct Vector3F
 	}
 
 	//! Returns the Vector3F result from sliding this Vector3F along a surface normal Vector3F value.
-	[[nodiscard]] constexpr Vector3F Slide(const Vector3F& normal) const
+	constexpr Vector3F Slide(const Vector3F& normal) const
 	{
 		return *this - normal * Dot(normal);
 	}
 
 	//! Returns the Vector3F result of snapping this Vector3F's components to the nearest corresponding step value.
-	[[nodiscard]] constexpr Vector3F Snapped(const Vector3F& step) const
+	constexpr Vector3F Snapped(const Vector3F& step) const
 	{
 		return {
 			Math::SnappedF(x, step.x),
@@ -432,7 +432,7 @@ struct Vector3F
 	}
 
 	//! Returns the Vector3F result of snapping this Vector3F's components to the nearest step value.
-	[[nodiscard]] constexpr Vector3F Snapped(const float step) const
+	constexpr Vector3F Snapped(const float step) const
 	{
 		return {
 			Math::SnappedF(x, step),
@@ -443,7 +443,7 @@ struct Vector3F
 
 	// Comparison
 	//! Returns whether or not this Vector3F approximately equals a given Vector3F based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsEqualApprox(const Vector3F& other, const float epsilon = 0.00001f) const
+	constexpr bool IsEqualApprox(const Vector3F& other, const float epsilon = 0.00001f) const
 	{
 		return	Math::IsEqualApproxF(x, other.x, epsilon) &&
 				Math::IsEqualApproxF(y, other.y, epsilon) &&
@@ -451,7 +451,7 @@ struct Vector3F
 	}
 
 	//! Returns whether or not this Vector3F approximately equals zero based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsZeroApprox(const float epsilon = 0.00001f) const
+	constexpr bool IsZeroApprox(const float epsilon = 0.00001f) const
 	{
 		return	Math::IsZeroApproxF(x, epsilon) &&
 				Math::IsZeroApproxF(y, epsilon) &&

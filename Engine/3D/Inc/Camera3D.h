@@ -7,22 +7,22 @@ class Camera3D : public WorldObject3D
 {
 public:
 	//! Returns whether or not this camera is the current World camera.
-	[[nodiscard]] bool IsCurrent() const;
+	bool IsCurrent() const;
 	//! Makes this camera the current World camera.
 	void MakeCurrent();
 
 	//! Returns the FOV of this camera.
-	[[nodiscard]] float GetFOV() const;
+	float GetFOV() const;
 	//! Sets the FOV of this camera.
 	void SetFOV(float fov);
 
 	//! Returns the near clip plane of this camera.
-	[[nodiscard]] float GetNearClipPlane() const;
+	float GetNearClipPlane() const;
 	//! Sets the near clip plane of this camera.
 	void SetNearClipPlane(float nearClipPlane);
 
 	//! Returns the far clip plane of this camera.
-	[[nodiscard]] float GetFarClipPlane() const;
+	float GetFarClipPlane() const;
 	//! Sets the far clip plane of this camera.
 	void SetFarClipPlane(float farClipPlane);
 

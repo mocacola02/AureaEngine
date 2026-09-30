@@ -34,7 +34,7 @@ public:
 
 	//! Returns the runtime's exit code.
 	//! If no runtime is found, returns -1.
-	[[nodiscard]] int32 GetExitCode() const override
+	int32 GetExitCode() const override
 	{
 		if (runtime_)
 		{

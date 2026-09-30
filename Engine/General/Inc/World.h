@@ -15,26 +15,28 @@ public:
 	void DestroyPendingObjects();
 
 	Array<WorldObject*>& GetObjects();
-	[[nodiscard]] const Array<WorldObject*>& GetObjects() const;
+	const Array<WorldObject*>& GetObjects() const;
 
 	WorldObject* FindObjectByID(uint32 id);
-	[[nodiscard]] const WorldObject* FindObjectByID(uint32 id) const;
+	const WorldObject* FindObjectByID(uint32 id) const;
 
 	WorldObject*		FindObjectByName(const Name& name);
-	[[nodiscard]] const WorldObject* FindObjectByName(const Name& name) const;
+	const WorldObject* FindObjectByName(const Name& name) const;
 
-	[[nodiscard]] Array<WorldObject*> GetRootObjects() const;
+	Array<WorldObject*> GetRootObjects() const;
 
 	static Array<WorldObject*> GetTickableChildren(const WorldObject* root, bool rootShouldTick, double deltaTime);
 
-	[[nodiscard]] uint32 GetObjectCount() const;
+	uint32 GetObjectCount() const;
 
-	[[nodiscard]] bool IsPaused() const;
+	bool IsPaused() const;
 
 	bool SetCamera3D(Camera3D* camera);
 
-protected:
 	void Exit(int32 code) override;
+
+protected:
+	friend class Runtime;
 
 	bool Initialize() override;
 
@@ -43,12 +45,15 @@ protected:
 	void Shutdown() override;
 
 private:
+	//! Tracks if this EngineLoop is running or not.
+	bool running_ = false;
+	//! Is the loop paused?
 	bool paused_ = false;
+
+	//! Code to return to the Application when exiting. Set via Exit()
+	int32 exitCode_ = 0;
 
 	Array<WorldObject*> objects_;
 
 	Camera3D* camera3D_ = nullptr;
-
-	template<typename T, typename... Args>
-	T* SpawnObject(Args&&... args);
 };

@@ -10,13 +10,7 @@ class RefCounted : public Object
 public:
 	RefCounted() = default;
 
-	explicit RefCounted(const Name& name) : Object(name) {}
-
-	RefCounted(const uint32 id, const Name& name) : Object(id, name) {}
-
-	RefCounted(const RefCounted&) = delete;
-
-	RefCounted& operator=(const RefCounted&) = delete;
+	explicit RefCounted(Runtime* runtime) : Object(runtime);
 
 	~RefCounted() override = default;
 
@@ -45,6 +39,9 @@ public:
 	{
 		return reference_count_;
 	}
+
+	// Operators
+	RefCounted& operator=(const RefCounted&) = delete;
 
 private:
 	mutable uint32 reference_count_ = 0;
@@ -196,7 +193,7 @@ public:
 		pointer_ = pointer;
 	}
 
-	[[nodiscard]] uint32 GetRefCount() const
+	uint32 GetRefCount() const
 	{
 		if (!pointer_)
 		{
@@ -206,7 +203,7 @@ public:
 		return pointer_->GetRefCount();
 	}
 
-	[[nodiscard]] bool IsValid() const noexcept
+	bool IsValid() const noexcept
 	{
 		return pointer_ != nullptr;
 	}

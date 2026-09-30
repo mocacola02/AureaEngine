@@ -268,7 +268,7 @@ struct Matrix4F
 	//===============
 
 	//! Transposes this Matrix4F.
-	[[nodiscard]] constexpr Matrix4F Transpose() const
+	constexpr Matrix4F Transpose() const
 	{
 		Matrix4F result;
 
@@ -289,7 +289,7 @@ struct Matrix4F
 	//===============
 
 	//! Returns whether or not this Matrix4F approximately equals another given Matrix4F.
-	[[nodiscard]] constexpr bool IsEqualApprox(const Matrix4F& other, const float epsilon = 0.00001f) const
+	constexpr bool IsEqualApprox(const Matrix4F& other, const float epsilon = 0.00001f) const
 	{
 		for (uint8 i = 0; i < 4; ++i)
 		{
@@ -317,7 +317,7 @@ struct Matrix4F
 	}
 
 	//! Returns a constant pointer to the float data of this Matrix4F.
-	[[nodiscard]] constexpr const float* Data() const
+	constexpr const float* Data() const
 	{
 		return *m;
 	}

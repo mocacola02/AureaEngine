@@ -1,5 +1,5 @@
 #include "../Inc/EngineLoop.h"
-#include "../Inc/EngineRuntime.h"
+#include "../Inc/Runtime.h"
 
 bool EngineLoop::Initialize()
 {
@@ -39,7 +39,7 @@ bool EngineLoop::LoopInit()
 	return true;
 }
 
-EngineRuntime* EngineLoop::GetRuntime() const
+Runtime* EngineLoop::GetRuntime() const
 {
 	return runtime_;
 }

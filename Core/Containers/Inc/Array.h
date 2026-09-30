@@ -322,19 +322,19 @@ public:
 	}
 
 	//! Returns the count of valid elements in this Array
-	[[nodiscard]] constexpr uint32 Count() const
+	constexpr uint32 Count() const
 	{
 		return count_;
 	}
 
 	//! Returns the capacity (valid elements + empty elements) of this Array
-	[[nodiscard]] [[nodiscard]] constexpr uint32 Capacity() const
+	constexpr uint32 Capacity() const
 	{
 		return capacity_;
 	}
 
 	//! Returns whether or not this Array is empty (aka count_ == 0)
-	[[nodiscard]] [[nodiscard]] constexpr bool IsEmpty() const
+	constexpr bool IsEmpty() const
 	{
 		return count_ == 0;
 	}

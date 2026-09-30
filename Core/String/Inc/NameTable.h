@@ -132,7 +132,7 @@ public:
 		return id;
 	}
 
-	[[nodiscard]] const char* GetString(const uint32 id) const
+	const char* GetString(const uint32 id) const
 	{
 		if (id >= entryCount_)
 		{
@@ -142,7 +142,7 @@ public:
 		return entries_[id].data;
 	}
 
-	[[nodiscard]] uint32 GetLength(const uint32 id) const
+	uint32 GetLength(const uint32 id) const
 	{
 		if (id >= entryCount_)
 		{
@@ -152,7 +152,7 @@ public:
 		return entries_[id].length;
 	}
 
-	[[nodiscard]] uint32 Count() const
+	uint32 Count() const
 	{
 		return entryCount_ - 1;
 	}
@@ -255,7 +255,7 @@ private:
 		entryCapacity_ = newCapacity;
 	}
 
-	[[nodiscard]] uint32 FindEmptyBucket(const uint32 hash) const
+	uint32 FindEmptyBucket(const uint32 hash) const
 	{
 		uint32 index = hash % bucketCapacity_;
 

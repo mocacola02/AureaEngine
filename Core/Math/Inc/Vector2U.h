@@ -64,7 +64,7 @@ struct Vector2U
 	// but no code has been pulled from Godot's source. -Moca
 
 	//! Returns the absolute value (positive value) of this Vector2U.
-	[[nodiscard]] constexpr Vector2U Abs() const
+	constexpr Vector2U Abs() const
 	{
 		return {
 			Math::AbsI(x),
@@ -73,7 +73,7 @@ struct Vector2U
 	}
 
 	//! Returns the clamped value of this Vector2U between a given minimum Vector2U and maximum Vector2U value.
-	[[nodiscard]] constexpr Vector2U Clamp(const Vector2U& min, const Vector2U& max) const
+	constexpr Vector2U Clamp(const Vector2U& min, const Vector2U& max) const
 	{
 		return {
 			Math::ClampI(x, min.x, max.x),
@@ -82,7 +82,7 @@ struct Vector2U
 	}
 
 	//!  Returns the clamped value of this Vector2U between a given minimum uint32 and maximum uint32 value.
-	[[nodiscard]] constexpr Vector2U Clamp(const uint32 min, const uint32 max) const
+	constexpr Vector2U Clamp(const uint32 min, const uint32 max) const
 	{
 		return {
 			Math::ClampI(x, min, max),
@@ -91,31 +91,31 @@ struct Vector2U
 	}
 
 	//! Returns the dot product of this Vector2U and another given Vector2U.
-	[[nodiscard]] constexpr uint32 Dot(const Vector2U& other) const
+	constexpr uint32 Dot(const Vector2U& other) const
 	{
 		return	x * other.x + y * other.y;
 	}
 
 	//! Returns whether or not this Vector2U is finite.
-	[[nodiscard]] constexpr bool IsFinite() const
+	constexpr bool IsFinite() const
 	{
 		return Math::IsFiniteI(x) && Math::IsFiniteI(y);
 	}
 
 	//! Returns the squared length of this Vector2U.
-	[[nodiscard]] constexpr uint32 LengthSquared() const
+	constexpr uint32 LengthSquared() const
 	{
 		return	x * x + y * y;
 	}
 
 	//! Returns the length of this Vector2U.
-	[[nodiscard]] constexpr float Length() const
+	constexpr float Length() const
 	{
 		return Math::SqrtF(LengthSquared());
 	}
 
 	//! Returns a Vector2U value where each component is the larger value between this Vector2U and another given Vector2U.
-	[[nodiscard]] constexpr Vector2U Max(const Vector2U& other) const
+	constexpr Vector2U Max(const Vector2U& other) const
 	{
 		return {
 			Math::MaxI(x, other.x),
@@ -124,7 +124,7 @@ struct Vector2U
 	}
 
 	//! Returns a Vector2U value where each component is the larger value between this Vector2U and a given uint32 value.
-	[[nodiscard]] constexpr Vector2U Max(const uint32 value) const
+	constexpr Vector2U Max(const uint32 value) const
 	{
 		return {
 			Math::MaxI(x, value),
@@ -133,7 +133,7 @@ struct Vector2U
 	}
 
 	//! Returns a Vector2U value where each component is the smaller value between this Vector2U and another given Vector2U.
-	[[nodiscard]] constexpr Vector2U Min(const Vector2U& other) const
+	constexpr Vector2U Min(const Vector2U& other) const
 	{
 		return {
 			Math::MinI(x, other.x),
@@ -142,7 +142,7 @@ struct Vector2U
 	}
 
 	//! Returns a Vector2U value where each component is the smaller value between this Vector2U and a given uint32 value.
-	[[nodiscard]] constexpr Vector2U Min(const uint32 value) const
+	constexpr Vector2U Min(const uint32 value) const
 	{
 		return {
 			Math::MinI(x, value),
@@ -151,7 +151,7 @@ struct Vector2U
 	}
 
 	//! Returns -1 if a component is negative, 0 if zero, and +1 if positive for each component of this Vector2U.
-	[[nodiscard]] constexpr Vector2U Sign() const
+	constexpr Vector2U Sign() const
 	{
 		return {
 			Math::SignI(x),

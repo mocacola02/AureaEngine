@@ -51,7 +51,7 @@ struct Vector4
 	// but no code has been pulled from Godot's source. -Moca
 
 	//! Returns the absolute value (positive value) of this Vector4.
-	[[nodiscard]] constexpr Vector4 Abs() const
+	constexpr Vector4 Abs() const
 	{
 		return {
 			Math::Abs(w),
@@ -62,13 +62,13 @@ struct Vector4
 	}
 
 	//! Returns the rounded up value of this Vector4.
-	[[nodiscard]] constexpr Vector4 Ceil() const
+	constexpr Vector4 Ceil() const
 	{
 		return {Math::Ceil(w), Math::Ceil(x), Math::Ceil(y), Math::Ceil(z)};
 	}
 
 	//! Returns the clamped value of this Vector4 between a given minimum Vector4 and maximum Vector4 value.
-	[[nodiscard]] constexpr Vector4 Clamp(const Vector4& min, const Vector4& max) const
+	constexpr Vector4 Clamp(const Vector4& min, const Vector4& max) const
 	{
 		return {
 			Math::Clamp(w, min.w, max.w),
@@ -79,7 +79,7 @@ struct Vector4
 	}
 
 	//!  Returns the clamped value of this Vector4 between a given minimum double and maximum double value.
-	[[nodiscard]] constexpr Vector4 Clamp(const double min, const double max) const
+	constexpr Vector4 Clamp(const double min, const double max) const
 	{
 		return {
 			Math::Clamp(w, min, max),
@@ -90,7 +90,7 @@ struct Vector4
 	}
 
 	//! Returns the interpolated Vector4 using the given weight.
-	[[nodiscard]] constexpr Vector4 CubicInterpolate(
+	constexpr Vector4 CubicInterpolate(
 		const Vector4& b, const Vector4& preA,
 		const Vector4& preB, const double weight) const
 	{
@@ -103,19 +103,19 @@ struct Vector4
 	}
 
 	//! Returns the normalized Vector4 pointed from this Vector4 to another given Vector4.
-	[[nodiscard]] constexpr Vector4 DirectionTo(const Vector4& other) const
+	constexpr Vector4 DirectionTo(const Vector4& other) const
 	{
 		return (other - *this).Normalized();
 	}
 
 	//! Returns the squared distance between this Vector4 and another given Vector4.
-	[[nodiscard]] constexpr double DistanceSquaredTo(const Vector4& other) const
+	constexpr double DistanceSquaredTo(const Vector4& other) const
 	{
 		return (other - *this).LengthSquared();
 	}
 
 	//! Returns the dot product of this Vector4 and another given Vector4.
-	[[nodiscard]] constexpr double Dot(const Vector4& other) const
+	constexpr double Dot(const Vector4& other) const
 	{
 		return	w * other.w +
 				x * other.x +
@@ -124,7 +124,7 @@ struct Vector4
 	}
 
 	//! Returns the rounded down value of this Vector4.
-	[[nodiscard]] constexpr Vector4 Floor() const
+	constexpr Vector4 Floor() const
 	{
 		return {
 			Math::Floor(w),
@@ -135,7 +135,7 @@ struct Vector4
 	}
 
 	//! Returns whether or not this Vector4 is finite.
-	[[nodiscard]] constexpr bool IsFinite() const
+	constexpr bool IsFinite() const
 	{
 		return	Math::IsFinite(w) &&
 				Math::IsFinite(x) &&
@@ -144,13 +144,13 @@ struct Vector4
 	}
 
 	//! Returns whether or not this Vector4 is normalized.
-	[[nodiscard]] constexpr bool IsNormalized(const double epsilon = 0.00001) const
+	constexpr bool IsNormalized(const double epsilon = 0.00001) const
 	{
 		return Math::IsEqualApprox(LengthSquared(), 1.0, epsilon);
 	}
 
 	//! Returns the squared length of this Vector4.
-	[[nodiscard]] constexpr double LengthSquared() const
+	constexpr double LengthSquared() const
 	{
 		return	w * w +
 				x * x +
@@ -159,13 +159,13 @@ struct Vector4
 	}
 
 	//! Returns the length of this Vector4.
-	[[nodiscard]] constexpr double Length() const
+	constexpr double Length() const
 	{
 		return Math::Sqrt(LengthSquared());
 	}
 
 	//! Returns the point between this Vector4 and a given target Vector4 based on a given weight.
-	[[nodiscard]] constexpr Vector4 Lerp(const Vector4& target, const double weight) const
+	constexpr Vector4 Lerp(const Vector4& target, const double weight) const
 	{
 		return {
 			Math::Lerp(w, target.w, weight),
@@ -176,7 +176,7 @@ struct Vector4
 	}
 
 	//! Returns the value of this Vector4 with its length limited to a given max length.
-	[[nodiscard]] constexpr Vector4 LimitLength(const double maxLength = 1.0) const
+	constexpr Vector4 LimitLength(const double maxLength = 1.0) const
 	{
 		const double lengthSquared = LengthSquared();
 
@@ -191,7 +191,7 @@ struct Vector4
 	}
 
 	//! Returns a Vector4 value where each component is the larger value between this Vector4 and another given Vector4.
-	[[nodiscard]] constexpr Vector4 Max(const Vector4& other) const
+	constexpr Vector4 Max(const Vector4& other) const
 	{
 		return {
 			Math::Max(w, other.w),
@@ -202,7 +202,7 @@ struct Vector4
 	}
 
 	//! Returns a Vector4 value where each component is the larger value between this Vector4 and a given double value.
-	[[nodiscard]] constexpr Vector4 Max(const double value) const
+	constexpr Vector4 Max(const double value) const
 	{
 		return {
 			Math::Max(w, value),
@@ -213,7 +213,7 @@ struct Vector4
 	}
 
 	//! Returns a Vector4 value where each component is the smaller value between this Vector4 and another given Vector4.
-	[[nodiscard]] constexpr Vector4 Min(const Vector4& other) const
+	constexpr Vector4 Min(const Vector4& other) const
 	{
 		return {
 			Math::Min(w, other.w),
@@ -224,7 +224,7 @@ struct Vector4
 	}
 
 	//! Returns a Vector4 value where each component is the smaller value between this Vector4 and a given double value.
-	[[nodiscard]] constexpr Vector4 Min(const double value) const
+	constexpr Vector4 Min(const double value) const
 	{
 		return {
 			Math::Min(w, value),
@@ -235,7 +235,7 @@ struct Vector4
 	}
 
 	//! Returns the point reached after moving this Vector4 toward another given Vector4 by up to a given delta distance.
-	[[nodiscard]] constexpr Vector4 MoveToward(const Vector4& other, const double delta) const
+	constexpr Vector4 MoveToward(const Vector4& other, const double delta) const
 	{
 		const Vector4 difference = other - *this;
 		const double distance = difference.Length();
@@ -249,7 +249,7 @@ struct Vector4
 	}
 
 	//! Returns the unit-length Vector4 in the same direction as this Vector4.
-	[[nodiscard]] constexpr Vector4 Normalized() const
+	constexpr Vector4 Normalized() const
 	{
 		const double length = Length();
 
@@ -262,7 +262,7 @@ struct Vector4
 	}
 
 	//! Returns a Vector4 with each component in the range [0, mod] for its corresponding component of a given Vector4 mod value.
-	[[nodiscard]] constexpr Vector4 PosMod(const Vector4& mod) const
+	constexpr Vector4 PosMod(const Vector4& mod) const
 	{
 		return {
 			Math::PosMod(w, mod.w),
@@ -273,7 +273,7 @@ struct Vector4
 	}
 
 	//! Returns a Vector4 with each component in the range [0, mod] for a given double mod value.
-	[[nodiscard]] constexpr Vector4 PosMod(const double mod) const
+	constexpr Vector4 PosMod(const double mod) const
 	{
 		return {
 			Math::PosMod(w, mod),
@@ -284,7 +284,7 @@ struct Vector4
 	}
 
 	//! Returns the Vector4 result of rounding this Vector4's components to the nearest whole number (integer).
-	[[nodiscard]] constexpr Vector4 Round() const
+	constexpr Vector4 Round() const
 	{
 		return {
 			Math::Round(w),
@@ -295,7 +295,7 @@ struct Vector4
 	}
 
 	//! Returns -1 if a component is negative, 0 if zero, and +1 if positive for each component of this Vector4.
-	[[nodiscard]] constexpr Vector4 Sign() const
+	constexpr Vector4 Sign() const
 	{
 		return {
 			Math::Sign(w),
@@ -306,7 +306,7 @@ struct Vector4
 	}
 
 	//! Returns the Vector4 result of snapping this Vector4's components to the nearest corresponding step value.
-	[[nodiscard]] constexpr Vector4 Snapped(const Vector4& step) const
+	constexpr Vector4 Snapped(const Vector4& step) const
 	{
 		return {
 			Math::Snapped(w, step.w),
@@ -317,7 +317,7 @@ struct Vector4
 	}
 
 	//! Returns the Vector4 result of snapping this Vector4's components to the nearest step value.
-	[[nodiscard]] constexpr Vector4 Snapped(const double step) const
+	constexpr Vector4 Snapped(const double step) const
 	{
 		return {
 			Math::Snapped(w, step),
@@ -329,7 +329,7 @@ struct Vector4
 
 	// Comparison
 	//! Returns whether or not this Vector4 approximately equals a given Vector4 based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsEqualApprox(const Vector4& other, const double epsilon = 0.00001) const
+	constexpr bool IsEqualApprox(const Vector4& other, const double epsilon = 0.00001) const
 	{
 		return	Math::IsEqualApprox(w, other.w, epsilon) &&
 				Math::IsEqualApprox(x, other.x, epsilon) &&
@@ -338,7 +338,7 @@ struct Vector4
 	}
 
 	//! Returns whether or not this Vector4 approximately equals zero based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsZeroApprox(const double epsilon = 0.00001) const
+	constexpr bool IsZeroApprox(const double epsilon = 0.00001) const
 	{
 		return	Math::IsZeroApprox(w, epsilon) &&
 				Math::IsZeroApprox(x, epsilon) &&

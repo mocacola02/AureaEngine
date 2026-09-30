@@ -27,7 +27,7 @@ public:
 
 	bool HasScriptFunction(const Name& functionName) const
 	{
-		return classInfo_.functions.Contains(functionName);
+		return classInfo_.functions.ContainsKey(functionName);
 	}
 
 	ClassFunction GetScriptFunction(const Name& functionName) const
@@ -37,7 +37,7 @@ public:
 
 	bool HasScriptProperty(const Name& propertyName) const
 	{
-		return classInfo_.properties.Contains(propertyName);
+		return classInfo_.properties.ContainsKey(propertyName);
 	}
 
 	ClassProperty GetScriptProperty(const Name& propertyName) const

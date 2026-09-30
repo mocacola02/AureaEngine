@@ -60,7 +60,7 @@ struct Vector2
 	// but no code has been pulled from Godot's source. -Moca
 
 	//! Returns the absolute value (positive value) of this Vector2.
-	[[nodiscard]] constexpr Vector2 Abs() const
+	constexpr Vector2 Abs() const
 	{
 		return {
 			Math::Abs(x),
@@ -68,19 +68,19 @@ struct Vector2
 		};
 	}
 
-	[[nodiscard]] constexpr double AngleXY() const
+	constexpr double AngleXY() const
 	{
 		return Math::Atan2(y, x);
 	}
 
 	//! Returns the minimum angle to a given Vector2 in radians.
-	[[nodiscard]] constexpr double AngleTo(const Vector2& other) const
+	constexpr double AngleTo(const Vector2& other) const
 	{
 		return Math::Atan2(Math::Abs(Cross(other)), Dot(other));
 	}
 
 	//! Returns the direction the cubic Bézier curve is heading at parameter t (its tangent vector).
-	[[nodiscard]] constexpr Vector2 BezierDerivative(
+	constexpr Vector2 BezierDerivative(
 		const Vector2& control1, const Vector2& control2,
 		const Vector2& end, const double t) const
 	{
@@ -92,7 +92,7 @@ struct Vector2
 	}
 
 	//! Returns the point on the cubic Bézier curve when moving t fraction along it.
-	[[nodiscard]] constexpr Vector2 BezierInterpolate(
+	constexpr Vector2 BezierInterpolate(
 		const Vector2& control1, const Vector2& control2,
 		const Vector2& end, const double t) const
 	{
@@ -107,13 +107,13 @@ struct Vector2
 	}
 
 	//! Returns the rounded up value of this Vector2.
-	[[nodiscard]] constexpr Vector2 Ceil() const
+	constexpr Vector2 Ceil() const
 	{
 		return {Math::Ceil(x), Math::Ceil(y)};
 	}
 
 	//! Returns the clamped value of this Vector2 between a given minimum Vector2 and maximum Vector2 value.
-	[[nodiscard]] constexpr Vector2 Clamp(const Vector2& min, const Vector2& max) const
+	constexpr Vector2 Clamp(const Vector2& min, const Vector2& max) const
 	{
 		return {
 			Math::Clamp(x, min.x, max.x),
@@ -122,7 +122,7 @@ struct Vector2
 	}
 
 	//!  Returns the clamped value of this Vector2 between a given minimum double and maximum double value.
-	[[nodiscard]] constexpr Vector2 Clamp(const double min, const double max) const
+	constexpr Vector2 Clamp(const double min, const double max) const
 	{
 		return {
 			Math::Clamp(x, min, max),
@@ -131,13 +131,13 @@ struct Vector2
 	}
 
 	//! Returns the cross product of this Vector2 and another Vector2.
-	[[nodiscard]] constexpr double Cross(const Vector2& other) const
+	constexpr double Cross(const Vector2& other) const
 	{
 		return x * other.y - y * other.x;
 	}
 
 	//! Returns the interpolated Vector2 using the given weight.
-	[[nodiscard]] constexpr Vector2 CubicInterpolate(
+	constexpr Vector2 CubicInterpolate(
 		const Vector2& b, const Vector2& preA,
 		const Vector2& preB, const double weight) const
 	{
@@ -150,25 +150,25 @@ struct Vector2
 	}
 
 	//! Returns the normalized Vector2 pointed from this Vector2 to another given Vector2.
-	[[nodiscard]] constexpr Vector2 DirectionTo(const Vector2& other) const
+	constexpr Vector2 DirectionTo(const Vector2& other) const
 	{
 		return (other - *this).Normalized();
 	}
 
 	//! Returns the squared distance between this Vector2 and another given Vector2.
-	[[nodiscard]] constexpr double DistanceSquaredTo(const Vector2& other) const
+	constexpr double DistanceSquaredTo(const Vector2& other) const
 	{
 		return (other - *this).LengthSquared();
 	}
 
 	//! Returns the dot product of this Vector2 and another given Vector2.
-	[[nodiscard]] constexpr double Dot(const Vector2& other) const
+	constexpr double Dot(const Vector2& other) const
 	{
 		return	x * other.x + y * other.y;
 	}
 
 	//! Returns the rounded down value of this Vector2.
-	[[nodiscard]] constexpr Vector2 Floor() const
+	constexpr Vector2 Floor() const
 	{
 		return {
 			Math::Floor(x),
@@ -177,31 +177,31 @@ struct Vector2
 	}
 
 	//! Returns whether or not this Vector2 is finite.
-	[[nodiscard]] constexpr bool IsFinite() const
+	constexpr bool IsFinite() const
 	{
 		return Math::IsFinite(x) && Math::IsFinite(y);
 	}
 
 	//! Returns whether or not this Vector2 is normalized.
-	[[nodiscard]] constexpr bool IsNormalized(const double epsilon = 0.00001) const
+	constexpr bool IsNormalized(const double epsilon = 0.00001) const
 	{
 		return Math::IsEqualApprox(LengthSquared(), 1.0, epsilon);
 	}
 
 	//! Returns the squared length of this Vector2.
-	[[nodiscard]] constexpr double LengthSquared() const
+	constexpr double LengthSquared() const
 	{
 		return	x * x + y * y;
 	}
 
 	//! Returns the length of this Vector2.
-	[[nodiscard]] constexpr double Length() const
+	constexpr double Length() const
 	{
 		return Math::Sqrt(LengthSquared());
 	}
 
 	//! Returns the point between this Vector2 and a given target Vector2 based on a given weight.
-	[[nodiscard]] constexpr Vector2 Lerp(const Vector2& target, const double weight) const
+	constexpr Vector2 Lerp(const Vector2& target, const double weight) const
 	{
 		return {
 			Math::Lerp(x,  target.x, weight),
@@ -210,7 +210,7 @@ struct Vector2
 	}
 
 	//! Returns the value of this Vector2 with its length limited to a given max length.
-	[[nodiscard]] constexpr Vector2 LimitLength(const double maxLength = 1.0) const
+	constexpr Vector2 LimitLength(const double maxLength = 1.0) const
 	{
 		const double lengthSquared = LengthSquared();
 
@@ -225,7 +225,7 @@ struct Vector2
 	}
 
 	//! Returns a Vector2 value where each component is the larger value between this Vector2 and another given Vector2.
-	[[nodiscard]] constexpr Vector2 Max(const Vector2& other) const
+	constexpr Vector2 Max(const Vector2& other) const
 	{
 		return {
 			Math::Max(x, other.x),
@@ -234,7 +234,7 @@ struct Vector2
 	}
 
 	//! Returns a Vector2 value where each component is the larger value between this Vector2 and a given double value.
-	[[nodiscard]] constexpr Vector2 Max(const double value) const
+	constexpr Vector2 Max(const double value) const
 	{
 		return {
 			Math::Max(x, value),
@@ -243,7 +243,7 @@ struct Vector2
 	}
 
 	//! Returns a Vector2 value where each component is the smaller value between this Vector2 and another given Vector2.
-	[[nodiscard]] constexpr Vector2 Min(const Vector2& other) const
+	constexpr Vector2 Min(const Vector2& other) const
 	{
 		return {
 			Math::Min(x, other.x),
@@ -252,7 +252,7 @@ struct Vector2
 	}
 
 	//! Returns a Vector2 value where each component is the smaller value between this Vector2 and a given double value.
-	[[nodiscard]] constexpr Vector2 Min(const double value) const
+	constexpr Vector2 Min(const double value) const
 	{
 		return {
 			Math::Min(x, value),
@@ -261,7 +261,7 @@ struct Vector2
 	}
 
 	//! Returns the point reached after moving this Vector2 toward another given Vector2 by up to a given delta distance.
-	[[nodiscard]] constexpr Vector2 MoveToward(const Vector2& other, const double delta) const
+	constexpr Vector2 MoveToward(const Vector2& other, const double delta) const
 	{
 		const Vector2 difference = other - *this;
 		const double distance = difference.Length();
@@ -275,7 +275,7 @@ struct Vector2
 	}
 
 	//! Returns the unit-length Vector2 in the same direction as this Vector2.
-	[[nodiscard]] constexpr Vector2 Normalized() const
+	constexpr Vector2 Normalized() const
 	{
 		const double length = Length();
 
@@ -288,7 +288,7 @@ struct Vector2
 	}
 
 	//! Returns a Vector2 with each component in the range [0, mod] for its corresponding component of a given Vector2 mod value.
-	[[nodiscard]] constexpr Vector2 PosMod(const Vector2& mod) const
+	constexpr Vector2 PosMod(const Vector2& mod) const
 	{
 		return {
 			Math::PosMod(x, mod.x),
@@ -297,7 +297,7 @@ struct Vector2
 	}
 
 	//! Returns a Vector2 with each component in the range [0, mod] for a given double mod value.
-	[[nodiscard]] constexpr Vector2 PosMod(const double mod) const
+	constexpr Vector2 PosMod(const double mod) const
 	{
 		return {
 			Math::PosMod(x, mod),
@@ -306,7 +306,7 @@ struct Vector2
 	}
 
 	//! Returns the Vector2 result of projecting this Vector2 onto another given Vector2.
-	[[nodiscard]] constexpr Vector2 Project(const Vector2& other) const
+	constexpr Vector2 Project(const Vector2& other) const
 	{
 		const double denominator = other.LengthSquared();
 
@@ -319,13 +319,13 @@ struct Vector2
 	}
 
 	//! Returns the reflected Vector2 result across a given surface normal Vector2 value.
-	[[nodiscard]] constexpr Vector2 Reflect(const Vector2& normal) const
+	constexpr Vector2 Reflect(const Vector2& normal) const
 	{
 		return *this - normal * (2.0 * Dot(normal));
 	}
 
 	//! Returns the rotated Vector2 result around a given axis by a given angle.
-	[[nodiscard]] constexpr Vector2 Rotated(const double angle) const
+	constexpr Vector2 Rotated(const double angle) const
 	{
 		const double c = Math::Cos(angle);
 		const double s = Math::Sin(angle);
@@ -337,7 +337,7 @@ struct Vector2
 	}
 
 	//! Returns the Vector2 result of rounding this Vector2's components to the nearest whole number (integer).
-	[[nodiscard]] constexpr Vector2 Round() const
+	constexpr Vector2 Round() const
 	{
 		return {
 			Math::Round(x),
@@ -346,7 +346,7 @@ struct Vector2
 	}
 
 	//! Returns -1 if a component is negative, 0 if zero, and +1 if positive for each component of this Vector2.
-	[[nodiscard]] constexpr Vector2 Sign() const
+	constexpr Vector2 Sign() const
 	{
 		return {
 			Math::Sign(x),
@@ -355,7 +355,7 @@ struct Vector2
 	}
 
 	//! Returns the spherical interpolated Vector2 between this Vector and another given Vector2 at a given weight.
-	[[nodiscard]] constexpr Vector2 Slerp(const Vector2& other, const double weight) const
+	constexpr Vector2 Slerp(const Vector2& other, const double weight) const
 	{
 		const double startLength = Length();
 		const double endLength	 = other.Length();
@@ -388,13 +388,13 @@ struct Vector2
 	}
 
 	//! Returns the Vector2 result from sliding this Vector2 along a surface normal Vector2 value.
-	[[nodiscard]] constexpr Vector2 Slide(const Vector2& normal) const
+	constexpr Vector2 Slide(const Vector2& normal) const
 	{
 		return *this - normal * Dot(normal);
 	}
 
 	//! Returns the Vector2 result of snapping this Vector2's components to the nearest corresponding step value.
-	[[nodiscard]] constexpr Vector2 Snapped(const Vector2& step) const
+	constexpr Vector2 Snapped(const Vector2& step) const
 	{
 		return {
 			Math::Snapped(x, step.x),
@@ -403,7 +403,7 @@ struct Vector2
 	}
 
 	//! Returns the Vector2 result of snapping this Vector2's components to the nearest step value.
-	[[nodiscard]] constexpr Vector2 Snapped(const double step) const
+	constexpr Vector2 Snapped(const double step) const
 	{
 		return {
 			Math::Snapped(x, step),
@@ -413,14 +413,14 @@ struct Vector2
 
 	// Comparison
 	//! Returns whether or not this Vector2 approximately equals a given Vector2 based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsEqualApprox(const Vector2& other, const double epsilon = 0.00001) const
+	constexpr bool IsEqualApprox(const Vector2& other, const double epsilon = 0.00001) const
 	{
 		return	Math::IsEqualApprox(x, other.x, epsilon) &&
 				Math::IsEqualApprox(y, other.y, epsilon);
 	}
 
 	//! Returns whether or not this Vector2 approximately equals zero based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsZeroApprox(const double epsilon = 0.00001) const
+	constexpr bool IsZeroApprox(const double epsilon = 0.00001) const
 	{
 		return	Math::IsZeroApprox(x, epsilon) &&
 				Math::IsZeroApprox(y, epsilon);

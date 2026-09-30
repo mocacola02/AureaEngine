@@ -12,6 +12,7 @@ class MeshData;
 class RenderDevice : public Object
 {
 public:
+	explicit RenderDevice(Runtime* runtime) : Object(runtime);
 	//! Destructor
 	~RenderDevice() override = default;
 

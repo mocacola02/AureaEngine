@@ -16,22 +16,22 @@ struct Transform3D
 	Quaternion	rotation;
 	Vector3		scale;
 
-	[[nodiscard]] constexpr Matrix4 GetMatrix() const
+	constexpr Matrix4 GetMatrix() const
 	{
 		return Matrix4::Translation(position) * Matrix4::Rotation(rotation) * Matrix4::Scale(scale);
 	}
 
-	[[nodiscard]] constexpr Vector3 GetForward() const
+	constexpr Vector3 GetForward() const
 	{
 		return rotation.Rotate(Vector3::Forward());
 	}
 
-	[[nodiscard]] constexpr Vector3 GetRight() const
+	constexpr Vector3 GetRight() const
 	{
 		return rotation.Rotate(Vector3::Right());
 	}
 
-	[[nodiscard]] constexpr Vector3 GetUp() const
+	constexpr Vector3 GetUp() const
 	{
 		return rotation.Rotate(Vector3::Up());
 	}

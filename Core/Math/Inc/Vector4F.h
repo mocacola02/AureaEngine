@@ -51,7 +51,7 @@ struct Vector4F
 	// but no code has been pulled from Godot's source. -Moca
 
 	//! Returns the absolute value (positive value) of this Vector4F.
-	[[nodiscard]] constexpr Vector4F Abs() const
+	constexpr Vector4F Abs() const
 	{
 		return {
 			Math::AbsF(w),
@@ -62,13 +62,13 @@ struct Vector4F
 	}
 
 	//! Returns the rounded up value of this Vector4F.
-	[[nodiscard]] constexpr Vector4F Ceil() const
+	constexpr Vector4F Ceil() const
 	{
 		return {Math::CeilF(w), Math::CeilF(x), Math::CeilF(y), Math::CeilF(z)};
 	}
 
 	//! Returns the clamped value of this Vector4F between a given minimum Vector4F and maximum Vector4F value.
-	[[nodiscard]] constexpr Vector4F Clamp(const Vector4F& min, const Vector4F& max) const
+	constexpr Vector4F Clamp(const Vector4F& min, const Vector4F& max) const
 	{
 		return {
 			Math::ClampF(w, min.w, max.w),
@@ -79,7 +79,7 @@ struct Vector4F
 	}
 
 	//!  Returns the clamped value of this Vector4F between a given minimum float and maximum float value.
-	[[nodiscard]] constexpr Vector4F Clamp(const float min, const float max) const
+	constexpr Vector4F Clamp(const float min, const float max) const
 	{
 		return {
 			Math::ClampF(w, min, max),
@@ -90,7 +90,7 @@ struct Vector4F
 	}
 
 	//! Returns the interpolated Vector4F using the given weight.
-	[[nodiscard]] constexpr Vector4F CubicInterpolate(
+	constexpr Vector4F CubicInterpolate(
 		const Vector4F& b, const Vector4F& preA,
 		const Vector4F& preB, const float weight) const
 	{
@@ -103,19 +103,19 @@ struct Vector4F
 	}
 
 	//! Returns the normalized Vector4F pointed from this Vector4F to another given Vector4F.
-	[[nodiscard]] constexpr Vector4F DirectionTo(const Vector4F& other) const
+	constexpr Vector4F DirectionTo(const Vector4F& other) const
 	{
 		return (other - *this).Normalized();
 	}
 
 	//! Returns the squared distance between this Vector4F and another given Vector4F.
-	[[nodiscard]] constexpr float DistanceSquaredTo(const Vector4F& other) const
+	constexpr float DistanceSquaredTo(const Vector4F& other) const
 	{
 		return (other - *this).LengthSquared();
 	}
 
 	//! Returns the dot product of this Vector4F and another given Vector4F.
-	[[nodiscard]] constexpr float Dot(const Vector4F& other) const
+	constexpr float Dot(const Vector4F& other) const
 	{
 		return  w * other.w +
 				x * other.x +
@@ -124,7 +124,7 @@ struct Vector4F
 	}
 
 	//! Returns the rounded down value of this Vector4F.
-	[[nodiscard]] constexpr Vector4F Floor() const
+	constexpr Vector4F Floor() const
 	{
 		return {
 			Math::FloorF(w),
@@ -135,7 +135,7 @@ struct Vector4F
 	}
 
 	//! Returns whether or not this Vector4F is finite.
-	[[nodiscard]] constexpr bool IsFinite() const
+	constexpr bool IsFinite() const
 	{
 		return	Math::IsFiniteF(w) &&
 				Math::IsFiniteF(x) &&
@@ -144,13 +144,13 @@ struct Vector4F
 	}
 
 	//! Returns whether or not this Vector4F is normalized.
-	[[nodiscard]] constexpr bool IsNormalized(const float epsilon = 0.00001f) const
+	constexpr bool IsNormalized(const float epsilon = 0.00001f) const
 	{
 		return Math::IsEqualApproxF(LengthSquared(), 1.0f, epsilon);
 	}
 
 	//! Returns the squared length of this Vector4F.
-	[[nodiscard]] constexpr float LengthSquared() const
+	constexpr float LengthSquared() const
 	{
 		return	w * w +
 				x * x +
@@ -159,13 +159,13 @@ struct Vector4F
 	}
 
 	//! Returns the length of this Vector4F.
-	[[nodiscard]] constexpr float Length() const
+	constexpr float Length() const
 	{
 		return Math::SqrtF(LengthSquared());
 	}
 
 	//! Returns the point between this Vector4F and a given target Vector4F based on a given weight.
-	[[nodiscard]] constexpr Vector4F Lerp(const Vector4F& target, const float weight) const
+	constexpr Vector4F Lerp(const Vector4F& target, const float weight) const
 	{
 		return {
 			Math::LerpF(w, target.w, weight),
@@ -176,7 +176,7 @@ struct Vector4F
 	}
 
 	//! Returns the value of this Vector4F with its length limited to a given max length.
-	[[nodiscard]] constexpr Vector4F LimitLength(const float maxLength = 1.0f) const
+	constexpr Vector4F LimitLength(const float maxLength = 1.0f) const
 	{
 		const float lengthSquared = LengthSquared();
 
@@ -191,7 +191,7 @@ struct Vector4F
 	}
 
 	//! Returns a Vector4F value where each component is the larger value between this Vector4F and another given Vector4F.
-	[[nodiscard]] constexpr Vector4F Max(const Vector4F& other) const
+	constexpr Vector4F Max(const Vector4F& other) const
 	{
 		return {
 			Math::MaxF(w, other.w),
@@ -202,7 +202,7 @@ struct Vector4F
 	}
 
 	//! Returns a Vector4F value where each component is the larger value between this Vector4F and a given float value.
-	[[nodiscard]] constexpr Vector4F Max(const float value) const
+	constexpr Vector4F Max(const float value) const
 	{
 		return {
 			Math::MaxF(w, value),
@@ -213,7 +213,7 @@ struct Vector4F
 	}
 
 	//! Returns a Vector4F value where each component is the smaller value between this Vector4F and another given Vector4F.
-	[[nodiscard]] constexpr Vector4F Min(const Vector4F& other) const
+	constexpr Vector4F Min(const Vector4F& other) const
 	{
 		return {
 			Math::MinF(w, other.w),
@@ -224,7 +224,7 @@ struct Vector4F
 	}
 
 	//! Returns a Vector4F value where each component is the smaller value between this Vector4F and a given float value.
-	[[nodiscard]] constexpr Vector4F Min(const float value) const
+	constexpr Vector4F Min(const float value) const
 	{
 		return {
 			Math::MinF(w, value),
@@ -235,7 +235,7 @@ struct Vector4F
 	}
 
 	//! Returns the point reached after moving this Vector4F toward another given Vector4F by up to a given delta distance.
-	[[nodiscard]] constexpr Vector4F MoveToward(const Vector4F& other, const float delta) const
+	constexpr Vector4F MoveToward(const Vector4F& other, const float delta) const
 	{
 		const Vector4F difference = other - *this;
 		const float distance = difference.Length();
@@ -249,7 +249,7 @@ struct Vector4F
 	}
 
 	//! Returns the unit-length Vector4F in the same direction as this Vector4F.
-	[[nodiscard]] constexpr Vector4F Normalized() const
+	constexpr Vector4F Normalized() const
 	{
 		const float length = Length();
 
@@ -262,7 +262,7 @@ struct Vector4F
 	}
 
 	//! Returns a Vector4F with each component in the range [0, mod] for its corresponding component of a given Vector4F mod value.
-	[[nodiscard]] constexpr Vector4F PosMod(const Vector4F& mod) const
+	constexpr Vector4F PosMod(const Vector4F& mod) const
 	{
 		return {
 			Math::PosModF(w, mod.w),
@@ -273,7 +273,7 @@ struct Vector4F
 	}
 
 	//! Returns a Vector4F with each component in the range [0, mod] for a given float mod value.
-	[[nodiscard]] constexpr Vector4F PosMod(const float mod) const
+	constexpr Vector4F PosMod(const float mod) const
 	{
 		return {
 			Math::PosModF(w, mod),
@@ -284,7 +284,7 @@ struct Vector4F
 	}
 
 	//! Returns the Vector4F result of rounding this Vector4F's components to the nearest whole number (integer).
-	[[nodiscard]] constexpr Vector4F Round() const
+	constexpr Vector4F Round() const
 	{
 		return {
 			Math::RoundF(w),
@@ -295,7 +295,7 @@ struct Vector4F
 	}
 
 	//! Returns -1 if a component is negative, 0 if zero, and +1 if positive for each component of this Vector4F.
-	[[nodiscard]] constexpr Vector4F Sign() const
+	constexpr Vector4F Sign() const
 	{
 		return {
 			Math::SignF(w),
@@ -306,7 +306,7 @@ struct Vector4F
 	}
 
 	//! Returns the Vector4F result of snapping this Vector4F's components to the nearest corresponding step value.
-	[[nodiscard]] constexpr Vector4F Snapped(const Vector4F& step) const
+	constexpr Vector4F Snapped(const Vector4F& step) const
 	{
 		return {
 			Math::SnappedF(w, step.w),
@@ -317,7 +317,7 @@ struct Vector4F
 	}
 
 	//! Returns the Vector4F result of snapping this Vector4F's components to the nearest step value.
-	[[nodiscard]] constexpr Vector4F Snapped(const float step) const
+	constexpr Vector4F Snapped(const float step) const
 	{
 		return {
 			Math::SnappedF(w, step),
@@ -329,7 +329,7 @@ struct Vector4F
 
 	// Comparison
 	//! Returns whether or not this Vector4F approximately equals a given Vector4F based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsEqualApprox(const Vector4F& other, const float epsilon = 0.00001) const
+	constexpr bool IsEqualApprox(const Vector4F& other, const float epsilon = 0.00001) const
 	{
 		return	Math::IsEqualApproxF(w, other.w, epsilon) &&
 				Math::IsEqualApproxF(x, other.x, epsilon) &&
@@ -338,7 +338,7 @@ struct Vector4F
 	}
 
 	//! Returns whether or not this Vector4F approximately equals zero based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsZeroApprox(const float epsilon = 0.00001) const
+	constexpr bool IsZeroApprox(const float epsilon = 0.00001) const
 	{
 		return	Math::IsZeroApproxF(w, epsilon) &&
 				Math::IsZeroApproxF(x, epsilon) &&

@@ -438,7 +438,7 @@ public:
 	}
 
 	//! Returns whether or not this String starts with another given String.
-	[[nodiscard]] bool StartsWith(const String& value) const
+	bool StartsWith(const String& value) const
 	{
 		return StartsWith(value.CStr());
 	}
@@ -472,7 +472,7 @@ public:
 	}
 
 	//! Returns whether or not this String ends with another given String.
-	[[nodiscard]] bool EndsWith(const String& value) const
+	bool EndsWith(const String& value) const
 	{
 		return EndsWith(value.CStr());
 	}
@@ -520,7 +520,7 @@ public:
 	}
 
 	//! Returns whether or not this String contains another given String.
-	[[nodiscard]] bool Contains(const String& value) const
+	bool Contains(const String& value) const
 	{
 		return Contains(value.CStr());
 	}
@@ -572,14 +572,14 @@ public:
 	//! Finds and returns the position of another given String.
 	//! Returns 0 if the given String's length is 0,
 	//! and returns -1 if the given String is not found in this String.
-	[[nodiscard]] uint32 Find(const String& value) const
+	uint32 Find(const String& value) const
 	{
 		return Find(value.CStr());
 	}
 
 	//! Returns the substring from a given start position up to a given count of characters.
 	//! Returns an empty String if invalid start position.
-	[[nodiscard]] String Substr(const uint32 start, uint32 count) const
+	String Substr(const uint32 start, uint32 count) const
 	{
 		if (start >= length_)
 		{
@@ -595,7 +595,7 @@ public:
 	}
 
 	//! Converts String characters to all lowercase.
-	[[nodiscard]] String ToLower() const
+	String ToLower() const
 	{
 		String result(*this);
 
@@ -611,7 +611,7 @@ public:
 	}
 
 	//! Converts String characters to all uppercase.
-	[[nodiscard]] String ToUpper() const
+	String ToUpper() const
 	{
 		String result(*this);
 
@@ -628,7 +628,7 @@ public:
 
 	// Data fetching
 	//! Returns this String's char data.
-	[[nodiscard]] const char* CStr() const
+	const char* CStr() const
 	{
 		return data_ ? data_ : "";
 	}
@@ -640,25 +640,25 @@ public:
 	}
 
 	//! Returns a pointer to this String's data as a constant.
-	[[nodiscard]] const char* Data() const
+	const char* Data() const
 	{
 		return data_;
 	}
 
 	//! Returns the length of this String.
-	[[nodiscard]] constexpr uint32 Length() const
+	constexpr uint32 Length() const
 	{
 		return length_;
 	}
 
 	//! Returns this capacity of this String.
-	[[nodiscard]] constexpr uint32 Capacity() const
+	constexpr uint32 Capacity() const
 	{
 		return capacity_;
 	}
 
 	//! Returns whether or not this String is empty.
-	[[nodiscard]] constexpr bool IsEmpty() const
+	constexpr bool IsEmpty() const
 	{
 		return length_ == 0;
 	}
@@ -919,7 +919,7 @@ private:
 	}
 
 	//! Compares the characters and length of a given String to this String.
-	[[nodiscard]] int8 Compare(const String& other) const
+	int8 Compare(const String& other) const
 	{
 		const uint32 compareLength = length_ < other.length_ ? length_ : other.length_;
 

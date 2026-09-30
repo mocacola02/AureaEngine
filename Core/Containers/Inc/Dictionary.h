@@ -56,22 +56,22 @@ public:
 	// Helpers
 	//==========
 
-	[[nodiscard]] [[nodiscard]] uint32 Count() const
+	uint32 Count() const
 	{
 		return count_;
 	}
 
-	[[nodiscard]] [[nodiscard]] uint32 Capacity() const
+	uint32 Capacity() const
 	{
 		return bucketCount_;
 	}
 
-	[[nodiscard]] bool IsEmpty() const
+	bool IsEmpty() const
 	{
 		return count_ == 0;
 	}
 
-	[[nodiscard]] double LoadFactor() const
+	double LoadFactor() const
 	{
 		if (bucketCount_ == 0)
 		{
@@ -135,7 +135,7 @@ public:
 
 	bool Add(const Key& key, const Value& value)
 	{
-		if (Contains(key))
+		if (ContainsKey(key))
 		{
 			return false;
 		}
@@ -149,7 +149,7 @@ public:
 
 	bool Add(const Key& key, Value&& value)
 	{
-		if (Contains(key))
+		if (ContainsKey(key))
 		{
 			return false;
 		}
@@ -163,7 +163,7 @@ public:
 
 	bool Add(Key&& key, Value&& value)
 	{
-		if (Contains(key))
+		if (ContainsKey(key))
 		{
 			return false;
 		}
@@ -173,6 +173,56 @@ public:
 		InsertNew(static_cast<Key&&>(key), static_cast<Value&&>(value));
 
 		return true;
+	}
+
+	Array<Key> GetKeys() const
+	{
+		Array<Key> keys;
+
+		if (IsEmpty())
+		{
+			return keys;
+		}
+
+		keys.Reserve(count_);
+
+		for (uint32 i = 0; i < bucketCount_; ++i)
+		{
+			const Entry* entry = buckets_[i];
+
+			while (entry)
+			{
+				keys.Add(entry->key);
+				entry = entry->next;
+			}
+		}
+
+		return keys;
+	}
+
+	Array<Value> GetValues() const
+	{
+		Array<Value> values;
+
+		if (IsEmpty())
+		{
+			return values;
+		}
+
+		values.Reserve(count_);
+
+		for (uint32 i = 0; i < bucketCount_; ++i)
+		{
+			const Entry* entry = buckets_[i];
+
+			while (entry)
+			{
+				values.Add(entry->value);
+				entry = entry->next;
+			}
+		}
+
+		return values;
 	}
 
 	Value* Find(const Key& key)
@@ -187,7 +237,7 @@ public:
 		return &entry -> value;
 	}
 
-	[[nodiscard]] const Value* Find(const Key& key) const
+	const Value* Find(const Key& key) const
 	{
 		const Entry* entry = FindEntry(key);
 
@@ -211,7 +261,7 @@ public:
 		return entry->value;
 	}
 
-	[[nodiscard]] const Value& Get(const Key& key) const
+	const Value& Get(const Key& key) const
 	{
 		const Entry* entry = FindEntry(key);
 
@@ -237,9 +287,33 @@ public:
 		return true;
 	}
 
-	[[nodiscard]] bool Contains(const Key& key) const
+	bool ContainsKey(const Key& key) const
 	{
 		return FindEntry(key) != nullptr;
+	}
+
+	bool ContainsValue(const Value& value) const
+	{
+		if (IsEmpty())
+		{
+			return false;
+		}
+
+		for (uint32 i = 0; i < bucketCount_; ++i)
+		{
+			const Entry* entry = buckets_[i];
+			while (entry)
+			{
+				if (entry->value == value)
+				{
+					return true;
+				}
+
+				entry = entry->next;
+			}
+		}
+
+		return false;
 	}
 
 	bool Remove(const Key& key)
@@ -349,7 +423,7 @@ public:
 		return nullptr;
 	}
 
-	[[nodiscard]] const Entry* FindEntry(const Key& key) const
+	const Entry* FindEntry(const Key& key) const
 	{
 		if (!buckets_ || bucketCount_ == 0)
 		{

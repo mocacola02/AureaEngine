@@ -67,7 +67,7 @@ struct Vector3
 	// but no code has been pulled from Godot's source. -Moca
 
 	//! Returns the absolute value (positive value) of this Vector3.
-	[[nodiscard]] constexpr Vector3 Abs() const
+	constexpr Vector3 Abs() const
 	{
 		return {
 			Math::Abs(x),
@@ -76,19 +76,19 @@ struct Vector3
 		};
 	}
 
-	[[nodiscard]] constexpr double AngleXY() const
+	constexpr double AngleXY() const
 	{
 		return Math::Atan2(y, x);
 	}
 
 	//! Returns the minimum angle to a given Vector3 in radians.
-	[[nodiscard]] constexpr double AngleTo(const Vector3& other) const
+	constexpr double AngleTo(const Vector3& other) const
 	{
 		return Math::Atan2(Cross(other).Length(), Dot(other));
 	}
 
 	//! Returns the direction the cubic Bézier curve is heading at parameter t (its tangent vector).
-	[[nodiscard]] constexpr Vector3 BezierDerivative(
+	constexpr Vector3 BezierDerivative(
 		const Vector3& control1, const Vector3& control2,
 		const Vector3& end, const double t) const
 	{
@@ -100,7 +100,7 @@ struct Vector3
 	}
 
 	//! Returns the point on the cubic Bézier curve when moving t fraction along it.
-	[[nodiscard]] constexpr Vector3 BezierInterpolate(
+	constexpr Vector3 BezierInterpolate(
 		const Vector3& control1, const Vector3& control2,
 		const Vector3& end, const double t) const
 	{
@@ -115,13 +115,13 @@ struct Vector3
 	}
 
 	//! Returns the rounded up value of this Vector3.
-	[[nodiscard]] constexpr Vector3 Ceil() const
+	constexpr Vector3 Ceil() const
 	{
 		return {Math::Ceil(x), Math::Ceil(y), Math::Ceil(z)};
 	}
 
 	//! Returns the clamped value of this Vector3 between a given minimum Vector3 and maximum Vector3 value.
-	[[nodiscard]] constexpr Vector3 Clamp(const Vector3& min, const Vector3& max) const
+	constexpr Vector3 Clamp(const Vector3& min, const Vector3& max) const
 	{
 		return {
 			Math::Clamp(x, min.x, max.x),
@@ -131,7 +131,7 @@ struct Vector3
 	}
 
 	//!  Returns the clamped value of this Vector3 between a given minimum double and maximum double value.
-	[[nodiscard]] constexpr Vector3 Clamp(const double min, const double max) const
+	constexpr Vector3 Clamp(const double min, const double max) const
 	{
 		return {
 			Math::Clamp(x, min, max),
@@ -141,7 +141,7 @@ struct Vector3
 	}
 
 	//! Returns the cross product of this Vector3 and another Vector3.
-	[[nodiscard]] constexpr Vector3 Cross(const Vector3& other) const
+	constexpr Vector3 Cross(const Vector3& other) const
 	{
 		return {
 			y * other.z - z * other.y,
@@ -151,7 +151,7 @@ struct Vector3
 	}
 
 	//! Returns the interpolated Vector3 using the given weight.
-	[[nodiscard]] constexpr Vector3 CubicInterpolate(
+	constexpr Vector3 CubicInterpolate(
 		const Vector3& b, const Vector3& preA,
 		const Vector3& preB, const double weight) const
 	{
@@ -164,19 +164,19 @@ struct Vector3
 	}
 
 	//! Returns the normalized Vector3 pointed from this Vector3 to another given Vector3.
-	[[nodiscard]] constexpr Vector3 DirectionTo(const Vector3& other) const
+	constexpr Vector3 DirectionTo(const Vector3& other) const
 	{
 		return (other - *this).Normalized();
 	}
 
 	//! Returns the squared distance between this Vector3 and another given Vector3.
-	[[nodiscard]] constexpr double DistanceSquaredTo(const Vector3& other) const
+	constexpr double DistanceSquaredTo(const Vector3& other) const
 	{
 		return (other - *this).LengthSquared();
 	}
 
 	//! Returns the dot product of this Vector3 and another given Vector3.
-	[[nodiscard]] constexpr double Dot(const Vector3& other) const
+	constexpr double Dot(const Vector3& other) const
 	{
 		return	x * other.x +
 				y * other.y +
@@ -184,7 +184,7 @@ struct Vector3
 	}
 
 	//! Returns the rounded down value of this Vector3.
-	[[nodiscard]] constexpr Vector3 Floor() const
+	constexpr Vector3 Floor() const
 	{
 		return {
 			Math::Floor(x),
@@ -194,7 +194,7 @@ struct Vector3
 	}
 
 	//! Returns whether or not this Vector3 is finite.
-	[[nodiscard]] constexpr bool IsFinite() const
+	constexpr bool IsFinite() const
 	{
 		return	Math::IsFinite(x) &&
 				Math::IsFinite(y) &&
@@ -202,13 +202,13 @@ struct Vector3
 	}
 
 	//! Returns whether or not this Vector3 is normalized.
-	[[nodiscard]] constexpr bool IsNormalized(const double epsilon = 0.00001) const
+	constexpr bool IsNormalized(const double epsilon = 0.00001) const
 	{
 		return Math::IsEqualApprox(LengthSquared(), 1.0, epsilon);
 	}
 
 	//! Returns the squared length of this Vector3.
-	[[nodiscard]] constexpr double LengthSquared() const
+	constexpr double LengthSquared() const
 	{
 		return	x * x +
 				y * y +
@@ -216,13 +216,13 @@ struct Vector3
 	}
 
 	//! Returns the length of this Vector3.
-	[[nodiscard]] constexpr double Length() const
+	constexpr double Length() const
 	{
 		return Math::Sqrt(LengthSquared());
 	}
 
 	//! Returns the point between this Vector3 and a given target Vector3 based on a given weight.
-	[[nodiscard]] constexpr Vector3 Lerp(const Vector3& target, const double weight) const
+	constexpr Vector3 Lerp(const Vector3& target, const double weight) const
 	{
 		return {
 			Math::Lerp(x,  target.x, weight),
@@ -232,7 +232,7 @@ struct Vector3
 	}
 
 	//! Returns the value of this Vector3 with its length limited to a given max length.
-	[[nodiscard]] constexpr Vector3 LimitLength(const double maxLength = 1.0) const
+	constexpr Vector3 LimitLength(const double maxLength = 1.0) const
 	{
 		const double lengthSquared = LengthSquared();
 
@@ -247,7 +247,7 @@ struct Vector3
 	}
 
 	//! Returns a Vector3 value where each component is the larger value between this Vector3 and another given Vector3.
-	[[nodiscard]] constexpr Vector3 Max(const Vector3& other) const
+	constexpr Vector3 Max(const Vector3& other) const
 	{
 		return {
 			Math::Max(x, other.x),
@@ -257,7 +257,7 @@ struct Vector3
 	}
 
 	//! Returns a Vector3 value where each component is the larger value between this Vector3 and a given double value.
-	[[nodiscard]] constexpr Vector3 Max(const double value) const
+	constexpr Vector3 Max(const double value) const
 	{
 		return {
 			Math::Max(x, value),
@@ -267,7 +267,7 @@ struct Vector3
 	}
 
 	//! Returns a Vector3 value where each component is the smaller value between this Vector3 and another given Vector3.
-	[[nodiscard]] constexpr Vector3 Min(const Vector3& other) const
+	constexpr Vector3 Min(const Vector3& other) const
 	{
 		return {
 			Math::Min(x, other.x),
@@ -277,7 +277,7 @@ struct Vector3
 	}
 
 	//! Returns a Vector3 value where each component is the smaller value between this Vector3 and a given double value.
-	[[nodiscard]] constexpr Vector3 Min(const double value) const
+	constexpr Vector3 Min(const double value) const
 	{
 		return {
 			Math::Min(x, value),
@@ -287,7 +287,7 @@ struct Vector3
 	}
 
 	//! Returns the point reached after moving this Vector3 toward another given Vector3 by up to a given delta distance.
-	[[nodiscard]] constexpr Vector3 MoveToward(const Vector3& other, const double delta) const
+	constexpr Vector3 MoveToward(const Vector3& other, const double delta) const
 	{
 		const Vector3 difference = other - *this;
 		const double distance = difference.Length();
@@ -301,7 +301,7 @@ struct Vector3
 	}
 
 	//! Returns the unit-length Vector3 in the same direction as this Vector3.
-	[[nodiscard]] constexpr Vector3 Normalized() const
+	constexpr Vector3 Normalized() const
 	{
 		const double length = Length();
 
@@ -314,7 +314,7 @@ struct Vector3
 	}
 
 	//! Returns a Vector3 with each component in the range [0, mod] for its corresponding component of a given Vector3 mod value.
-	[[nodiscard]] constexpr Vector3 PosMod(const Vector3& mod) const
+	constexpr Vector3 PosMod(const Vector3& mod) const
 	{
 		return {
 			Math::PosMod(x, mod.x),
@@ -324,7 +324,7 @@ struct Vector3
 	}
 
 	//! Returns a Vector3 with each component in the range [0, mod] for a given double mod value.
-	[[nodiscard]] constexpr Vector3 PosMod(const double mod) const
+	constexpr Vector3 PosMod(const double mod) const
 	{
 		return {
 			Math::PosMod(x, mod),
@@ -334,7 +334,7 @@ struct Vector3
 	}
 
 	//! Returns the Vector3 result of projecting this Vector3 onto another given Vector3.
-	[[nodiscard]] constexpr Vector3 Project(const Vector3& other) const
+	constexpr Vector3 Project(const Vector3& other) const
 	{
 		const double denominator = other.LengthSquared();
 
@@ -347,13 +347,13 @@ struct Vector3
 	}
 
 	//! Returns the reflected Vector3 result across a given surface normal Vector3 value.
-	[[nodiscard]] constexpr Vector3 Reflect(const Vector3& normal) const
+	constexpr Vector3 Reflect(const Vector3& normal) const
 	{
 		return *this - normal * (2.0 * Dot(normal));
 	}
 
 	//! Returns the rotated Vector3 result around a given axis by a given angle.
-	[[nodiscard]] constexpr Vector3 Rotated(const Vector3& axis, const double angle) const
+	constexpr Vector3 Rotated(const Vector3& axis, const double angle) const
 	{
 		const Vector3 normalizedAxis = axis.Normalized();
 		const double cosine = Math::Cos(angle);
@@ -364,7 +364,7 @@ struct Vector3
 	}
 
 	//! Returns the Vector3 result of rounding this Vector3's components to the nearest whole number (integer).
-	[[nodiscard]] constexpr Vector3 Round() const
+	constexpr Vector3 Round() const
 	{
 		return {
 			Math::Round(x),
@@ -374,7 +374,7 @@ struct Vector3
 	}
 
 	//! Returns -1 if a component is negative, 0 if zero, and +1 if positive for each component of this Vector3.
-	[[nodiscard]] constexpr Vector3 Sign() const
+	constexpr Vector3 Sign() const
 	{
 		return {
 			Math::Sign(x),
@@ -384,7 +384,7 @@ struct Vector3
 	}
 
 	//! Returns the spherical interpolated Vector3 between this Vector and another given Vector3 at a given weight.
-	[[nodiscard]] constexpr Vector3 Slerp(const Vector3& other, const double weight) const
+	constexpr Vector3 Slerp(const Vector3& other, const double weight) const
 	{
 		const double startLength = Length();
 		const double endLength	 = other.Length();
@@ -417,13 +417,13 @@ struct Vector3
 	}
 
 	//! Returns the Vector3 result from sliding this Vector3 along a surface normal Vector3 value.
-	[[nodiscard]] constexpr Vector3 Slide(const Vector3& normal) const
+	constexpr Vector3 Slide(const Vector3& normal) const
 	{
 		return *this - normal * Dot(normal);
 	}
 
 	//! Returns the Vector3 result of snapping this Vector3's components to the nearest corresponding step value.
-	[[nodiscard]] constexpr Vector3 Snapped(const Vector3& step) const
+	constexpr Vector3 Snapped(const Vector3& step) const
 	{
 		return {
 			Math::Snapped(x, step.x),
@@ -433,7 +433,7 @@ struct Vector3
 	}
 
 	//! Returns the Vector3 result of snapping this Vector3's components to the nearest step value.
-	[[nodiscard]] constexpr Vector3 Snapped(const double step) const
+	constexpr Vector3 Snapped(const double step) const
 	{
 		return {
 			Math::Snapped(x, step),
@@ -444,7 +444,7 @@ struct Vector3
 
 	// Comparison
 	//! Returns whether or not this Vector3 approximately equals a given Vector3 based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsEqualApprox(const Vector3& other, const double epsilon = 0.00001) const
+	constexpr bool IsEqualApprox(const Vector3& other, const double epsilon = 0.00001) const
 	{
 		return	Math::IsEqualApprox(x, other.x, epsilon) &&
 				Math::IsEqualApprox(y, other.y, epsilon) &&
@@ -452,7 +452,7 @@ struct Vector3
 	}
 
 	//! Returns whether or not this Vector3 approximately equals zero based on a given epsilon value.
-	[[nodiscard]] constexpr bool IsZeroApprox(const double epsilon = 0.00001) const
+	constexpr bool IsZeroApprox(const double epsilon = 0.00001) const
 	{
 		return	Math::IsZeroApprox(x, epsilon) &&
 				Math::IsZeroApprox(y, epsilon) &&

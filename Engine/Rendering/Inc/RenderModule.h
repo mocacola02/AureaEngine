@@ -9,6 +9,7 @@ class RenderManager;
 class RenderModule : public Object
 {
 public:
+	explicit RenderModule(Runtime* runtime) : Object(runtime);
 	~RenderModule() override;
 
 	bool Load(const String& path);

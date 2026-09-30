@@ -39,27 +39,27 @@ struct QuaternionF
 		return {1.0f, 0.0f, 0.0f, 0.0f};
 	}
 
-	[[nodiscard]] constexpr QuaternionF Inverse() const
+	constexpr QuaternionF Inverse() const
 	{
 		return {-q.w, -q.x, -q.y, -q.z};
 	}
 
-	[[nodiscard]] constexpr float LengthSquared() const
+	constexpr float LengthSquared() const
 	{
 		return q.LengthSquared();
 	}
 
-	[[nodiscard]] constexpr float Length() const
+	constexpr float Length() const
 	{
 		return q.Length();
 	}
 
-	[[nodiscard]] constexpr QuaternionF Normalized() const
+	constexpr QuaternionF Normalized() const
 	{
 		return QuaternionF(q.Normalized());
 	}
 
-	[[nodiscard]] constexpr Vector3F Rotate(const Vector3F& vector) const
+	constexpr Vector3F Rotate(const Vector3F& vector) const
 	{
 		return {
 			q.x * vector.x,

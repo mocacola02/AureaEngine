@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <SDL3/SDL_stdinc.h>
 
 using int8  = int8_t;
 using int16 = int16_t;
@@ -35,6 +36,17 @@ template<> inline constexpr uint8  MaxInt<uint8> = 0xFFU;
 template<> inline constexpr uint16 MaxInt<uint16> = 0xFFFFU;
 template<> inline constexpr uint32 MaxInt<uint32> = 0xFFFFFFFFUL;
 template<> inline constexpr uint64 MaxInt<uint64> = 0xFFFFFFFFFFFFFFFFULL;
+
+namespace Rand
+{
+	static uint64 Rand64()
+	{
+		const uint32 high = SDL_rand_bits();
+		const uint32 low  = SDL_rand_bits();
+
+		return (static_cast<uint64>(high) << 32) | low;
+	}
+}
 
 struct int128
 {

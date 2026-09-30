@@ -16,34 +16,36 @@ enum class TickMode : uint8
 class WorldObject : public Object
 {
 public:
+	explicit WorldObject(Runtime* runtime) : Object(runtime);
+
 	bool Initialize() override;
 
 	void PreStart();
 	void Start();
 	void PostStart();
-	[[nodiscard]] bool HasStarted() const;
+	bool HasStarted() const;
 
 	void Tick(double deltaTime);
 
-	[[nodiscard]] bool IsPendingDestroy() const;
+	bool IsPendingDestroy() const;
 
 	void Destroy();
 
-	[[nodiscard]] bool ShouldTick(bool parentShouldTick, double deltaTime);
+	bool ShouldTick(bool parentShouldTick, double deltaTime);
 	void SetTickMode(const TickMode& tickMode);
-	[[nodiscard]] TickMode GetTickMode() const;
+	TickMode GetTickMode() const;
 
 	WorldObject*	   GetParent();
-	[[nodiscard]] const WorldObject* GetParent() const;
+	const WorldObject* GetParent() const;
 
 	WorldObject*	GetRoot();
-	[[nodiscard]] const WorldObject* GetRoot() const;
-	[[nodiscard]] bool IsRoot() const;
+	const WorldObject* GetRoot() const;
+	bool IsRoot() const;
 
-	[[nodiscard]] const Array<WorldObject*>& GetChildren() const;
+	const Array<WorldObject*>& GetChildren() const;
 
-	[[nodiscard]] bool HasParent() const;
-	[[nodiscard]] bool HasChildren() const;
+	bool HasParent() const;
+	bool HasChildren() const;
 	bool HasChild(WorldObject *object) const;
 	bool IsChildOf(const WorldObject* object) const;
 
@@ -54,7 +56,7 @@ public:
 	void RemoveParent();
 
 	World* GetWorld();
-	[[nodiscard]] const World* GetWorld() const;
+	const World* GetWorld() const;
 
 protected:
 	friend class World;

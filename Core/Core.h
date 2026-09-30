@@ -5,7 +5,6 @@
 
 #include "General/Inc/Application.h"
 #include "General/Inc/Object.h"
-#include "General/Inc/Runtime.h"
 
 #include "Math/Inc/Math.h"
 #include "String/Inc/Name.h"

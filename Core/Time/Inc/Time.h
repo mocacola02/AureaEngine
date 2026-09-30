@@ -7,6 +7,8 @@
 class Time : public Object
 {
 public:
+	explicit Time(Runtime* runtime) : Object(runtime)
+
 	void Start()
 	{
 		PlatformTime::Initialize();
@@ -41,17 +43,17 @@ public:
 		}
 	}
 
-	[[nodiscard]] double GetDeltaTime() const
+	double GetDeltaTime() const
 	{
 		return deltaTime_;
 	}
 
-	[[nodiscard]] double GetElapsedTime() const
+	double GetElapsedTime() const
 	{
 		return elapsedTime_;
 	}
 
-	[[nodiscard]] double GetFPS() const
+	double GetFPS() const
 	{
 		return fps_;
 	}
