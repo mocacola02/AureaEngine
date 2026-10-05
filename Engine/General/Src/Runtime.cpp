@@ -2,49 +2,28 @@
 
 #include "../Inc/World.h"
 
-#include "../../Audio/Inc/AudioManager.h"
-#include "../../Config/Inc/ConfigManager.h"
-#include "../../Input/Inc/InputManager.h"
-#include "../../Networking/Inc/NetworkManager.h"
-#include "../../Rendering/Inc/RenderManager.h"
-#include "../../Resource/Inc/ResourceManager.h"
-#include "../../Script/Inc/ScriptManager.h"
-#include "../Inc/StatsManager.h"
-
 
 bool Runtime::Initialize()
 {
-	CreateManagers();
-	return ValidManagers();
+	return true;
 }
 
-void Runtime::Tick() const
+void Runtime::Run()
 {
-	if (IsRunning() && HasWorld())
-	{
-		world_->Tick(GetStatsManager()->GetDeltaTime());
-	}
+	const double delta = time_.Tick();
+	world_.Tick(delta);
 }
 
 void Runtime::Shutdown()
 {
-	world_ = nullptr;
-
-	audioManager_	 = nullptr;
-	configManager_	 = nullptr;
-	inputManager_	 = nullptr;
-	networkManager_  = nullptr;
-	renderManager_	 = nullptr;
-	resourceManager_ = nullptr;
-	scriptManager_	 = nullptr;
-	statsManager_	 = nullptr;
+	world_.Shutdown();
 
 	for (Object* object : GetObjects())
 	{
 		DeleteObject(object);
 	}
 
-	objects_.Clear();
+	uuidManager_.Clear();
 
 	Exit();
 }
@@ -62,17 +41,14 @@ void Runtime::SetResultString(const String& result)
 void Runtime::Exit()
 {
 	running_ = false;
-}
 
-bool Runtime::HasWorld() const
-{
-	return world_ != nullptr;
+
 }
 
 template<typename Type>
 Type* Runtime::CreateObject()
 {
-	if (!IsChildOf<Type, Object>())
+	if (!IsBasedOn<Type, Object>())
 	{
 		ERROR("Invalid class type provided! The class type must derive from Object! Aborting CreateObject");
 		return nullptr;
@@ -101,233 +77,85 @@ Type* Runtime::CreateObject()
 void Runtime::DeleteObject(Object* object)
 {
 	object->Shutdown();
-	UnregisterObject(object);
+	GetUUIDManager().UnregisterObject(object);
 	delete object;
 }
 
-Array<Object*> Runtime::GetObjects() const
+Array<Object*> Runtime::GetObjects()
 {
-	return objects_.GetValues();
+	return GetUUIDManager().GetObjects();
 }
 
+template<typename Type>
+Array<Type*> Runtime::GetObjectsOfType()
+{
+	Array<Type*> objects;
+
+	for (Object* object : GetUUIDManager().GetObjects())
+	{
+		if (object->IsOfType<Type>())
+		{
+			objects.Add(object);
+		}
+	}
+
+	return objects;
+}
+
+
 template<typename Base, typename Derived>
-bool Runtime::IsChildOf() const noexcept
+bool Runtime::IsBasedOn() const noexcept
 {
 	Derived temp;
 	return dynamic_cast<Base*>(&temp) != nullptr;
 }
 
-StatsManager *Runtime::GetStatsManager() const
+AudioManager& Runtime::GetAudioManager() noexcept
 {
-	return statsManager_;
+	return audioManager_;
 }
 
-bool Runtime::IsValidUUID(const uint64 uuid)
+ConfigManager& Runtime::GetConfigManager() noexcept
 {
-	return uuid != 0;
+	return configManager_;
 }
 
-uint64 Runtime::GenerateUUID() const
+InputManager& Runtime::GetInputManager() noexcept
 {
-	uint64 newUUID = Rand::Rand64();
-
-	while (DoesUUIDExist(newUUID) || !IsValidUUID(newUUID))
-	{
-		newUUID = Rand::Rand64();
-	}
-
-	return newUUID;
+	return inputManager_;
 }
 
-bool Runtime::DoesUUIDExist(const uint64 uuid) const
+NetworkManager& Runtime::GetNetworkManager() noexcept
 {
-	return objects_.ContainsKey(uuid);
+	return networkManager_;
 }
 
-bool Runtime::LeaseUUID(Object* object)
+RenderManager& Runtime::GetRenderManager() noexcept
 {
-	if (!object)
-	{
-		ERROR(String("Cannot lease UUID for invalid object!"));
-		return false;
-	}
-
-	if (IsValidUUID(object->GetUUID()))
-	{
-		WARN("The provided object already has a valid UUID. If you want to reassign it, use RenewUUID() instead.");
-		return false;
-	}
-
-	return RegisterObject(object, GenerateUUID());
+	return renderManager_;
 }
 
-bool Runtime::RenewUUID(Object* object)
+ResourceManager& Runtime::GetResourceManager() noexcept
 {
-	if (!object)
-	{
-		ERROR(String("Cannot renew UUID for invalid object!"));
-		return false;
-	}
-
-	if (IsObjectRegistered(object))
-	{
-		if (!UnregisterObject(object))
-		{
-			ERROR(String("Could not unregister object ") + object->GetName().ToString() + "!");
-			return false;
-		}
-	}
-
-	return LeaseUUID(object);
+	return resourceManager_;
 }
 
-bool Runtime::RequestUUID(Object* object, const uint64 uuid)
+ScriptManager& Runtime::GetScriptManager() noexcept
 {
-	if (!object)
-	{
-		ERROR(String("Cannot request UUID for invalid object!"));
-		return false;
-	}
-
-	if (!IsValidUUID(uuid))
-	{
-		ERROR(String("Cannot request invalid UUID ") + uuid);
-		return false;
-	}
-
-	if (DoesUUIDExist(uuid))
-	{
-		WARN(
-			String("Could not assign UUID ") + uuid +
-			" to object " + object->GetName().ToString() +
-			" as that UUID is already assigned."
-		);
-		return false;
-	}
-
-	if (IsObjectRegistered(object))
-	{
-		if (!UnregisterObject(object))
-		{
-			ERROR(String("Could not unregister object ") + object->GetName().ToString());
-			return false;
-		}
-	}
-
-	return RegisterObject(object, uuid);
+	return scriptManager_;
 }
 
-bool Runtime::DemandUUID(Object* object, const uint64 uuid)
+UUIDManager& Runtime::GetUUIDManager() noexcept
 {
-	if (RequestUUID(object, uuid))
-	{
-		return true;
-	}
-
-	Object* existingLeaser = GetObjectFromUUID(uuid);
-
-	if (!existingLeaser)
-	{
-		ERROR("UUID request failed, but the existing leaser could not be found.");
-		return false;
-	}
-
-	if (!RenewUUID(existingLeaser))
-	{
-		ERROR(String("Could not renew UUID for existing leaser ") + existingLeaser->GetName().ToString());
-		return false;
-	}
-
-	if (!UnregisterObject(object))
-	{
-		ERROR(String("Could not unregistered demanding object."));
-		return false;
-	}
-
-	return RegisterObject(object, uuid);
+	return uuidManager_;
 }
 
-bool Runtime::RegisterObject(Object* object, const uint64 uuid)
+Time& Runtime::GetTime() noexcept
 {
-	if (!object)
-	{
-		ERROR("Cannot register invalid object!");
-		return false;
-	}
-
-	if (IsObjectRegistered(object))
-	{
-		WARN(String("Cannot register object ") + object->GetName().ToString() + " as it is already registered.");
-		return false;
-	}
-
-	if (!IsValidUUID(uuid))
-	{
-		ERROR(String("Cannot register object ") + object->GetName().ToString() + " with invalid UUID " + uuid);
-		return false;
-	}
-
-	object->SetUUID(uuid);
-
-	return objects_.Add(uuid, object);
+	return time_;
 }
 
-bool Runtime::UnregisterObject(Object* object)
+World& Runtime::GetWorld() noexcept
 {
-	if (!object)
-	{
-		ERROR("Cannot unregister invalid object!");
-		return false;
-	}
-
-	if (IsObjectRegistered(object))
-	{
-		const uint64 uuid = object->GetUUID();
-		object->SetUUID(0);
-		return objects_.Remove(uuid);
-	}
-
-	WARN(String("Cannot unregister ") + object->GetName().ToString() + " as it is not registered to begin with.");
-	return false;
-}
-
-Object* Runtime::GetObjectFromUUID(const uint64 uuid)
-{
-	return objects_.Get(uuid);
-}
-
-bool Runtime::IsObjectRegistered(const Object* object) const
-{
-	const uint64 uuid = object->GetUUID();
-
-	if (!IsValidUUID(uuid))
-	{
-		return false;
-	}
-
-	return objects_.ContainsKey(uuid);
-}
-
-void Runtime::CreateManagers()
-{
-	configManager_	 = CreateObject<ConfigManager>();
-	audioManager_	 = CreateObject<AudioManager>();
-	inputManager_	 = CreateObject<InputManager>();
-	networkManager_  = CreateObject<NetworkManager>();
-	renderManager_	 = CreateObject<RenderManager>();
-	resourceManager_ = CreateObject<ResourceManager>();
-	scriptManager_	 = CreateObject<ScriptManager>();
-	statsManager_	 = CreateObject<StatsManager>();
-}
-
-bool Runtime::ValidManagers() const
-{
-	return	configManager_	 != nullptr &&
-			audioManager_	 != nullptr &&
-			inputManager_	 != nullptr &&
-			networkManager_  != nullptr &&
-			renderManager_	 != nullptr &&
-			resourceManager_ != nullptr &&
-			scriptManager_	 != nullptr &&
-			statsManager_	 != nullptr;
+	return world_;
 }

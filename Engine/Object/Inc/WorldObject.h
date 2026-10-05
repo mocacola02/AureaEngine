@@ -16,7 +16,7 @@ enum class TickMode : uint8
 class WorldObject : public Object
 {
 public:
-	explicit WorldObject(Runtime* runtime) : Object(runtime);
+	explicit WorldObject(Runtime* runtime) : Object(runtime) {}
 
 	bool Initialize() override;
 
@@ -31,7 +31,7 @@ public:
 
 	void Destroy();
 
-	bool ShouldTick(bool parentShouldTick, double deltaTime);
+	bool ShouldTick(double deltaTime);
 	void SetTickMode(const TickMode& tickMode);
 	TickMode GetTickMode() const;
 
@@ -43,6 +43,7 @@ public:
 	bool IsRoot() const;
 
 	const Array<WorldObject*>& GetChildren() const;
+	const Array<WorldObject*>& GetDescendents() const;
 
 	bool HasParent() const;
 	bool HasChildren() const;
@@ -73,7 +74,6 @@ protected:
 	double lifetime_ = 0.0;
 
 	WorldObject*		parent_ = nullptr;
-	WorldObject*		root_	= nullptr;
 	Array<WorldObject*> children_;
 
 	World* world_ = nullptr;

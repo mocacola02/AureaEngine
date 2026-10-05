@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../../Engine/General/Inc/Runtime.h"
 #include "../../Math/Inc/Int.h"
 #include "../../String/Inc/Name.h"
 #include "../../Utility/Inc/Log.h"
@@ -16,12 +17,12 @@ public:
 		if (!runtime)
 		{
 			ERROR(String("New object was not given a pointer to the runtime!!!"));
-			// gun emoji
-			// CONSIDER: Do some research on if self-deletion is safe
-			delete this;
-		}
 
-		SetName(Name(Object::GetClassName(), true));
+			// CONSIDER: Do some research on if self-deletion is safe
+			// gun emoji
+			delete this;
+			return;
+		}
 	}
 
 	virtual ~Object() = default;
@@ -39,6 +40,7 @@ public:
 
 protected:
 	friend class Runtime;
+	friend class UUIDManager;
 
 	virtual bool Initialize();
 	virtual void Shutdown();

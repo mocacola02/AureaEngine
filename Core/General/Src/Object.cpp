@@ -28,7 +28,8 @@ Runtime* Object::GetRuntime() const
 
 bool Object::Initialize()
 {
-	return true;
+	SetName(Name(GetClassName(), true));
+	return GetRuntime()->GetUUIDManager().Lease(*this);;
 }
 
 void Object::Shutdown()
@@ -38,7 +39,5 @@ void Object::Shutdown()
 
 void Object::Delete()
 {
-	Shutdown();
-
-	Runtime::DeleteObject(this);
+	GetRuntime()->DeleteObject(this);
 }

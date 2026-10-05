@@ -2,6 +2,7 @@
 
 #include <Core.h>
 
+
 class ResourceManager final : public Object
 {
 public:

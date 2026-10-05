@@ -2,6 +2,7 @@
 
 #include <Core.h>
 
+
 class ScriptManager final : public Object
 {
 public:

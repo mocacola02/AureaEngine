@@ -10,21 +10,13 @@ class Runtime;
 class EngineLoop : public Object
 {
 public:
-	explicit EngineLoop(Runtime* runtime) : Object(runtime);
+	explicit EngineLoop(Runtime* runtime) : Object(runtime) {}
 
 protected:
 	//! Returns whether or not this EngineLoop is running.
 	virtual bool IsRunning() const ;
 	virtual void SetIsRunning(bool isRunning);
 
-	//! Sets the exit code and sets to stop running.
-	virtual void Exit(int32 code);
-	//! Returns the current exit code.
-	virtual int32 GetExitCode() const;
-
-	//! Creates and initializes any relevant objects and sets running_ to true.
-	//! Returns whether or not initialization was successful.
-	virtual bool LoopInit();
 	//! Ticks the EngineLoop and any tickable objects it owns.
 	virtual void Tick(double deltaTime) = 0;
 };

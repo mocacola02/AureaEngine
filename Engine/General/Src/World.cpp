@@ -1,343 +1,107 @@
-#include "../../Inc/World/World.h"
-#include "../../Inc/World/WorldObject.h"
-#include "Inc/World/3D/Camera3D.h"
+#include "../Inc/World.h"
 
-// TODO: Implement this for real
-template<typename T, typename... Args>
-T* World::SpawnObject(Args&&... args)
+Array<WorldObject*> World::GetWorldObjects()
 {
-	unique_ptr<T> object = make_unique<T>(Forward<Args>(args)...);
+	Array<WorldObject*> objects;
 
-	T* objectPtr = object.get();
+	objects.Add(&rootObject_);
 
-	objectPtr->Initialize();
-
-	return nullptr;
-}
-
-bool World::DestroyObject(WorldObject* object)
-{
-	if (!object)
+	for (WorldObject* object : rootObject_.GetDescendents())
 	{
-		return false;
+		objects.Add(object);
 	}
 
-	bool found = false;
+	return objects;
+}
 
-	for (const WorldObject* existing : objects_)
+template<typename Type>
+Array<Type*> World::GetWorldObjectsOfType()
+{
+	Array<Type*> objects;
+
+	if (!IsBasedOn<Type, WorldObject>())
 	{
-		if (existing == object)
+		WARN("Provided type must be based on WorldObject. Returning empty array.");
+		return objects;
+	}
+
+	for (WorldObject* object : rootObject_.GetDescendents())
+	{
+		if (object->IsOfType<Type>())
 		{
-			found = true;
-			break;
+			objects.Add(object);
 		}
 	}
 
-	if (!found)
-	{
-		return false;
-	}
-
-	if (object->IsPendingDestroy())
-	{
-		return true;
-	}
-
-	object->Destroy();
-
-	return true;
+	return objects;
 }
 
-//! TODO: Ensure proper handling of children, OnDestroy, and actual object deletion
+template<typename Base, typename Derived>
+bool World::IsBasedOn() const noexcept
+{
+	return runtime_->IsBasedOn<Base, Derived>();
+}
+
 void World::DestroyPendingObjects()
 {
-	// We'll destroy objects from the "bottom up."
-	for (uint32 i = objects_.Count(); i > 0; --i)
+	for (WorldObject* object : GetWorldObjects())
 	{
-		const uint32 index = i - 1;
-
-		WorldObject* object = objects_[index];
-
-		if (!object)
+		if (object->IsPendingDestroy())
 		{
-			objects_.RemoveAt(index);
-			continue;
-		}
-
-		if (!object->IsPendingDestroy())
-		{
-			continue;
-		}
-
-		object->OnDestroy();
-
-		object->RemoveParent();
-
-		while (!object->GetChildren().IsEmpty())
-		{
-			WorldObject* child = object->GetChildren().Last();
-
-			if (!child)
-			{
-				break;
-			}
-
-			child->RemoveParent();
-		}
-
-		objects_.RemoveAt(index);
-	}
-}
-
-Array<WorldObject*>& World::GetObjects()
-{
-	return objects_;
-}
-
-const Array<WorldObject*>& World::GetObjects() const
-{
-	return objects_;
-}
-
-WorldObject* World::FindObjectByID(const uint32 id)
-{
-	uint32 index = 0;
-
-	for (WorldObject* object : objects_)
-	{
-		if (!object)
-		{
-			objects_.RemoveAt(index);
-			++index;
-			continue;
-		}
-
-		if (object->GetID() == id)
-		{
-			return object;
-		}
-
-		++index;
-	}
-
-	return nullptr;
-}
-
-const WorldObject* World::FindObjectByID(const uint32 id) const
-{
-	for (const WorldObject* object : objects_)
-	{
-		if (!object)
-		{
-			continue;
-		}
-
-		if (object->GetID() == id)
-		{
-			return object;
+			object->OnDestroy();
+			runtime_->GetUUIDManager().Release(object->GetUUID());
+			delete object;
 		}
 	}
-
-	return nullptr;
-}
-
-WorldObject* World::FindObjectByName(const Name& name)
-{
-	uint32 index = 0;
-
-	for (WorldObject* object : objects_)
-	{
-		if (!object)
-		{
-			objects_.RemoveAt(index);
-			++index;
-			continue;
-		}
-
-		if (object->GetName() == name)
-		{
-			return object;
-		}
-
-		++index;
-	}
-
-	return nullptr;
-}
-
-const WorldObject* World::FindObjectByName(const Name &name) const
-{
-	for (const WorldObject* object : objects_)
-	{
-		if (!object)
-		{
-			continue;
-		}
-
-		if (object->GetName() == name)
-		{
-			return object;
-		}
-	}
-
-	return nullptr;
-}
-
-Array<WorldObject*> World::GetRootObjects() const
-{
-	Array<WorldObject*> rootObjects = {};
-
-	for (WorldObject* object : objects_)
-	{
-		if (!object)
-		{
-			continue;
-		}
-
-		if (!object->HasParent())
-		{
-			rootObjects.Add(object);
-		}
-	}
-
-	return rootObjects;
-}
-
-// CLEANUP: This all feels very messy
-Array<WorldObject*> World::GetTickableChildren(const WorldObject* root, const bool rootShouldTick, const double deltaTime)
-{
-	Array<WorldObject*> tickableChildren = {};
-
-	for (WorldObject* child : root->GetChildren())
-	{
-		const bool childShouldTick = child->ShouldTick(rootShouldTick, deltaTime);
-
-		if (childShouldTick)
-		{
-			tickableChildren.Add(child);
-		}
-
-		if (Array<WorldObject*> tickableChildrenChildren = GetTickableChildren(child, childShouldTick, deltaTime);
-			!tickableChildrenChildren.IsEmpty()
-		)
-		{
-			tickableChildren.Combine(tickableChildrenChildren);
-		}
-	}
-
-	return tickableChildren;
-}
-
-uint32 World::GetObjectCount() const
-{
-	return objects_.Count();
-}
-
-bool World::IsPaused() const
-{
-	return paused_;
-}
-
-bool World::SetCamera3D(Camera3D* camera)
-{
-	if (camera && !camera->IsPendingDestroy())
-	{
-		camera3D_ = camera;
-		return true;
-	}
-
-	return false;
-}
-
-void World::Exit(const int32 code)
-{
-	exitCode_ = code;
-	Shutdown();
 }
 
 bool World::Initialize()
 {
-	for (WorldObject* object : objects_)
+	if (!runtime_)
 	{
-		if (!object)
-		{
-			continue;
-		}
-
-		if (object->IsPendingDestroy())
-		{
-			continue;
-		}
-
-		object->Start();
+		ERROR("World does not have a pointer to the runtime!");
+		return false;
 	}
 
-	SetIsRunning(true);
+	rootObject_.SetTickMode(TickMode::Always);
+
 	return true;
 }
 
 void World::Tick(const double deltaTime)
 {
-	if (!IsRunning())
+	if (rootObject_.ShouldTick(deltaTime))
 	{
-		return;
-	}
-
-	Array<WorldObject*> tickList;
-
-	for (WorldObject* root : GetRootObjects())
-	{
-		const bool shouldRootTick = root->ShouldTick(true, deltaTime);
-
-		if (shouldRootTick)
+		for (WorldObject* object : GetTickList(deltaTime))
 		{
-			tickList.Add(root);
-		}
-
-		if (const Array<WorldObject*> tickableObjects = GetTickableChildren(root, shouldRootTick, deltaTime);
-			!tickableObjects.IsEmpty()
-		)
-		{
-			tickList.Combine(tickableObjects);
+			object->Tick(deltaTime);
 		}
 	}
-
-	for (WorldObject* object : tickList)
-	{
-		object->Tick(deltaTime);
-	}
-
-	DestroyPendingObjects();
 }
 
 void World::Shutdown()
 {
-	for (WorldObject* object : objects_)
+	for (WorldObject* object : GetWorldObjects())
 	{
-		if (!object)
-		{
-			continue;
-		}
-
-		object->RemoveParent();
-	}
-
-	for (WorldObject* object : objects_)
-	{
-		if (!object)
-		{
-			continue;
-		}
-
-		if (!object->IsPendingDestroy())
-		{
-			object->Destroy();
-		}
+		object->Destroy();
 	}
 
 	DestroyPendingObjects();
 
-	objects_.Clear();
+	runtime_ = nullptr;
+}
 
-	SetIsRunning(false);
+Array<WorldObject*> World::GetTickList(const double deltaTime)
+{
+	Array<WorldObject*> tickList;
+
+	for (WorldObject* object : GetWorldObjects())
+	{
+		if (object->ShouldTick(deltaTime))
+		{
+			tickList.Add(object);
+		}
+	}
+
+	return tickList;
 }

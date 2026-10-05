@@ -46,6 +46,11 @@ namespace Rand
 
 		return (static_cast<uint64>(high) << 32) | low;
 	}
+
+	static uint32 Rand32()
+	{
+		return SDL_rand_bits();
+	}
 }
 
 struct int128

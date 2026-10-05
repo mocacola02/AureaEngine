@@ -2,6 +2,7 @@
 
 #include <Core.h>
 
+
 class Runtime;
 class RenderDevice;
 class RenderModule;
