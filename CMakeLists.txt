@@ -16,11 +16,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # -----------------------------------------------------------------------------
 # Paths
 # -----------------------------------------------------------------------------
-set(PROJECT_CORE_DIR 	 "${CMAKE_CURRENT_SOURCE_DIR}/Core")
 set(PROJECT_ENGINE_DIR 	 "${CMAKE_CURRENT_SOURCE_DIR}/Engine")
 set(PROJECT_EDITOR_DIR 	 "${CMAKE_CURRENT_SOURCE_DIR}/Editor")
 set(PROJECT_MIRA_DIR   	 "${CMAKE_CURRENT_SOURCE_DIR}/Mira")
-set(PROJECT_COMPILER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Compiler")
 
 set(PROJECT_GL_DIR 		"${PROJECT_MIRA_DIR}/GL")
 set(PROJECT_VK_DIR 		"${PROJECT_MIRA_DIR}/VK")
@@ -28,7 +26,7 @@ set(PROJECT_VK_DIR 		"${PROJECT_MIRA_DIR}/VK")
 set(PROJECT_THIRDPARTY_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty")
 set(PROJECT_GLAD_DIR  		"${PROJECT_THIRDPARTY_DIR}/glad")
 set(PROJECT_IMGUI_DIR 		"${PROJECT_THIRDPARTY_DIR}/ImGui")
-set(PROJECT_ROBIN_DIR   	"${PROJECT_THIRDPARTY_DIR}/robin-map")
+set(PROJECT_ROBIN_DIR   	"${PROJECT_THIRDPARTY_DIR}/pcg-cpp")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -46,14 +44,6 @@ add_subdirectory(
 # -----------------------------------------------------------------------------
 # Automatic source discovery
 # -----------------------------------------------------------------------------
-file(
-		GLOB_RECURSE PROJECT_CORE_SOURCES
-		CONFIGURE_DEPENDS
-		"${PROJECT_CORE_DIR}/*.c"
-		"${PROJECT_CORE_DIR}/*.cpp"
-		"${PROJECT_CORE_DIR}/*.h"
-		"${PROJECT_CORE_DIR}/*.hpp"
-)
 file(
 		GLOB_RECURSE PROJECT_ENGINE_SOURCES
 		CONFIGURE_DEPENDS
@@ -85,14 +75,6 @@ file(
 		"${PROJECT_VK_DIR}/*.cpp"
 		"${PROJECT_VK_DIR}/*.h"
 		"${PROJECT_VK_DIR}/*.hpp"
-)
-file(
-		GLOB_RECURSE PROJECT_COMPILER_SOURCES
-		CONFIGURE_DEPENDS
-		"${PROJECT_COMPILER_DIR}/*.c"
-		"${PROJECT_COMPILER_DIR}/*.cpp"
-		"${PROJECT_COMPILER_DIR}/*.h"
-		"${PROJECT_COMPILER_DIR}/*.hpp"
 )
 
 # -----------------------------------------------------------------------------
@@ -158,33 +140,6 @@ target_link_libraries(
 
 
 # -----------------------------------------------------------------------------
-# robin-map
-# -----------------------------------------------------------------------------
-
-#add_subdirectory("ThirdParty/robin-map")
-
-
-# -----------------------------------------------------------------------------
-# Core
-# -----------------------------------------------------------------------------
-add_library(
-		Core
-		SHARED
-		${PROJECT_CORE_SOURCES}
-)
-target_include_directories(
-		Core
-		PUBLIC
-		"${PROJECT_CORE_DIR}"
-)
-
-#target_link_libraries(
-#		Core
-#		PUBLIC
-#		tsl::robin_map
-#)
-
-# -----------------------------------------------------------------------------
 # Engine
 # -----------------------------------------------------------------------------
 add_library(
@@ -200,7 +155,6 @@ target_include_directories(
 target_link_libraries(
 		Engine
 		PUBLIC
-		Core
 		SDL3::SDL3
 )
 
@@ -220,7 +174,6 @@ target_include_directories(
 target_link_libraries(
 		MiraGL
 		PUBLIC
-		Core
 		Engine
 
 		PRIVATE
@@ -244,7 +197,6 @@ target_include_directories(
 target_link_libraries(
 		MiraVK
 		PUBLIC
-		Core
 		Engine
 
 		PRIVATE
@@ -266,38 +218,18 @@ target_include_directories(
 target_link_libraries(
 		AureaEd
 		PRIVATE
-		Core
 		Engine
 		MiraGL
 		MiraVK
 		ImGui
 )
 
-# -----------------------------------------------------------------------------
-# AureaCompiler
-# -----------------------------------------------------------------------------
-add_executable(
-		AureaCompiler
-		${PROJECT_COMPILER_SOURCES}
-)
-target_include_directories(
-		AureaCompiler
-		PRIVATE
-		"${PROJECT_COMPILER_DIR}"
-)
-target_link_libraries(
-		AureaCompiler
-		PRIVATE
-		Core
-		Engine
-)
 
 # -----------------------------------------------------------------------------
 # Windows DLL exports
 # -----------------------------------------------------------------------------
 if(WIN32)
 	set_target_properties(
-			Core
 			Engine
 			MiraGL
 			MiraVK
@@ -316,12 +248,5 @@ if(WIN32)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			$<TARGET_FILE:SDL3::SDL3>
 			$<TARGET_FILE_DIR:AureaEd>
-	)
-
-	add_custom_command(
-			TARGET AureaCompiler
-			POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			$<TARGET_FILE_DIR:AureaCompiler>
 	)
 endif()

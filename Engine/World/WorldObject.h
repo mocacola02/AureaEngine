@@ -1,0 +1,109 @@
+#pragma once
+
+#include <../Core/Core.h>
+
+class World;
+
+enum class TickMode : uint8
+{
+	Inherit,
+	Pausable,
+	DuringPause,
+	Always,
+	Disabled
+};
+
+class WorldObject : public Object
+{
+public:
+	explicit WorldObject(Runtime* runtime) : Object(runtime) {}
+
+	bool HasStarted() const;
+	virtual void PreStart();
+	virtual void Start();
+	virtual void PostStart();
+
+	void Tick(double deltaTime);
+
+	bool IsPendingDestroy() const;
+	void Destroy();
+
+	bool CanTickThisFrame() const;
+	void SetTickMode(const TickMode& tickMode);
+	TickMode GetTickMode() const;
+
+	WorldObject*	   GetParent();
+	const WorldObject* GetParent() const;
+
+	WorldObject*	GetWorldRoot();
+	const WorldObject* GetWorldRoot() const;
+	bool IsWorldRoot() const;
+
+	Object* GetObjectFromUUID(uint32 uuid);
+	const Object* GetObjectFromUUID(uint32 uuid) const;
+
+	Array<uint32> GetChildrenUUID() const;
+
+	//! Returns an array of WorldObject children of this WorldObject. If you want to include the "children's children", use GetDescendents().
+	Array<WorldObject*> GetChildren();
+	//! Returns an array of WorldObject descendents of this WorldObject, in the order of each direct child to furthest (any descendents without children)
+	Array<WorldObject*> GetDescendents();
+	//! Returns an array of WorldObject ancestors of this WorldObject, in order of nearest ancestor (parent) to furthest (world root).
+	Array<WorldObject*> GetAncestors();
+
+	bool HasParent() const;
+	bool HasChildren() const;
+	bool HasChild(WorldObject *object) const;
+	bool IsChildOf(const WorldObject* object) const;
+
+	bool HasDescendent(WorldObject* object) const;
+	bool IsDescendentOf(const WorldObject* object) const;
+
+	bool SetParent(WorldObject* parent);
+	void RemoveParent();
+
+	World* GetWorld();
+	const World* GetWorld() const;
+
+protected:
+	friend class World;
+
+	bool started_		   = false;
+	bool pendingDestroy_   = false;
+	bool canTickThisFrame_ = false;
+
+	TickMode tickMode_ = TickMode::Inherit;
+	uint32	 ticksPerSecond_ = 0;
+	double	 tickAccumlator_ = 0.0;
+
+	uint64 tickCount_ = 0;
+	double lifetime_ = 0.0;
+
+	uint32 parent_ = 0;
+	Array<uint32> children_;
+
+	World* world_ = nullptr;
+
+	bool Initialize() override;
+
+	void SetWorld(World* world);
+
+	void AddChild(WorldObject* object);
+	void RemoveChild(WorldObject* object);
+
+	void UpdateRoot();
+
+	bool ShouldTick(double deltaTime);
+
+	virtual void OnInitialize() {}
+	virtual void OnPreStart()	{}
+	virtual void OnStart()		{}
+	virtual void OnPostStart()	{}
+
+	virtual void OnTick(double deltaTime) {}
+
+	virtual void OnDestroy() {}
+
+private:
+	void AccumulateTick(double deltaTime);
+};
