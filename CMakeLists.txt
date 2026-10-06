@@ -25,8 +25,8 @@ set(PROJECT_VK_DIR 		"${PROJECT_MIRA_DIR}/VK")
 
 set(PROJECT_THIRDPARTY_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty")
 set(PROJECT_GLAD_DIR  		"${PROJECT_THIRDPARTY_DIR}/glad")
-set(PROJECT_IMGUI_DIR 		"${PROJECT_THIRDPARTY_DIR}/ImGui")
-set(PROJECT_ROBIN_DIR   	"${PROJECT_THIRDPARTY_DIR}/pcg-cpp")
+set(PROJECT_IMGUI_DIR 	 "${PROJECT_THIRDPARTY_DIR}/ImGui")
+set(PROJECT_ROBIN_DIR    "${PROJECT_THIRDPARTY_DIR}/pcg-cpp")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
@@ -108,12 +108,10 @@ target_include_directories(
 add_library(
 		ImGui
 		STATIC
-
 		"${PROJECT_IMGUI_DIR}/imgui.cpp"
 		"${PROJECT_IMGUI_DIR}/imgui_draw.cpp"
 		"${PROJECT_IMGUI_DIR}/imgui_tables.cpp"
 		"${PROJECT_IMGUI_DIR}/imgui_widgets.cpp"
-
 		"${PROJECT_IMGUI_DIR}/backends/imgui_impl_sdl3.cpp"
 		"${PROJECT_IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
 )
@@ -138,7 +136,6 @@ target_link_libraries(
 		GLAD
 )
 
-
 # -----------------------------------------------------------------------------
 # Engine
 # -----------------------------------------------------------------------------
@@ -151,11 +148,13 @@ target_include_directories(
 		Engine
 		PUBLIC
 		"${PROJECT_ENGINE_DIR}"
+		"${PROJECT_ROBIN_DIR}/include"
 )
 target_link_libraries(
 		Engine
 		PUBLIC
 		SDL3::SDL3
+		ImGui
 )
 
 # -----------------------------------------------------------------------------
@@ -221,9 +220,7 @@ target_link_libraries(
 		Engine
 		MiraGL
 		MiraVK
-		ImGui
 )
-
 
 # -----------------------------------------------------------------------------
 # Windows DLL exports

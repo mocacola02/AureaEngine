@@ -1,6 +1,7 @@
 #pragma once
 
-#include <../Core/Core.h>
+#include "../Core/Object.h"
+#include "../Core/Utility/Rand.h"
 
 
 class UUIDManager : public Object
@@ -173,11 +174,11 @@ private:
 		constexpr uint16 maxAttempts = 1000;
 		uint16 attempts = 0;
 
-		UUID newUUID = Rand::Rand32();
+		UUID newUUID = UUID(Rand::RandUInt64());
 
 		while (attempts > maxAttempts || registry_.ContainsKey(newUUID) || !IsUUIDValid(newUUID))
 		{
-			newUUID = Rand::Rand32();
+			newUUID = UUID(Rand::RandUInt64());
 			++attempts;
 		}
 
@@ -229,7 +230,7 @@ private:
 		}
 
 		UUID uuid = object->GetUUID();
-		object->SetUUID(0));
+		object->SetUUID(0);
 		return registry_.Remove(uuid);
 	}
 };
