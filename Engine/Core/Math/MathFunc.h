@@ -328,7 +328,9 @@ namespace Math
 	}
 
 	// Rotation
+	//! Pi constant with double precision
 	constexpr double Pi  = 3.1415926535897932384626433832795028841971693993751058209749445923078164062;
+	//! Pi * 2 constant with double precision
 	constexpr double Tau = 6.2831853071795864769252867665590057683943387987502116419498891846156328124;
 
 	constexpr double DegreesToRadians(const double degrees)

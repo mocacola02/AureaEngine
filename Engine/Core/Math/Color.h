@@ -19,19 +19,38 @@ struct Color
 	// Static Presets
 	//=================
 
+	//! Returns a black Color value.
 	static constexpr Color Black()
 	{
 		return {.r = 0.0f, .g = 0.0f, .b = 0.0f, .a = 1.0f};
 	}
 
+	//! Returns a white Color value.
 	static constexpr Color White()
 	{
 		return {.r = 1.0f, .g = 1.0f, .b = 1.0f, .a = 1.0f};
 	}
 
+	//! Returns a transparent Color value.
 	static constexpr Color Transparent()
 	{
 		return {.r = 0.0f, .g = 0.0f, .b = 0.0f, .a = 0.0f};
+	}
+
+
+	//=============
+	// Conversion
+	//=============
+	//
+	//! Converts a hex color value into RGBA float format.
+	static constexpr Color FromHex(const uint32 hexValue)
+	{
+		return {
+			.r = ((hexValue >> 16) & 0xFF) / 255.0f,
+			.g = ((hexValue >> 8) & 0xFF) / 255.0f,
+			.b = (hexValue & 0xFF) / 255.0f,
+			.a = ((hexValue >> 24) & 0xFF) / 255.0f
+		};
 	}
 
 
@@ -40,6 +59,12 @@ struct Color
 	//============
 
 	constexpr Color& operator=(const Color& other) = default;
+
+	constexpr Color& operator=(const uint32 hexValue)
+	{
+		*this = FromHex(hexValue);
+		return *this;
+	}
 
 	constexpr Color operator+(const Color& other) const
 	{

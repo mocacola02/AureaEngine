@@ -6,12 +6,8 @@
 //===================================================
 #pragma once
 
-#include "../Utility/Inc/Memory.h"
+#include "../Utility/Memory.h"
 #include "../Math/Int.h"
-
-#include <algorithm>
-#include <ranges>
-
 
 //! Array type that can store an ordered list of values of any type. -Moca
 template<typename T>

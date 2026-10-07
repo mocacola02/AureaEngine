@@ -1,11 +1,10 @@
 #pragma once
 
-#include <../../Core/Core.h>
+#include "Core.h"
 
 
 class ResourceManager final : public Object
 {
 public:
-	ResourceManager() = default;
-	explicit ResourceManager(Runtime* runtime) : Object(runtime);
+	explicit ResourceManager(Runtime* runtime) : Object(runtime) {}
 };

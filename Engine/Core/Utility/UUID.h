@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Math/Math.h"
 #include "Hash.h"
+
 
 struct UUID
 {

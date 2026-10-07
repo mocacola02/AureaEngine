@@ -1,7 +1,10 @@
 #pragma once
 
-#include <../Core/Core.h>
+#include "Core.h"
+
 
 class StatsManager final : public Object
 {
+public:
+	explicit StatsManager(Runtime* runtime) : Object(runtime) {}
 };

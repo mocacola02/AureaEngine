@@ -2,79 +2,68 @@
 
 #include "../String/String.h"
 
-#include <SDL3/SDL_messagebox.h>
+#include <iostream>
 
-#include <cstdio>
 
-namespace Log
+namespace Logging
 {
-	constexpr const char* ResetColor = "\033[0m";
-	constexpr const char* InfoColor	 = "\033[36m";
-	constexpr const char* WarnColor  = "\033[33m";
-	constexpr const char* ErrorColor = "\033[31m";
-	constexpr const char* TraceColor = "\033[90m";
-
-	inline void WriteLog(
-		const char* level,
-		const char* color,
-		const char* message,
-		const char* file,
-		const char* func,
-		const uint32 line
-	)
+	namespace Internal
 	{
-		printf(
-			"%s[%s]%s %s[%s @ %s:%u]%s %s\n",
+		inline String buffer;
 
-			color,
-			level,
-			ResetColor,
+		inline void GenericLog(
+			const String& prefix,
+			const String& file,
+			const String& func,
+			const String& line,
+			const String& message
+		)
+		{
+			String finalMsg;
+			finalMsg.Append(prefix);
+			finalMsg.Append(file);
+			finalMsg.Append(" -> ");
+			finalMsg.Append(func);
+			finalMsg.Append(":[");
+			finalMsg.Append(line);
+			finalMsg.Append("]: ");
+			finalMsg.Append(message);
 
-			TraceColor,
-			func ? func : "",
-			file,
-			line,
-			ResetColor,
+			buffer.Append(finalMsg);
+		}
 
-			message
-		);
+		inline void Flush()
+		{
+			if (buffer.IsEmpty())
+			{
+				return;
+			}
+
+			std::cout << buffer.CStr();
+
+			buffer.Clear();
+		}
 	}
 
-	inline void WritePrint(const char* message)
+
+	inline void InfoLog(const String& message, const String& file, const String& func, const String& line)
 	{
-		printf("%s\n", message);
+		Internal::GenericLog("[Info]", file, func, line, message);
 	}
 
-	inline void InternalInfo(const String& message, const char* file, const char* function, const uint32 line)
+	inline void WarnLog(const String& message, const String& file, const String& func, const String& line)
 	{
-		WriteLog("Info", InfoColor, message.CStr(), file, function, line);
+		Internal::GenericLog("[Warn]", file, func, line, message);
 	}
 
-	inline void InternalWarn(const String& message, const char* file, const char* function, const uint32 line)
+	inline void ErrorLog(const String& message, const String& file, const String& func, const String& line)
 	{
-		WriteLog("Warn", WarnColor, message.CStr(), file, function, line);
-	}
-
-	inline void InternalError(const String& message, const char* file, const char* function, const uint32 line)
-	{
-		WriteLog("Error", ErrorColor, message.CStr(), file, function, line);
-	}
-
-	inline void InternalFatal(const String& message, const char* file, const char* function, const uint32 line)
-	{
-		InternalError(message, file, function, line);
-
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "FATAL ERROR", message.CStr(), nullptr);
-	}
-
-	inline void InternalPrint(const String& message)
-	{
-		WritePrint(message.CStr());
+		Internal::GenericLog("[Error]", file, func, line, message);
 	}
 }
 
-#define LOG(message)	\
-	Log::InternalInfo(	\
+#define INFO(message)	\
+	Logging::InfoLog(	\
 		(message),		\
 		__FILE__,		\
 		__func__,		\
@@ -82,7 +71,7 @@ namespace Log
 	)
 
 #define WARN(message)	\
-	Log::InternalWarn(	\
+	Logging::WarnLog(	\
 		(message),		\
 		__FILE__,		\
 		__func__,		\
@@ -90,22 +79,9 @@ namespace Log
 	)
 
 #define ERROR(message)	\
-	Log::InternalError(	\
+	Logging::ErrorLog(	\
 		(message),		\
 		__FILE__,		\
 		__func__,		\
 		__LINE__		\
-	)
-
-#define FATAL(message)	\
-	Log::InternalFatal(		\
-		(message),		\
-		__FILE__,		\
-		__func__,		\
-		__LINE__		\
-	)
-
-#define PRINT(message)	\
-	Log::InternalPrint(	\
-		(message)		\
 	)

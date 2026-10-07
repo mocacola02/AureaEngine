@@ -23,7 +23,7 @@ public:
 	}
 
 	//! Char to String constructor
-	// Maybe I'm doing it wrong, but making this explicit makes this constructor much more annoying, so I'm disabling that warning
+	// Maybe I'm doing it wrong, but making this makes this constructor much more annoying, so I'm disabling that warning
 	// ReSharper disable once CppNonExplicitConvertingConstructor
 	String(const char* value)
 	{
@@ -65,7 +65,7 @@ public:
 	}
 
 	//! int8 to String constructor
-	explicit String(const int8 value)
+	String(const int8 value)
 	{
 		char buffer[8]{};
 
@@ -88,7 +88,7 @@ public:
 	}
 
 	//! int16 to String constructor
-	explicit String(const int16 value)
+	String(const int16 value)
 	{
 		char buffer[16]{};
 
@@ -111,7 +111,7 @@ public:
 	}
 
 	//! int32 to String constructor
-	explicit String(const int32 value)
+	String(const int32 value)
 	{
 		char buffer[16]{};
 
@@ -134,7 +134,7 @@ public:
 	}
 
 	//! int64 to String constructor
-	explicit String(const int64 value)
+	String(const int64 value)
 	{
 		char buffer[32]{};
 
@@ -157,7 +157,7 @@ public:
 	}
 
 	//! uint8 to String constructor
-	explicit String(const uint8 value)
+	String(const uint8 value)
 	{
 		char buffer[8]{};
 
@@ -180,7 +180,7 @@ public:
 	}
 
 	//! uint16 to String constructor
-	explicit String(const uint16 value)
+	String(const uint16 value)
 	{
 		char buffer[16]{};
 
@@ -203,7 +203,7 @@ public:
 	}
 
 	//! uint32 to String constructor
-	explicit String(const uint32 value)
+	String(const uint32 value)
 	{
 		char buffer[16]{};
 
@@ -226,7 +226,7 @@ public:
 	}
 
 	//! uint64 to String constructor
-	explicit String(const uint64 value)
+	String(const uint64 value)
 	{
 		char buffer[32]{};
 
@@ -249,7 +249,7 @@ public:
 	}
 
 	//! Float to String constructor
-	explicit String(const float value)
+	String(const float value)
 	{
 		char buffer[64]{};
 
@@ -272,7 +272,7 @@ public:
 	}
 
 	//! Double to String constructor
-	explicit String(const double value)
+	String(const double value)
 	{
 		char buffer[64]{};
 

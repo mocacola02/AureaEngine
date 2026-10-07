@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vector3F.h"
-#include "Inc/Vector4F.h"
+#include "Vector4F.h"
 
 //! Quaternion type with float precision. Used primarily for rendering. Transform3D uses the double precision Quaternion.
 struct QuaternionF

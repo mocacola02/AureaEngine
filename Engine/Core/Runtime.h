@@ -1,17 +1,15 @@
 #pragma once
 
-#include "../../Audio/Inc/AudioManager.h"
-#include "../../Config/Inc/ConfigManager.h"
-#include "Managers/InputManager.h"
-#include "Managers/NetworkManager.h"
+#include "../Managers/AudioManager.h"
+#include "../Managers/Config/ConfigManager.h"
+#include "../Managers/Input/InputManager.h"
+#include "../Managers/Network/NetworkManager.h"
 #include "../Managers/Rendering/RenderManager.h"
 #include "../Managers/ResourceManager.h"
-#include "../Managers/ScriptManager.h"
+#include "../Managers/Script/ScriptManager.h"
 #include "../Managers/UUIDManager.h"
 
-#include "../../Object/World.h"
-
-#include <../../Core/Core.h>
+#include "../World/World.h"
 
 //! The engine runtime handles the engine's various managers,
 //! and it owns and ticks the EngineLoop (World, by default).

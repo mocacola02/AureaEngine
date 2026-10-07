@@ -36,3 +36,6 @@
 .vscode/
 .kdev4/
 .idea/
+
+build/
+cmake-build-debug/

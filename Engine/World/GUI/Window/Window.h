@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../World/Inc/WorldObject.h"
-#include "../Config/Inc/DisplaySettings.h"
+#include "../../WorldObject.h"
+
 
 enum class WindowMode : uint8
 {
@@ -65,5 +65,5 @@ private:
 
 	WindowMode windowMode_ = WindowMode::Windowed;
 
-	WindowDisplaySettings displaySettings;
+	//WindowDisplaySettings displaySettings;
 };

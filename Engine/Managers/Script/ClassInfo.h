@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Containers/Dictionary.h"
-#include "../Math/Math.h"
-#include "../String/Name.h"
+#include "../Core/Containers/Dictionary.h"
+#include "../Core/Math/Math.h"
+#include "../Core/String/Name.h"
 
 //! Value types supported by AureaScript.
 enum class ValueType : uint8

@@ -1,3 +1,8 @@
+//===================================================
+// Int.h
+// Author: Moca 9/10/2026
+// Global header that includes most math-related headers.
+//===================================================
 #pragma once
 
 #include "Color.h"

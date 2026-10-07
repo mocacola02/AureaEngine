@@ -1,6 +1,6 @@
 #pragma once
 
-#include <../../Core/Core.h>
+#include "Core.h"
 
 
 class Runtime;
@@ -10,8 +10,7 @@ class RenderModule;
 class RenderManager final : public Object
 {
 public:
-	RenderManager() = default;
-	explicit RenderManager(Runtime* runtime) : Object(runtime);
+	explicit RenderManager(Runtime* runtime) : Object(runtime) {}
 
 	void PreRender();
 	void Render();
@@ -23,7 +22,6 @@ protected:
 	void Shutdown() override;
 
 private:
-	Runtime* engineRuntime_ = nullptr;
 	RenderDevice*  renderDevice_  = nullptr;
 	RenderModule*  renderModule_  = nullptr;
 

@@ -6,7 +6,7 @@
 #pragma once
 
 #include "Int.h"
-#include "Inc/VectorFunc.h"
+#include "VectorFunc.h"
 
 // Thanks to Matthew Fisher for his resources at https://graphics.stanford.edu/~mdfisher/BaseCode.html
 // It served as a useful reference.

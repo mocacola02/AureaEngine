@@ -1,6 +1,7 @@
 #pragma once
 
-#include <../Core/Core.h>
+#include "Core.h"
+#include "ClassInfo.h"
 
 class Script : public Resource
 {

@@ -1,3 +1,9 @@
+//===================================================
+// Int.h
+// Author: Moca 9/10/2026
+// Defines aliases for main integer types, as well as
+// MinInt/MaxInt expressions and (u)int128.
+//===================================================
 #pragma once
 
 #include <cstdint>
@@ -18,7 +24,7 @@ using intptr  = intptr_t;
 template<typename T>
 inline constexpr T MinInt;
 
-template<> inline constexpr int8  MinInt<int8> = -128;
+template<> inline constexpr int8  MinInt<int8>  = -128;
 template<> inline constexpr int16 MinInt<int16> = -32768;
 template<> inline constexpr int32 MinInt<int32> = -2147483647 - 1;
 template<> inline constexpr int64 MinInt<int64> = -9223372036854775807LL - 1LL;
@@ -26,16 +32,17 @@ template<> inline constexpr int64 MinInt<int64> = -9223372036854775807LL - 1LL;
 template<typename T>
 inline constexpr T MaxInt;
 
-template<> inline constexpr int8  MaxInt<int8> = 127;
+template<> inline constexpr int8  MaxInt<int8>  = 127;
 template<> inline constexpr int16 MaxInt<int16> = 32767;
 template<> inline constexpr int32 MaxInt<int32> = 2147483647L;
 template<> inline constexpr int64 MaxInt<int64> = 9223372036854775807LL;
 
-template<> inline constexpr uint8  MaxInt<uint8> = 0xFFU;
+template<> inline constexpr uint8  MaxInt<uint8>  = 0xFFU;
 template<> inline constexpr uint16 MaxInt<uint16> = 0xFFFFU;
 template<> inline constexpr uint32 MaxInt<uint32> = 0xFFFFFFFFUL;
 template<> inline constexpr uint64 MaxInt<uint64> = 0xFFFFFFFFFFFFFFFFULL;
 
+//! 128-bit signed integer type. Rarely used.
 struct int128
 {
 	int64 low;
@@ -84,6 +91,7 @@ struct int128
 	}
 };
 
+//! 128-bit unsigned integer type. Rarely used.
 struct uint128
 {
 	uint64 low;

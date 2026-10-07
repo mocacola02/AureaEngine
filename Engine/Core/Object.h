@@ -16,7 +16,7 @@ public:
 	{
 		if (!runtime)
 		{
-			ERROR(String("New object was not given a pointer to the runtime!!!"));
+			ERROR("New object was not given a pointer to the runtime!!!");
 
 			// CONSIDER: Do some research on if self-deletion is safe
 			// gun emoji
@@ -29,7 +29,7 @@ public:
 
 	Name GetName() const;
 
-	UUID GetUUID() const;
+	UUID& GetUUID() const;
 
 	virtual constexpr String GetClassName() const;
 

@@ -2,7 +2,7 @@
 
 #include "../Object.h"
 #include "Memory.h"
-#include "Inc/Types.h"
+#include "Types.h"
 
 
 class RefCounted : public Object
@@ -10,7 +10,7 @@ class RefCounted : public Object
 public:
 	RefCounted() = default;
 
-	explicit RefCounted(Runtime* runtime) : Object(runtime);
+	explicit RefCounted(Runtime* runtime) : Object(runtime) {}
 
 	~RefCounted() override = default;
 
