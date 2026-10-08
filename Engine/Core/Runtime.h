@@ -42,7 +42,7 @@ public:
 	Array<Type*> GetObjectsOfType();
 
 	template<typename Base, typename Derived>
-	bool IsBasedOn() const noexcept;
+	bool IsClassBasedOn() const noexcept;
 
 	// Manager Helpers
 	AudioManager&	 GetAudioManager()	  noexcept;

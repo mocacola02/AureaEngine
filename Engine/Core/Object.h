@@ -5,38 +5,28 @@
 #include "Utility/Log.h"
 #include "Utility/UUID.h"
 
+
 class Runtime;
 
 class Object
 {
 public:
 	Object() = default;
-
-	explicit Object(Runtime* runtime) : runtime_(runtime)
-	{
-		if (!runtime)
-		{
-			ERROR("New object was not given a pointer to the runtime!!!");
-
-			// CONSIDER: Do some research on if self-deletion is safe
-			// gun emoji
-			delete this;
-			return;
-		}
-	}
-
+	explicit Object(Runtime* runtime) : runtime_(runtime) {}
 	virtual ~Object() = default;
-
-	Name GetName() const;
-
-	UUID& GetUUID() const;
 
 	virtual constexpr String GetClassName() const;
 
-	template<typename T>
+	void Delete();
+
+	Name GetName() const;
+	UUID GetUUID() const;
+
+	template<typename Base>
 	bool IsOfType() const;
 
-	Runtime* GetRuntime() const;
+	Runtime* GetRuntime();
+	const Runtime* GetRuntime() const;
 
 protected:
 	friend class Runtime;
@@ -45,14 +35,12 @@ protected:
 	virtual bool Initialize();
 	virtual void Shutdown();
 
-	void Delete();
-
 	void SetName(const Name& name);
-	void SetUUID(UUID uuid);
+	void SetUUID(const UUID &uuid);
 	void SetUUID(uint64 uuid);
 
 private:
-	UUID uuid_ = UUID(0);
+	UUID uuid_ = UUID::None();
 	Name name_;
 	Runtime* runtime_ = nullptr;
 };

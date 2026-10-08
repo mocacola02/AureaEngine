@@ -1,11 +1,10 @@
 #include "Runtime.h"
-
-#include "../../Object/World.h"
-
+#include "../World/World.h"
 
 bool Runtime::Initialize()
 {
-	return true;
+	running_ = true;
+	return running_;
 }
 
 void Runtime::Run()
@@ -41,14 +40,12 @@ void Runtime::SetResultString(const String& result)
 void Runtime::Exit()
 {
 	running_ = false;
-
-
 }
 
 template<typename Type>
 Type* Runtime::CreateObject()
 {
-	if (!IsBasedOn<Type, Object>())
+	if (!IsClassBasedOn<Type, Object>())
 	{
 		ERROR("Invalid class type provided! The class type must derive from Object! Aborting CreateObject");
 		return nullptr;
@@ -69,7 +66,12 @@ Type* Runtime::CreateObject()
 		return nullptr;
 	}
 
-	newObject->Initialize();
+	if (!newObject->Initialize())
+	{
+		ERROR("Failed to initialize new object!");
+		DeleteObject(newObject);
+		return nullptr;
+	}
 
 	return newObject;
 }
@@ -104,7 +106,7 @@ Array<Type*> Runtime::GetObjectsOfType()
 
 
 template<typename Base, typename Derived>
-bool Runtime::IsBasedOn() const noexcept
+bool Runtime::IsClassBasedOn() const noexcept
 {
 	Derived temp;
 	return dynamic_cast<Base*>(&temp) != nullptr;

@@ -1,4 +1,15 @@
-#include "Inc/Object.h"
+#include "Object.h"
+#include "Runtime.h"
+
+constexpr String Object::GetClassName() const
+{
+	return "Object";
+}
+
+void Object::Delete()
+{
+	runtime_->DeleteObject(this);
+}
 
 Name Object::GetName() const
 {
@@ -10,18 +21,18 @@ UUID Object::GetUUID() const
 	return uuid_;
 }
 
-constexpr String Object::GetClassName() const
-{
-	return {"Object"};
-}
-
-template<typename ClassType>
+template<typename Base>
 bool Object::IsOfType() const
 {
-	return dynamic_cast<const ClassType*>(this) != nullptr;
+	return dynamic_cast<Base>(this) != nullptr;
 }
 
-Runtime* Object::GetRuntime() const
+Runtime* Object::GetRuntime()
+{
+	return runtime_;
+}
+
+const Runtime *Object::GetRuntime() const
 {
 	return runtime_;
 }
@@ -29,7 +40,7 @@ Runtime* Object::GetRuntime() const
 bool Object::Initialize()
 {
 	SetName(Name(GetClassName(), true));
-	return GetRuntime()->GetUUIDManager().Lease(*this);;
+	return GetRuntime() != nullptr;
 }
 
 void Object::Shutdown()
@@ -37,7 +48,17 @@ void Object::Shutdown()
 	runtime_ = nullptr;
 }
 
-void Object::Delete()
+void Object::SetName(const Name& name)
 {
-	GetRuntime()->DeleteObject(this);
+	name_ = name;
+}
+
+void Object::SetUUID(const UUID& uuid)
+{
+	uuid_ = uuid;
+}
+
+void Object::SetUUID(const uint64 uuid)
+{
+	uuid_ = uuid;
 }

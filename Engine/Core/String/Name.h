@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Inc/NameTable.h"
-#include "Inc/String.h"
+#include "NameTable.h"
+#include "String.h"
 #include "../Math/Int.h"
 
 

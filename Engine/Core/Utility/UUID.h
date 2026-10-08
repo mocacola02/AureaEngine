@@ -5,9 +5,15 @@
 
 struct UUID
 {
+	UUID() = default;
 	explicit UUID(const uint64 value) : value(value) {}
 
 	uint64 value = 0;
+
+	static constexpr UUID None()
+	{
+		return UUID(0);
+	}
 
 	bool IsValid() const
 	{

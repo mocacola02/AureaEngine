@@ -7,7 +7,7 @@
 #pragma once
 
 #include "../Utility/Memory.h"
-#include "../Math/Int.h"
+#include "../Utility/Log.h"
 
 //! Array type that can store an ordered list of values of any type. -Moca
 template<typename T>
@@ -195,14 +195,13 @@ public:
 	//! Returns and removes the element at the end of the Array.
 	T PopBack()
 	{
-		T returnValue = nullptr;
-
 		if (count_ == 0)
 		{
-			return returnValue;
+			WARN("Array is empty, returning default value.");
+			return T();
 		}
 
-		returnValue = Last();
+		T returnValue = Last();
 
 		RemoveAt(count_ - 1);
 
@@ -212,14 +211,13 @@ public:
 	//! Returns and removes the element at the front of the Array (index 0).
 	T PopFront()
 	{
-		T returnValue = nullptr;
-
 		if (count_ == 0)
 		{
-			return returnValue;
+			WARN("Array is empty, returning default value.");
+			return T();
 		}
 
-		returnValue = First();
+		T returnValue = First();
 
 		RemoveAt(0);
 

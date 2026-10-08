@@ -5,7 +5,7 @@
 class World final : public Object
 {
 public:
-	explicit World(Runtime* runtime) : EngineLoop(runtime), rootObject_(runtime) {}
+	explicit World(Runtime* runtime) : Object(runtime), rootObject_(runtime) {}
 
 	WorldObject* GetRootObject();
 	const WorldObject* GetRootObject() const;
@@ -15,21 +15,18 @@ public:
 	template<typename Type>
 	Array<Type*> GetWorldObjectsOfType();
 
-	template<typename Base, typename Derived>
-	bool IsBasedOn() const noexcept;
-
 	void DestroyPendingObjects();
 
 	bool IsPaused() const;
 
-	Runtime* GetRuntime();
-	const Runtime* GetRuntime() const;
+	template<typename Base, typename Derived>
+	bool IsClassBasedOn() const;
 
 protected:
 	friend class Runtime;
 
 	bool Initialize() override;
-	void Tick(double deltaTime) override;
+	void Tick(double deltaTime);
 	void Shutdown() override;
 
 	Array<WorldObject*> GetTickList(double deltaTime);

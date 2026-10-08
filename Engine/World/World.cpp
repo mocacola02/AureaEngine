@@ -1,4 +1,14 @@
-#include "../../Object/World.h"
+#include "World.h"
+
+WorldObject* World::GetRootObject()
+{
+	return &rootObject_;
+}
+
+const WorldObject* World::GetRootObject() const
+{
+	return &rootObject_;
+}
 
 Array<WorldObject*> World::GetWorldObjects()
 {
@@ -19,7 +29,7 @@ Array<Type*> World::GetWorldObjectsOfType()
 {
 	Array<Type*> objects;
 
-	if (!IsBasedOn<Type, WorldObject>())
+	if (!IsClassBasedOn<Type, WorldObject>())
 	{
 		WARN("Provided type must be based on WorldObject. Returning empty array.");
 		return objects;
@@ -37,9 +47,9 @@ Array<Type*> World::GetWorldObjectsOfType()
 }
 
 template<typename Base, typename Derived>
-bool World::IsBasedOn() const noexcept
+bool World::IsClassBasedOn() const
 {
-	return runtime_->IsBasedOn<Base, Derived>();
+	return runtime_->IsClassBasedOn<Base, Derived>();
 }
 
 void World::DestroyPendingObjects()
@@ -53,6 +63,11 @@ void World::DestroyPendingObjects()
 			delete object;
 		}
 	}
+}
+
+bool World::IsPaused() const
+{
+	return paused_;
 }
 
 bool World::Initialize()
